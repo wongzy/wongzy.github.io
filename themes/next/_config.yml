@@ -368,12 +368,12 @@ han: false
 
 # Disqus
 disqus:
-  enable: true
+  enable: false
   shortname:
   count: true
 
 # Hypercomments
-hypercomments_id: 100476
+#hypercomments_id: 100476
 
 # changyan
 changyan:
@@ -433,7 +433,7 @@ gitment:
 # This plugin is more useful in China, make sure you known how to use it.
 # And you can find the use guide at official webiste: http://www.jiathis.com/.
 # Warning: JiaThis does not support https.
-jiathis: true
+jiathis: false
   ##uid: Get this uid from http://www.jiathis.com/
 #add_this_id:
 
