@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/source/404.html" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/source/404/index.md" afterPath="$PROJECT_DIR$/source/404/index.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,8 +96,6 @@
         <option value="$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md" />
         <option value="$PROJECT_DIR$/source/_posts/发布Android开源项目到Jcenter库.md" />
         <option value="$PROJECT_DIR$/themes/next/source/404.html" />
-        <option value="$PROJECT_DIR$/404.html" />
-        <option value="$PROJECT_DIR$/source/404.html" />
         <option value="$PROJECT_DIR$/themes/next/layout/_layout.swig" />
         <option value="$PROJECT_DIR$/scaffolds/post.md" />
         <option value="$PROJECT_DIR$/themes/next/scripts/related_posts.js" />
@@ -104,7 +104,9 @@
         <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/themes/next/_config.yml" />
         <option value="$PROJECT_DIR$/source/_posts/twolianbiaotoone.md" />
+        <option value="$PROJECT_DIR$/404.html" />
         <option value="$PROJECT_DIR$/source/404/index.md" />
+        <option value="$PROJECT_DIR$/source/404.html" />
       </list>
     </option>
   </component>
@@ -150,11 +152,6 @@
               <item name="source" type="462c0819:PsiDirectoryNode" />
               <item name="404" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="JoshuaRogue.github.io" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JoshuaRogue.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="themes" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -170,6 +167,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\androidObject\JoshuaRogue.github.io\source" />
       <recent name="D:\androidObject\JoshuaRogue.github.io\source\404" />
     </key>
   </component>
@@ -718,7 +716,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/404.html" />
     <entry file="file://$PROJECT_DIR$/themes/next/source/404.html" />
     <entry file="file://$PROJECT_DIR$/source/404/404.html" />
     <entry file="file://$PROJECT_DIR$/themes/next/layout/_layout.swig">
@@ -838,6 +835,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="94">
           <caret line="371" column="12" lean-forward="true" selection-start-line="371" selection-start-column="12" selection-end-line="371" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -849,10 +847,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.deploy_git/page/2/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/twolianbiaotoone.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="132">
+          <first_editor relative-caret-position="1518">
             <caret line="66" column="0" lean-forward="true" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
             <folding />
           </first_editor>
@@ -862,10 +868,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.deploy_git/page/2/index.html">
+    <entry file="file://$PROJECT_DIR$/source/404.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="276">
+          <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -873,8 +879,8 @@
     <entry file="file://$PROJECT_DIR$/source/404/index.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="161">
-            <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <first_editor relative-caret-position="92">
+            <caret line="4" column="19" lean-forward="false" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
             <folding />
           </first_editor>
           <second_editor>
