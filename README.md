@@ -1,1 +1,1 @@
-# JoshuaRogue.github.io
+Please see it on [My Blog](https://joshuarogue.github.io/)
