@@ -1,7 +1,7 @@
 ---
 title: ButterKnife在RecyclerView adapter中的使用
 date: 2017-10-8 12:02:04
-categories: Android第三方开源项目使用
+categories: Android
 ---
 #### ButterKnife是一个用起来十分方便的开源库，我们只需要用一个小小的插件ButterKnifeZenezny就免去了写一大袋findViewbyId的书写，不过在adapter中，插件自动生成的方式就步行了，我们一般都需要在ViewHolder中实现依赖注入,这时候我们需要像下面这样
 ```

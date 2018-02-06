@@ -1,7 +1,7 @@
 ---
 title: 发布Android开源项目到Jcenter库
 date: 2017-12-10 12:02:04
-categories: Android开源
+categories: Android
 ---
 #### 我们在使用Android studio时，导入一个第三方开源库很方便，如果整个库已经被发布到Maven库时，我们只需要在MainActivity所在的build.gradle（注意不是最外层的）中添加依赖即可，像这样
 ```

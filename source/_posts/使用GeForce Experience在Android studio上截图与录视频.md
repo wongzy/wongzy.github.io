@@ -1,7 +1,7 @@
 ---
 title: 使用GeForce Experience在Android studio上截图与录视频
 date: 2017-11-15 12:02:04
-categories: Android小技巧
+categories: Android
 ---
 > 今天偶然发现了英伟达的显卡管理工具GeForce Experience居然能把录屏和截图的功能在Android studio中使用，在刚刚更新的Android3.0中也没有找到录屏的选项，所以就在这里分享出来了哈哈
 #### 首先，当然是下载GeForce Experience了，地址如下：

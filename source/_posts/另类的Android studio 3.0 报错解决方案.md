@@ -1,7 +1,7 @@
 ---
 title: 另类的Android studio 3.0 报错解决方案
 date: 2017-11-25 12:02:04
-categories: Android studio
+categories: Android
 ---
 #### 前几天手贱升级了3.0，结果第二天就报出了奇怪的错误，类似于下面这种
 >Error:too many padding sections on bottom border.

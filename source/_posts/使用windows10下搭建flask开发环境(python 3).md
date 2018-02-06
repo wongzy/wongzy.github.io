@@ -1,7 +1,7 @@
 ---
 title: 使用windows10下搭建flask开发环境(python 3)
 date: 2017-10-28 12:02:04
-categories: Flask
+categories: python
 ---
 > 前几周在windows10下搭建flask环境的时候遇到了几个小问题，拿出来分享一下
 #### 首先，安装python3，地址如下：

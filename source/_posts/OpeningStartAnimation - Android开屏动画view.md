@@ -1,7 +1,7 @@
 ---
 title: OpeningStartAnimation - Android开屏动画view
 date: 2017-12-26 12:02:04
-categories: Android开源
+categories: Android
 ---
 #### 项目地址
 https://github.com/JoshuaRogue/FancyView

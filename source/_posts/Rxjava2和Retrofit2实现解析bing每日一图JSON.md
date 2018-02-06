@@ -1,7 +1,7 @@
 ---
 title: Rxjava2和Retrofit2实现解析bing每日一图JSON
 date: 2017-10-12 12:02:04
-categories: Android第三方开源项目使用
+categories: Android网络开发
 ---
 > 一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下
 ##### 网上找的带有每日一图链接的资源如下
