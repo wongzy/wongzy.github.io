@@ -12,7 +12,7 @@ comments: false
 因为最初写博客时博主就读于本科三年级，内容不免有些肤浅，可能对某一知识点的总结也会有错误，如有读者发现了文章中不当之处希望能予以指正。
 
 
-* Email：wongzhenyu790509558@gmail.com
+* Email：wongzhenyu96@gmail.com
 * 微博： 卖欠账包的王大麻
 
 
