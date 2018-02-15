@@ -1,5 +1,5 @@
 ---
-title: handler与UI更新
+title: Handler与UI更新
 date: 2018-02-15 14:14:18
 categories: Android
 ---
