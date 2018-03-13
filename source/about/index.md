@@ -11,13 +11,6 @@ Phone: 176-8243-9926　　　　　　　 　　　Email: wongzhenyu96@gmail.com
 
 GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　Blog: [wongzhenyu.cn](http://joshuarogue.github.io)
 
----
-
-### 意向岗位
-
-客户端开发工程师(Android)
-
----
 
 ### 个人经历
 
@@ -26,8 +19,6 @@ GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　B
 物联网工程专业
 
 专业排名: 5/43 　　　　　　　　　　　 GPA: 2.80
-
----
 
 ### 专业技能
 
@@ -43,8 +34,7 @@ GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　B
 * 了解Android NDK的开发，在项目中有使用NDK的经验
 * 了解Android多进程开发
 * 对Android模块化开发有一定了解
-
----
+* 对react native有一定了解
 
 ### 项目经历
 
@@ -56,7 +46,10 @@ GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　B
 
 ##### 职责：
 
-* 独立开发者
+* 使用javapoet自动生成代码
+* 决解子模块与主项目之间的通信问题
+* 使用单例模式、代理模式等独立设计整个项目的架构
+* 编写注解处理器
 
 #### 2017/12-2017/12　　　　　　OpeningStartAnimation
 
@@ -66,31 +59,27 @@ GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　B
 
 ##### 职责：
 
-* 独立开发者
+* 独立设计整个模块
+* 自定义属性动画
+* 使用Builder模式、代理模式、策略模式等实现了模块的高度可定制化，并防止了view的内存泄漏
 
-#### 2017/10-2017/11　　　　　　路书　　　　
-
-##### 项目简介：
-
-这是一款帮助用户进行时间规划的APP，用户可以通过输入需要到达的地点和所使用的出行方式来获得推荐的花费时间最少的方案，也可以自定义到达地点的顺序，由APP来计算出所需时间和总花费。同时，也实现了每日更新壁纸的功能。已在GitHub开源。
-
-> 本项目使用了MVP模式来进行开发，使用了Dagger2、Rxjava、Retrofit等开源框架，并使用了NDK来进行图片的毛玻璃效果处理。
-
-##### 职责：
-
-* 独立开发者
-
-#### 2017/07-2017/08　　　　　　FlowMonitor
+#### 2017/9-2017/11　　　　　　　路书　　　　
 
 ##### 项目简介：
 
-针对各大平台推出的日租卡来进行已用流量和剩余流量计算的APP。已在百度平台的应用商店上架。
+帮助用户规划几个地点的最佳路径的APP。已在GitHub开源。
 
 ##### 职责：
 
-* 独立开发者
+* 独立设计和开发整个app
+* 使用贪婪链的算法规划路径
+* 使用MVP模式，实现视图与数据之间的解耦
+* 使用retrofit实现了每日更换壁纸
+* 使用NDK实现了仿知乎毛玻璃特效的效果
+* 使用Messenger实现了与service的跨进程通信
 
-#### 2017/06-2017/07　　　　　　出行计划表
+
+#### 2017/06-2017/08　　　　　　　出行计划表
 
 ##### 项目简介：
 
@@ -98,21 +87,5 @@ GitHub: [github.com/JoshuaRogue](https://github.com/JoshuaRogue)　　　　　B
 
 ##### 职责：
 
-* 独立开发者
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* 独立设计和开发app
+* 熟悉使用了Android中的各类组件
