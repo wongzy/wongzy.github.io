@@ -1,5 +1,5 @@
 ---
-title: NDK实现毛玻璃效果完全教程
+title: NDK实现毛玻璃效果
 date: 2017-10-7 12:02:04
 categories: Android
 ---
