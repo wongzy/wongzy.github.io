@@ -40,14 +40,16 @@ Java中应用正则表达式必须依靠Pattern与Matcher类，常用的正则�
 
 序号 | 规范 | 描述
 --- | --- | ---
-1 | XY | 既满足X规范又满足Y规范
-2 | X\|Y | X规范或Y规范
-3 | （X） | 作为一个捕获组规范
+1 |  XY | 既满足X规范又满足Y规范
+2 |  X1Y  | X规范或Y规范
+3 | （X）  | 作为一个捕获组规范
 
 举例：
 
 正则表达式 | 匹配的字符串 | 不匹配的字符串
 --- | --- | ---
-(A\|B)(C\|D) | AC AD BC BD | 其他所有字符串
-A(B\|C)*D | AD ABD ACD ABCCBD | BCD ADD ABCBC
-A*\|(A*BA*BA*)* | AAA BBAABB BABAAA | ABA BBB BABBAAA
+(A1B)(C1D) | AC AD BC BD | 其他所有字符串
+A(B1C)*D | AD ABD ACD ABCCBD | BCD ADD ABCBC
+A*1(A*BA*BA*)* | AAA BBAABB BABAAA | ABA BBB BABBAAA
+
+> 因博客文章中表格无法正确识别"|"符号，故上述表格中"|"均用1替代
