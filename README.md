@@ -1,1 +1,1 @@
-Please see it on [My Blog](https://joshuarogue.github.io/)
+Please see it on [My Blog](https://wongzy.github.io/)
