@@ -134,11 +134,11 @@ scheme: Mist
 # Value after `||` delimeter is the name of FontAwesome icon. If icon (with or without delimeter) is not specified, globe icon will be loaded.
 social:
   GitHub: https://github.com/wongzy || github
-  LeetCode: https://leetcode-cn.com/wongzy/ || keyboard
+  LeetCode: https://leetcode-cn.com/wongzy/ || accusoft
   CSDN: http://blog.csdn.net/qq_33487412 || code
   微博: https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102 || weibo
   E-Mail: mailto:wongzhenyu96@gmail.com || envelope
-  linkedin: https://www.linkedin.com/in/wong-zhenyu-57b262142/ || user-tie
+  linkedin: https://www.linkedin.com/in/wong-zhenyu-57b262142/ || user-circle
   #Google: https://plus.google.com/yourname || google
   #Twitter: https://twitter.com/yourname || twitter
   #FB Page: https://www.facebook.com/yourname || facebook
@@ -151,11 +151,11 @@ social:
 social_icons:
   enable: true
   GitHub: github
-  LeetCode: keyboard
+  LeetCode: accusoft
   CSDN: code
   微博: weibo
   E-mail: envelope
-  linkedin: user-tie
+  linkedin: user-circle
 # Blog rolls
 links_icon: link
 links_title: Links
