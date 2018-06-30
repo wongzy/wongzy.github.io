@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,12 +14,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="锁、不可重入锁与条件.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="锁、不可重入锁与条件.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="46">
-                <caret line="265" column="17" selection-start-line="265" selection-start-column="17" selection-end-line="265" selection-end-column="17" />
+              <first_editor relative-caret-position="19">
+                <caret line="1" column="15" lean-forward="true" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="15" />
               </first_editor>
               <second_editor>
                 <markdownNavigatorState />
@@ -28,12 +28,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Android NDK调用不符合jni规范的so文件.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Android NDK调用不符合jni规范的so文件.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="38">
-                <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+              <first_editor relative-caret-position="325">
+                <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
               </first_editor>
               <second_editor>
                 <markdownNavigatorState />
@@ -167,7 +167,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -190,6 +189,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -290,22 +290,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5160858" side_tool="true" weight="0.3751783" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.3266762" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.3266762" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23525469" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2386059" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -315,15 +316,15 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26126608" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -331,8 +332,8 @@
       <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3295325" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Maven Projects" order="5" />
       <window_info id="Favorites" order="4" side_tool="true" />
     </layout-to-restore>
@@ -641,18 +642,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/重入锁与重入读写锁.md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="46">
-            <caret line="265" column="17" selection-start-line="265" selection-start-column="17" selection-end-line="265" selection-end-column="17" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
@@ -668,8 +657,20 @@
     <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="38">
-            <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+          <first_editor relative-caret-position="325">
+            <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="382">
+            <caret line="278" column="44" selection-start-line="6" selection-end-line="278" selection-end-column="44" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />

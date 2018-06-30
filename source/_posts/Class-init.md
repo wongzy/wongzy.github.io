@@ -1,5 +1,5 @@
 ---
-title: 类与示例的初始化顺序
+title: 类与实例的初始化顺序
 date: 2018-04-25 09:34:08
 categories: Java
 ---

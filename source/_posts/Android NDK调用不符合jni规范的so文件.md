@@ -1,5 +1,5 @@
 ---
-title: Android中设置界面PreferenceFragment的用法
+title: Android NDK调用不符合jni规范的so文件
 date: 2018-6-30 15:02:04
 categories: Android
 ---
