@@ -134,7 +134,7 @@ scheme: Mist
 # Value after `||` delimeter is the name of FontAwesome icon. If icon (with or without delimeter) is not specified, globe icon will be loaded.
 social:
   GitHub: https://github.com/wongzy || github
-  LeetCode: https://leetcode-cn.com/wongzy/ || accusoft
+  LeetCode: https://leetcode-cn.com/wongzy/ || terminal
   CSDN: http://blog.csdn.net/qq_33487412 || code
   微博: https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102 || weibo
   E-Mail: mailto:wongzhenyu96@gmail.com || envelope
@@ -151,7 +151,7 @@ social:
 social_icons:
   enable: true
   GitHub: github
-  LeetCode: accusoft
+  LeetCode: terminal
   CSDN: code
   微博: weibo
   E-mail: envelope
