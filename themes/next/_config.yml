@@ -151,11 +151,11 @@ social:
 social_icons:
   enable: true
   GitHub: github
-  LeetCode: terminal
+  LeetCode: keyboard
   CSDN: code
   微博: weibo
   E-mail: envelope
-  linkedin: linkedin
+  linkedin: user-tie
 # Blog rolls
 links_icon: link
 links_title: Links
