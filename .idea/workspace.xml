@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/next/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/themes/next/_config.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,44 +14,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="锁、不可重入锁与条件.md" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="19">
-                <caret line="1" column="15" lean-forward="true" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="15" />
-              </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
+      <file leaf-file-name="_config.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="69" column="21" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Android NDK调用不符合jni规范的so文件.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="325">
-                <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
-              </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Android中设置界面PreferenceFragment的用法.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-            <state split_layout="SPLIT">
-              <first_editor>
-                <caret selection-end-line="4" selection-end-column="3" />
-              </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
+      <file leaf-file-name="_config.yml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/themes/next/_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="19">
+              <caret line="105" column="11" selection-start-line="105" selection-start-column="11" selection-end-line="105" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -135,7 +111,6 @@
         <option value="$PROJECT_DIR$/source/_posts/NDK实现毛玻璃效果完全教程.md" />
         <option value="$PROJECT_DIR$/source/_posts/javasyn.md" />
         <option value="$PROJECT_DIR$/source/_posts/PatternAndMatcher.md" />
-        <option value="$PROJECT_DIR$/source/_posts/Class-init.md" />
         <option value="$PROJECT_DIR$/source/_posts/countdownlatch.md" />
         <option value="$PROJECT_DIR$/source/_posts/CyclicBarrier.md" />
         <option value="$PROJECT_DIR$/source/_posts/git-flow.md" />
@@ -146,14 +121,15 @@
         <option value="$PROJECT_DIR$/.deploy_git/2017/10/08/ButterKnife在RecyclerView adapter中的使用/index.html" />
         <option value="$PROJECT_DIR$/themes/next/layout/_layout.swig" />
         <option value="$PROJECT_DIR$/_config.yml" />
-        <option value="$PROJECT_DIR$/themes/next/_config.yml" />
         <option value="$PROJECT_DIR$/source/_posts/重入锁与重入读写锁.md" />
         <option value="$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md" />
         <option value="$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" />
+        <option value="$PROJECT_DIR$/source/_posts/Class-init.md" />
+        <option value="$PROJECT_DIR$/themes/next/_config.yml" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="260" />
     <option name="y" value="20" />
     <option name="width" value="1400" />
@@ -182,8 +158,13 @@
             <path>
               <item name="wongzy.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="wongzy.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="source" type="462c0819:PsiDirectoryNode" />
-              <item name="_posts" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wongzy.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wongzy.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="themes" type="462c0819:PsiDirectoryNode" />
+              <item name="next" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -290,7 +271,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -299,9 +279,9 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.3266762" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.3266762" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2386059" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2386059" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -499,18 +479,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/CyclicBarrier.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/countdownlatch.md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/Class-init.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="81">
-            <caret line="147" column="8" selection-start-line="147" selection-start-column="8" selection-end-line="147" selection-end-column="8" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scaffolds/page.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
@@ -627,21 +595,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/themes/next/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="100" column="3" selection-start-line="100" selection-start-column="3" selection-end-line="100" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="83" column="7" lean-forward="true" selection-start-line="83" selection-start-column="7" selection-end-line="83" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/重入锁与重入读写锁.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="211">
+            <caret line="269" column="19" selection-start-line="269" selection-start-column="19" selection-end-line="269" selection-end-column="19" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
@@ -654,11 +620,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
+    <entry file="file://$PROJECT_DIR$/source/_posts/Class-init.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="325">
-            <caret line="215" lean-forward="true" selection-start-line="215" selection-end-line="215" />
+            <caret line="157" selection-start-line="157" selection-end-line="157" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />
@@ -666,15 +632,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="382">
-            <caret line="278" column="44" selection-start-line="6" selection-end-line="278" selection-end-column="44" />
+          <first_editor relative-caret-position="95">
+            <caret line="5" selection-start-line="5" selection-end-line="5" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />
           </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="69" column="21" selection-start-line="69" selection-start-column="21" selection-end-line="69" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/themes/next/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="105" column="11" selection-start-line="105" selection-start-column="11" selection-end-line="105" selection-end-column="11" />
         </state>
       </provider>
     </entry>
