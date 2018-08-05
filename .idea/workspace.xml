@@ -12,7 +12,22 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="synchronized关键字与volatile原理浅析.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/synchronized关键字与volatile原理浅析.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="1520">
+                <caret line="80" column="140" selection-start-line="80" selection-start-column="140" selection-end-line="80" selection-end-column="140" />
+              </first_editor>
+              <second_editor>
+                <markdownNavigatorState />
+              </second_editor>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -56,7 +71,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/source/_posts/ButterKnife在RecyclerView adapter中的使用.md" />
         <option value="$PROJECT_DIR$/source/_posts/使用windows10下搭建flask开发环境(python 3).md" />
         <option value="$PROJECT_DIR$/source/_posts/Rxjava2和Retrofit2实现解析bing每日一图JSON.md" />
         <option value="$PROJECT_DIR$/source/_posts/Java中的网络通信.md" />
@@ -107,6 +121,7 @@
         <option value="$PROJECT_DIR$/source/_posts/Https连接建立过程.md" />
         <option value="$PROJECT_DIR$/source/_posts/Class-init.md" />
         <option value="$PROJECT_DIR$/source/_posts/Android事件分发机制总结.md" />
+        <option value="$PROJECT_DIR$/source/_posts/synchronized关键字与volatile原理浅析.md" />
       </list>
     </option>
   </component>
@@ -124,6 +139,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -146,8 +163,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -257,7 +272,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
       <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.30385163" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22520107" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23123324" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -274,12 +289,12 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26126608" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -288,7 +303,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.3295325" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" id="Maven Projects" order="5" />
       <window_info id="Favorites" order="4" side_tool="true" />
@@ -298,7 +313,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/source/_posts/重入锁与重入读写锁.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
@@ -647,8 +661,20 @@
     <entry file="file://$PROJECT_DIR$/source/_posts/Android事件分发机制总结.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="289">
-            <caret line="68" column="51" selection-start-line="68" selection-start-column="51" selection-end-line="68" selection-end-column="51" />
+          <first_editor relative-caret-position="19">
+            <caret line="1" column="22" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="22" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/synchronized关键字与volatile原理浅析.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="1520">
+            <caret line="80" column="140" selection-start-line="80" selection-start-column="140" selection-end-line="80" selection-end-column="140" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />
