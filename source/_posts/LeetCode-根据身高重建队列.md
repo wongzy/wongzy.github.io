@@ -1,5 +1,5 @@
 ---
-title: 'LeetCode:根据身高重建队列'
+title: LeetCode:根据身高重建队列
 date: 2018-08-19 15:21:00
 categories: 算法
 ---
