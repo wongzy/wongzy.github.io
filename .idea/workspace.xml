@@ -2,117 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/01/25/使用git bash下载Android源码/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/01/25/使用git bash下载Android源码/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/02/自定义ViewGroup之扩展FloatingActionButton/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/02/自定义ViewGroup之扩展FloatingActionButton/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/05/DialogFragment实现DatePicker/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/05/DialogFragment实现DatePicker/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/07/NDK实现毛玻璃效果完全教程/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/07/NDK实现毛玻璃效果完全教程/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/08/ButterKnife在RecyclerView adapter中的使用/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/08/ButterKnife在RecyclerView adapter中的使用/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/13/DialogFragment实现自定义布局的小技巧/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/13/DialogFragment实现自定义布局的小技巧/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/18/android图片状态栏实现沉浸式状态栏/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/18/android图片状态栏实现沉浸式状态栏/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/19/Android中设置界面PreferenceFragment的用法/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/19/Android中设置界面PreferenceFragment的用法/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/10/22/Dagger2实现MVP模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/10/22/Dagger2实现MVP模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/11/02/使用委托模式在Activity中操作RecyclerView中的item/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/11/02/使用委托模式在Activity中操作RecyclerView中的item/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/11/06/MVP模式中的小技巧：软引用与弱引用/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/11/06/MVP模式中的小技巧：软引用与弱引用/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/11/15/使用GeForce Experience在Android studio上截图与录视频/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/11/15/使用GeForce Experience在Android studio上截图与录视频/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/11/25/另类的Android studio 3.0 报错解决方案/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/11/25/另类的Android studio 3.0 报错解决方案/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/11/27/Parcelable序列化类在Activity、Fragment之间通信/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/11/27/Parcelable序列化类在Activity、Fragment之间通信/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/12/10/发布Android开源项目到Jcenter库/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/12/10/发布Android开源项目到Jcenter库/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/12/17/Android引入react native/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/12/17/Android引入react native/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/12/26/OpeningStartAnimation - Android开屏动画view/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/12/26/OpeningStartAnimation - Android开屏动画view/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2017/12/27/react native 三种导航栏/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2017/12/27/react native 三种导航栏/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/02/用Github桌面版实现最简单的hexo部署到Github/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/02/用Github桌面版实现最简单的hexo部署到Github/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/03/设计模式中的车轮战-责任链模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/03/设计模式中的车轮战-责任链模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/05/策略模式：再见if-else/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/05/策略模式：再见if-else/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/06/Intance单例模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/06/Intance单例模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/08/组合模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/08/组合模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/09/原型模式与保护性拷贝/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/09/原型模式与保护性拷贝/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/12/抽象工厂模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/12/抽象工厂模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/13/工厂方法模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/13/工厂方法模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/15/中介者模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/15/中介者模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/15/让函数有执行顺序-模板方法/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/15/让函数有执行顺序-模板方法/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/17/Java中内置的设计模式-观察者模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/17/Java中内置的设计模式-观察者模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/17/命令模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/17/命令模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/17/容器中的游标-迭代器模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/17/容器中的游标-迭代器模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/18/对象内部的改变-状态模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/18/对象内部的改变-状态模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/19/Builder模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/19/Builder模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/20/外观模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/20/外观模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/20/特殊的继承关系-装饰模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/20/特殊的继承关系-装饰模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/20/解释器模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/20/解释器模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/22/设计模式中的撤销-备忘录模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/22/设计模式中的撤销-备忘录模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/24/使用最频繁的粘合剂-适配器模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/24/使用最频繁的粘合剂-适配器模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/24/访问者模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/24/访问者模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/25/轻量级的对象池-享元模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/25/轻量级的对象池-享元模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/26/抽象与实现之间的桥梁-桥接模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/26/抽象与实现之间的桥梁-桥接模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/01/28/oopsix/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/01/28/oopsix/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/02/06/Java中的网络通信/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/02/06/Java中的网络通信/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/02/14/GitCommand/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/02/14/GitCommand/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/02/15/gitpro/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/02/15/gitpro/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/02/23/compileAnnotation/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/02/23/compileAnnotation/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/03/26/PatternAndMatcher/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/03/26/PatternAndMatcher/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/04/25/Class-init/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/04/25/Class-init/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/06/03/git-flow/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/06/03/git-flow/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/06/30/Android NDK调用不符合jni规范的so文件/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/06/30/Android NDK调用不符合jni规范的so文件/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/07/08/同步器-倒计时门闩/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/07/08/同步器-倒计时门闩/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/07/15/Https连接建立过程/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/07/15/Https连接建立过程/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/07/30/Android事件分发机制总结/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/07/30/Android事件分发机制总结/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/08/05/synchronized关键字与volatile原理浅析/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/08/05/synchronized关键字与volatile原理浅析/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/08/12/Lock接口实现解析：到底什么是非重入锁和可重入锁/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/08/12/Lock接口实现解析：到底什么是非重入锁和可重入锁/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/08/19/LeetCode-根据身高重建队列/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/08/19/LeetCode-根据身高重建队列/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/08/25/Android绘制流程总结/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/08/25/Android绘制流程总结/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/08/30/LeetCode-01矩阵/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/08/30/LeetCode-01矩阵/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/2018/09/10/OkHttp中拦截器流程解析/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/2018/09/10/OkHttp中拦截器流程解析/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/404.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/404.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/about/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/about/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/01/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/01/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/10/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/10/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/11/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/11/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/12/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/12/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2017/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2017/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/01/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/01/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/01/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/01/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/01/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/01/page/3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/02/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/02/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/03/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/03/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/04/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/04/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/06/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/06/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/07/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/07/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/08/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/08/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/09/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/09/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/page/3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/page/4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/page/4/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/2018/page/5/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/2018/page/5/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/page/3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/page/4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/page/4/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/page/5/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/page/5/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/archives/page/6/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/archives/page/6/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/baidusitemap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/baidusitemap.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Android/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Android/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Android/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Android/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Android网络开发/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Android网络开发/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Git/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Git/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Java/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Java/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/Java多线程/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/Java多线程/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/react-native/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/react-native/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/算法/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/算法/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/设计模式/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/设计模式/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/设计模式/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/设计模式/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/categories/设计模式/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/categories/设计模式/page/3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/page/2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/page/2/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/page/3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/page/3/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/page/4/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/page/4/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/page/5/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/page/5/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/page/6/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/page/6/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/search.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.deploy_git/sitemap.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.deploy_git/sitemap.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -123,7 +12,22 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="堆排序实现及总结.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/堆排序实现及总结.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="482">
+                <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
+              </first_editor>
+              <second_editor>
+                <markdownNavigatorState />
+              </second_editor>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -167,7 +71,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/source/_posts/sortStackByStack.md" />
         <option value="$PROJECT_DIR$/source/_posts/HashCode-And-equal.md" />
         <option value="$PROJECT_DIR$/source/_posts/synchronized-and-volatile.md" />
         <option value="$PROJECT_DIR$/source/_posts/threadMethod.md" />
@@ -218,6 +121,7 @@
         <option value="$PROJECT_DIR$/source/_posts/LeetCode-01矩阵.md" />
         <option value="$PROJECT_DIR$/source/_posts/OkHttp中拦截器流程解析.md" />
         <option value="$PROJECT_DIR$/source/_posts/常见排序算法汇总及Java中默认实现.md" />
+        <option value="$PROJECT_DIR$/source/_posts/堆排序实现及总结.md" />
       </list>
     </option>
   </component>
@@ -236,7 +140,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -259,6 +162,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -358,22 +262,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5160858" side_tool="true" weight="0.3751783" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.38801712" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3295325" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" weight="0.38746437" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16085792" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1689008" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
-      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -384,14 +289,14 @@
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26126608" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.3295325" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -409,16 +314,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/source/_posts/ButterKnife在RecyclerView adapter中的使用.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/NDK实现毛玻璃效果完全教程.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
@@ -797,8 +692,20 @@
     <entry file="file://$PROJECT_DIR$/source/_posts/常见排序算法汇总及Java中默认实现.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="173">
-            <caret line="198" column="5" lean-forward="true" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
+          <first_editor relative-caret-position="325">
+            <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+          </first_editor>
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/堆排序实现及总结.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="482">
+            <caret line="45" lean-forward="true" selection-start-line="45" selection-end-line="45" />
           </first_editor>
           <second_editor>
             <markdownNavigatorState />
