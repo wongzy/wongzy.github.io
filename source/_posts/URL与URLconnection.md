@@ -74,3 +74,105 @@ Proxy proxy = new Proxy(Proxy.Type.HTTP, address);
 ```
 
 虽然只有三种代理对象，但是对于不同主机上的不同代理服务器，可以有相同类型的多个不同代理。
+
+#### 与网站认证相关的类
+
+很多流行的网站需要提供用户名和口令才能访问。有些网站（如W3C成员页面）通过HTTP认证来实现这一点。其他的网站，如New York Times网站，则通过cookie和HTML表单来实现。Java的URL类可以访问使用HTTP认证的网站，不过，当然需要提供用户名和口令。
+
+对于使用基于cookie的非标准认证的网站，要提供支持会更有难度，很重要的一个原因是：不同网站的cookie认证有很大区别。实现cookie认证往往要实现一个完整的Web浏览器，而且需要提供充分的HTML表单和cookie支持。
+
+##### Authenticator类
+
+包java.net包括一个Authenticator类，可以用它为使用HTTP认证自我保护的网站提供用户名和口令，由于Authenticator是一个抽象类，所以必须派生子类，不同子类可以采用不同的方式获取信息。
+
+> 需要注意的是，Authenticator类中没有抽象方法
+
+为了让URL使用这个子类，要把它传递给Authenticator.setDefault()静态方法，将它安装为默认的认证程序（Authenticator）
+
+```
+Authenticator.setDefault(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return super.getPasswordAuthentication();
+            }
+
+            @Override
+            protected URL getRequestingURL() {
+                return super.getRequestingURL();
+            }
+
+            @Override
+            protected RequestorType getRequestorType() {
+                return super.getRequestorType();
+            }
+        });
+```
+
+只需要安装一次。此后，当URL类需要用户名和口令时，它就会使用Authenticator.requestPasswordAuthentication()静态方法询问这个Authenticator类的子类,这个方法的源代码如下所示:
+
+```
+public static PasswordAuthentication requestPasswordAuthentication(
+                                    String host,
+                                    InetAddress addr,
+                                    int port,
+                                    String protocol,
+                                    String prompt,
+                                    String scheme,
+                                    URL url,
+                                    RequestorType reqType) {
+
+        SecurityManager sm = System.getSecurityManager();
+        if (sm != null) {
+            NetPermission requestPermission
+                = new NetPermission("requestPasswordAuthentication");
+            sm.checkPermission(requestPermission);
+        }
+
+        Authenticator a = theAuthenticator;
+        if (a == null) {
+            return null;
+        } else {
+            synchronized(a) {
+                a.reset();
+                a.requestingHost = host;
+                a.requestingSite = addr;
+                a.requestingPort = port;
+                a.requestingProtocol = protocol;
+                a.requestingPrompt = prompt;
+                a.requestingScheme = scheme;
+                a.requestingURL = url;
+                a.requestingAuthType = reqType;
+                return a.getPasswordAuthentication();
+            }
+        }
+    }
+```
+
+如源代码中所示,它使用了getPasswordAuthentication()方法,所以这个方法也是必须被重写的
+
+requestPasswordAuthentication()函数中各个参数如下:
+
+1. String host: 主机名
+
+2. InetAddress addr: 需要认证的主机
+
+3. int port: 该主机上的端口
+
+4. String protocol: 访问网站的应用层协议
+
+5. String prompt: 需要认证的域的域名
+
+6. String scheme: 认证模式
+
+7. URL url: 引发身份验证的请求URL
+
+8. RequestorType reqType: 认证类型(请求认证的是服务器还是代理服务器)
+
+##### PasswordAuthentication类
+
+非常简单的final类,它支持两个只读属性:用户名和口令
+
+##### JPasswordField类
+
+Swing中的组件,能以稍安全的方式来询问用户口令。
+
