@@ -1,5 +1,5 @@
 ---
-title: Socket
+title: Java Socket
 date: 2018-11-28 15:33:58
 categories: Android网络开发
 ---
@@ -50,7 +50,7 @@ Socket的构造函数如下：
 * public Socket(String host, int port, boolean stream) throws IOException
 * public Socket(InetAddress host, int port, boolean stream) throws IOException
 
-###### 设置Socket选项
+##### 设置Socket选项
 
 Socket选项指定了Java Socket类所依赖的原生socket如何发送和接收数据。对于客户端Socket，Java支持9个选项：
 
@@ -68,7 +68,11 @@ SO_LINGER选项指定了Socket关闭时如何处理尚未发送的数据报，�
 
 4. SO_REVBUF和SO_SNDBUF
 
-SO_REVBUF选项用于控制用于网络输入的建议的接收缓冲区大小。SO_SNDBUF选项控制用于网络输入的建议的发送缓冲区的大小。
+SO_REVBUF选项用于控制用于网络输入的 *建议的* 接收缓冲区大小。SO_SNDBUF选项控制用于网络输入的 *建议的* 发送缓冲区的大小。
+
+尽管看起来应该能独立地设置发送和接收缓冲区，但实际上缓冲区通常会设置为二者中较小的一个。例如，如果将发送缓冲区设置为64KB，而接收缓冲区设置为128KB，那么发送和接收缓冲区的大小都将是64KB。Java会报告接收缓冲区为128KB，但底层TCP栈实际上会使用64KB。
+
+> TCP的滑动窗口大小实际上就是socket的接收缓冲区（SO_RCVBUF）大小的字节数，拥塞窗口大小实际上就是socket的接收缓冲区（SO_SNDBUF）大小的字节数。
 
 5. SO_KEEPALIVE
 
@@ -85,4 +89,48 @@ SO_REVBUF选项用于控制用于网络输入的建议的接收缓冲区大小�
 8. IP_TOS
 
 服务类型
+
+#### 使用ServerSocket
+
+ServerSocket类包含了使用Java编写服务器所需的全部内容。其中包括创建新ServerSocket对象的构造函数、在指定端口监听连接的方法、配置各个服务器Socket选项的方法，以及其他一些常见的方法。
+
+在Java中，服务器程序的基本生命周期如下：
+
+1. 使用一个ServerSocket构造函数在一个特定端口创建一个新的ServerSocket
+2. ServerSocket使用其accept（）方法监听这个端口的入站连接。accept（）会一直阻塞，直到一个客户端尝试建立连接，此时accept（）将返回一个连接客户端和服务器的Socket对象。
+3. 根据服务器的类型，会调用Socket的getInputStream（）方法或getOutputSteam（）方法，或者这两个方法都调用，以获得与客户端通信的输入和输出流
+4. 服务器和客户端根据已协商的协议交互，直到要关闭连接
+5. 服务器或客户端（或二者）关闭连接
+6. 服务器返回步骤2，等待下一次连接
+
+##### 构造ServerSocket
+
+ServerSocket共有构造函数如下：
+
+* public ServerSocket() throws IOException: 无参构造函数，会创建一个ServerSocket对象，但未将它绑定到某个端口，所以开始时它不能接收任何连接。以后可以使用bind（）来进行绑定。允许程序在绑定端口之前设置服务器socket选项。有些选项在服务器socket绑定后必须固定
+* public ServerSocket(int port) throws IOException
+* public ServerSocket(int port, int backlog) throws IOException
+* public ServerSocket(int port, int backlog, InetAddress bindAddr) throws IOException
+
+##### ServerSocket选项
+
+Socket选项指定了ServerSocket类所依赖的原生Socket如何发送和接收数据。对于服务器Socket，Java支持以下3个选项：
+
+1. SO_TIMEOUT
+
+SO_TIMEOUT是accept（）在抛出java.io.InterruptedIOExption异常前等待入站连接的时间，以毫秒计。如果SO_TIMEOUT为0，accept（）就永远不会超时。
+
+2. SO_REUSEADDR
+
+服务器Socket的SO_REUSEADDR选项与客户端Socket的SO_REUSEDADDR选项非常类似。它确定了是否允许一个Socket绑定到之前使用过的一个端口，而此时可能还有一些发送到原Socket的数据正在网络上传输。
+
+3. SO_REVBUF
+
+SO_REVBUF选项设置了服务器Socket接收的客户端Socket默认接收缓冲区大小。设置一个服务器的SO_REVBUF就像在accept（）返回的各个Socket上调用setReceivedBufferSize()，这个选项给出了一个 *建议值* 。
+
+###### 服务类型
+
+public void setPerformancePreferences(int connectionTime,int latency,int bandwidth)方法描述了其连接时间，延迟和带宽所给定的相对优先级。但很多实现（包括Android）会完全忽略这些值。
+
+
 
