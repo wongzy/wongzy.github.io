@@ -132,5 +132,62 @@ SO_REVBUF选项设置了服务器Socket接收的客户端Socket默认接收缓�
 
 public void setPerformancePreferences(int connectionTime,int latency,int bandwidth)方法描述了其连接时间，延迟和带宽所给定的相对优先级。但很多实现（包括Android）会完全忽略这些值。
 
+#### 安全Socket
+
+作为一个Internet用户，你确实有一些保护手段可以防范官方的监视。为了使Internet连接从根本上更加安全，可以对Socket加密。这可以保持事务的机密性、真实性和准确性。
+
+JSSE允许你创建Socket和服务器Socket，可以透明地处理安全通信中心必要的协商和加密。Java安全Socket扩展（JSSE）分为四个包：
+
+* javax.net.ssl：定义Java安全网络通信API的抽象类
+* javax.net: 替代构造函数创建安全Socket的抽象Socket工厂类
+* java.security.cert: 处理SSL所需公开密钥证书的类
+* com.sun.net.ssl: Sun的JSSE参考实现中实现加密算法和协议的具体类。从理论上讲，它们不属于JSSE标准的一部分。
+
+##### 创建安全客户端Socket
+
+创建安全客户端Socket并不是用构造函数来构造一个java.net.Socket对象，而是从javax.net.ssl.SSLSocketFactory使用其createSocket()方法得到一个Socket对象。SSLSocketFactory是一个遵循抽象工厂设计模式的抽象类。要通过调用静态SSLSocketFactory.getDefault()方法得到一个实例：
+
+```
+SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();
+Socket socket = sslSocketFactory.createSocket();
+```
+
+创建安全客户端Socket还有以下方法：
+
+* public abstract Socket createSocket(String var1, int var2) throws IOException, UnknownHostException
+* public abstract Socket createSocket(String var1, int var2, InetAddress var3, int var4) throws IOException, UnknownHostException
+* public abstract Socket createSocket(InetAddress var1, int var2) throws IOException
+* public abstract Socket createSocket(InetAddress var1, int var2, InetAddress var3, int var4) throws IOException
+
+###### 选择密码组
+
+JSSE的不同实现支持认证和加密算法的不同组合。默认情况下，JDK 1.7实现启用了所有加密认证密码组。如果想要无认证的事务或认证但不加密的事务，必须用setEnalbledCipherSuites（）方法显式启用这些密码组。同时要避免名字中包含NULL、ANON或EXPORT的密码组。
+
+强制连接使用密码组可以使用这样的代码段：
+
+```
+SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();
+SSLSocket socket = sslSocketFactory.createSocket();
+String[] suites = {"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256"};
+socket.setEnabledCipherSuites(suites);
+```
+
+每个密码组中的算法都分为四个部分：协议、密钥交换算法、加密算法和校验和。
+
+> 除了选择密码组，还有管理会话和确立客户端是否需要自行认证的方法。
+
+##### 创建安全服务器Socket
+
+与安全客户端Socket相似，创建安全服务器Socket同样是工厂模式。但是需要注意的是，为了同时进行加密，服务端安全Socket需要更多的初始化和设置，如以下步骤所示：
+
+1. 使用keytool生成公开密钥和证书
+2. 花钱请可信任的第三方认证你的证书
+3. 为你使用的算法创建一个SSLContext
+4. 为你要使用的证书源创建一个TrustManagerFactory
+5. 为你要使用的密钥类型创建一个KeyManagerFactory
+6. 为密钥和证书数据库创建一个KeyStore对象
+7. 用密钥和证书填充KeyStore对象
+8. 用KeyStore及其口令短语初始化KeyManagerFactory
+9. 用KeyManagerFactory中的密钥管理器（必要）、TrustManagerFactory中的信任管理器和一个随机源来初始化上下文
 
 
