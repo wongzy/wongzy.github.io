@@ -13,18 +13,32 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/_posts/Java泛型总结.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="74">
-                <caret line="208" selection-start-line="208" selection-end-line="208" />
+              <first_editor relative-caret-position="215">
+                <caret line="27" column="5" lean-forward="true" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
               </first_editor>
-              <second_editor>
-                <markdownNavigatorState />
-              </second_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/source/_posts/Proguard学习及App混淆.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="82">
+                <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -73,7 +87,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/source/_posts/fourComponents.md" />
         <option value="$PROJECT_DIR$/source/_posts/androidBinder.md" />
         <option value="$PROJECT_DIR$/source/_posts/binderandAIDL.md" />
         <option value="$PROJECT_DIR$/source/_posts/UIdraw.md" />
@@ -124,10 +137,11 @@
         <option value="$PROJECT_DIR$/source/_posts/ConstraintLayout用法（一）.md" />
         <option value="$PROJECT_DIR$/source/_posts/ConstraintLayout用法.md" />
         <option value="$PROJECT_DIR$/source/_posts/Java泛型总结.md" />
+        <option value="$PROJECT_DIR$/source/_posts/Proguard学习及App混淆.md" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="85" />
     <option name="y" value="25" />
     <option name="width" value="1750" />
@@ -170,7 +184,11 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -192,22 +210,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -242,6 +244,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -262,17 +271,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1516879174390</updated>
+      <workItem from="1563200994515" duration="89000" />
+      <workItem from="1563684477697" duration="6997000" />
     </task>
     <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="7086000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.15587847" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.12533513" />
       <window_info id="Structure" order="1" sideWeight="0.5028329" side_tool="true" weight="0.2608983" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
+      <window_info id="Image Layers" order="5" />
+      <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -283,12 +299,18 @@
       <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.5779037" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5160858" side_tool="true" weight="0.3751783" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286119" />
+      <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="right" id="Maven Projects" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Maven" order="7" />
+      <window_info anchor="right" id="Capture Analysis" order="8" />
+      <window_info anchor="right" id="Database" order="9" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26126608" />
@@ -314,8 +336,10 @@
       <window_info anchor="right" id="Maven Projects" order="5" />
     </layout-to-restore>
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.deploy_git/2017/10/08/ButterKnife在RecyclerView adapter中的使用/index.html" />
     <entry file="file://$PROJECT_DIR$/.deploy_git/index.html" />
     <entry file="file://$PROJECT_DIR$/.deploy_git/js/src/schemes/pisces.js" />
     <entry file="file://$PROJECT_DIR$/themes/next/layout/_layout.swig">
@@ -327,42 +351,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/_posts/重入锁与重入读写锁.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/锁、不可重入锁与条件.md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor>
-            <caret selection-end-line="4" selection-end-column="3" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="95">
-            <caret line="5" selection-start-line="5" selection-end-line="5" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/组合模式.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="19">
-            <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android中设置界面PreferenceFragment的用法.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android NDK调用不符合jni规范的so文件.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/组合模式.md" />
     <entry file="file://$PROJECT_DIR$/themes/next/_config.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="188">
@@ -370,317 +361,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Https连接建立过程.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="19">
-            <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/同步器-倒计时门闩.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="398">
-            <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android事件分发机制总结.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="19">
-            <caret line="1" column="22" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="22" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/synchronized关键字与volatile原理浅析.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="209">
-            <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Lock接口实现解析：到底什么是非重入锁和可重入锁.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="252">
-            <caret line="77" column="8" selection-start-line="77" selection-start-column="8" selection-end-line="77" selection-end-column="8" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/Https连接建立过程.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/同步器-倒计时门闩.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android事件分发机制总结.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/synchronized关键字与volatile原理浅析.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Lock接口实现解析：到底什么是非重入锁和可重入锁.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/再探synchronized关键字.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/gradle task.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/gradle中使用的编程语言-Groovy.md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/DialogFragment实现自定义布局的小技巧.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="646">
-            <caret line="37" column="13" lean-forward="true" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/git-flow.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="521">
-            <caret line="42" selection-start-line="42" selection-end-line="42" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/对象内部的改变-状态模式.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/DialogFragment实现自定义布局的小技巧.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/git-flow.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/对象内部的改变-状态模式.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/Java项目构建：基础单项目.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/使用windows10下搭建flask开发环境(python 3).md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android绘制流程总结.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="114">
-            <caret line="6" column="14" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="14" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/LeetCode-01矩阵.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="597">
-            <caret line="100" column="9" selection-start-line="100" selection-start-column="9" selection-end-line="100" selection-end-column="9" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/LeetCode-根据身高重建队列.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="209">
-            <caret line="11" selection-start-line="11" selection-end-line="11" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Builder模式.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/OkHttp中拦截器流程解析.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="190">
-            <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/常见排序算法汇总及Java中默认实现.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="325">
-            <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/堆排序实现及总结.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="887">
-            <caret line="72" column="49" selection-start-line="72" selection-start-column="49" selection-end-line="72" selection-end-column="49" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/虚拟存储器.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="327">
-            <caret line="63" selection-start-line="63" selection-end-line="63" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/404/index.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP2.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="867">
-            <caret line="81" column="70" selection-start-line="81" selection-start-column="70" selection-end-line="81" selection-end-column="70" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP1.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="51">
-            <caret line="3" column="23" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="23" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/URL与URLconnection.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="1040">
-            <caret line="174" column="5" selection-start-line="174" selection-start-column="5" selection-end-line="174" selection-end-column="5" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/DNS.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="459">
-            <caret line="27" selection-start-line="27" selection-end-line="27" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android绘制流程总结.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/LeetCode-01矩阵.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/LeetCode-根据身高重建队列.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Builder模式.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/OkHttp中拦截器流程解析.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/常见排序算法汇总及Java中默认实现.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/堆排序实现及总结.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/虚拟存储器.md" />
+    <entry file="file://$PROJECT_DIR$/source/404/index.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP2.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP1.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/URL与URLconnection.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/DNS.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/Java中的网络通信.md" />
-    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="187">
-            <caret line="11" column="299" selection-start-line="11" selection-start-column="299" selection-end-line="11" selection-end-column="299" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/android图片状态栏实现沉浸式状态栏.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Android电视焦点问题总结.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="310">
-            <caret line="44" column="52" selection-start-line="44" selection-start-column="52" selection-end-line="44" selection-end-column="52" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Rxjava2和Retrofit2实现解析bing每日一图JSON.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/UDP-and-TCP.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/android图片状态栏实现沉浸式状态栏.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Android电视焦点问题总结.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Rxjava2和Retrofit2实现解析bing每日一图JSON.md" />
     <entry file="file://$PROJECT_DIR$/db.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/ConstraintLayout用法.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="271">
-            <caret line="161" column="4" lean-forward="true" selection-start-line="161" selection-start-column="4" selection-end-line="161" selection-end-column="4" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/ConstraintLayout用法.md" />
     <entry file="file://$PROJECT_DIR$/_config.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
@@ -688,83 +403,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/RecyclerView深入学习.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="209">
-            <caret line="11" selection-start-line="11" selection-end-line="11" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/让函数有执行顺序-模板方法.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/客户端Socket.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="119">
-            <caret line="7" selection-start-line="7" selection-end-line="7" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/oopsix.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Java-Socket-UDP.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="589">
-            <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/source/_posts/Class-init.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="674">
-            <caret line="156" column="22" selection-start-line="156" selection-start-column="22" selection-end-line="156" selection-end-column="22" />
-          </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/RecyclerView深入学习.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/让函数有执行顺序-模板方法.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/客户端Socket.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/oopsix.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Java-Socket-UDP.md" />
+    <entry file="file://$PROJECT_DIR$/source/_posts/Class-init.md" />
     <entry file="file://$PROJECT_DIR$/source/_posts/Java泛型总结.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="74">
-            <caret line="208" selection-start-line="208" selection-end-line="208" />
+          <first_editor relative-caret-position="215">
+            <caret line="27" column="5" lean-forward="true" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
           </first_editor>
-          <second_editor>
-            <markdownNavigatorState />
-          </second_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/_posts/Proguard学习及App混淆.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="82">
+            <caret line="27" column="47" selection-start-line="27" selection-start-column="47" selection-end-line="27" selection-end-column="47" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
