@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/Android依赖的多种使用方法和依赖冲突处理.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Android依赖的多种使用方法和依赖冲突处理.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,13 +18,13 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/_posts/Android依赖的多种使用方法和依赖冲突处理.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="82">
-                <caret line="74" column="50" selection-start-line="74" selection-start-column="50" selection-end-line="74" selection-end-column="50" />
+              <first_editor relative-caret-position="617">
+                <caret line="83" column="1" selection-start-line="83" selection-start-column="1" selection-end-line="83" selection-end-column="1" />
               </first_editor>
               <second_editor />
             </state>
@@ -143,6 +144,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -165,7 +167,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -260,17 +261,19 @@
       <updated>1516879174390</updated>
       <workItem from="1563200994515" duration="89000" />
       <workItem from="1563684477697" duration="7414000" />
-      <workItem from="1564294934368" duration="5373000" />
+      <workItem from="1564294934368" duration="5529000" />
+      <workItem from="1564816250499" duration="1246000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12876000" />
+    <option name="totallyTimeSpent" value="14278000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49716714" weight="0.14477211" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49716714" weight="0.1461126" />
       <window_info id="Structure" order="1" sideWeight="0.5028329" side_tool="true" weight="0.2608983" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -284,7 +287,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" visible="true" weight="0.57648724" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" weight="0.3243626" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5160858" side_tool="true" weight="0.3751783" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286119" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
@@ -301,7 +304,7 @@
       <window_info anchor="right" id="Database" order="9" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.14477211" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49716714" visible="true" weight="0.1461126" />
       <window_info id="Structure" order="1" sideWeight="0.5028329" side_tool="true" weight="0.2608983" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -315,7 +318,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" weight="0.57708627" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4839142" weight="0.3243626" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5160858" side_tool="true" weight="0.3751783" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.3286119" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
@@ -427,8 +430,8 @@
     <entry file="file://$PROJECT_DIR$/source/_posts/Android依赖的多种使用方法和依赖冲突处理.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="82">
-            <caret line="74" column="50" selection-start-line="74" selection-start-column="50" selection-end-line="74" selection-end-column="50" />
+          <first_editor relative-caret-position="617">
+            <caret line="83" column="1" selection-start-line="83" selection-start-column="1" selection-end-line="83" selection-end-column="1" />
           </first_editor>
           <second_editor />
         </state>

@@ -66,6 +66,8 @@ dependencies {
 
 这里我们在映入some-library的同时将*com.example.imgtools：native*这个库剔除掉了，这样进行引入，我们的module就不会传递性地引入*com.example.imgtools：native*这个库了，除了使用exclude来屏蔽传递性依赖，实际上我们还有一个更一了百了的方法，如下：
 
+#### transitive
+
 ```groovy
 api ('com.facebook.fresco:fresco:0.13.0'){
         transitive = false
@@ -74,5 +76,17 @@ api ('com.facebook.fresco:fresco:0.13.0'){
 
 这样，通过*com.facebook.fresco:fresco*这个库传递的所有依赖都被我们屏蔽了
 
+#### force
 
+通过force关键字可以强制指定某个模块的版本
+
+```groovy
+configurations.all {
+   resolutionStrategy {
+       force 'org.hamcrest:hamcrest-core:1.3'
+   }
+}
+```
+
+> 使用configurations.all可以指定全局设置
 
