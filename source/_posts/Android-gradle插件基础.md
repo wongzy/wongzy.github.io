@@ -145,4 +145,81 @@ class AutoMultilingualResourcePlugin : Plugin<Project> {
 这里需要特别注意的是，我们读取在build.gradle中配置的参数必须是在gradle的evaluate声明周期之后，否则读取的参数还是默认的，而不是在build.gradle中配置的
 
 
+# 另一种插件:Transform
 
+transform是插件是另一种用法，它相当于在app打包的过程中再插入了一个task，这个task会在assembleDebug之前执行，具体的代码如下：
+
+```kotlin
+package com.example.multilingual
+
+import com.android.build.api.transform.QualifiedContent
+import com.android.build.api.transform.Transform
+import com.android.build.api.transform.TransformInvocation
+import com.android.build.gradle.internal.pipeline.TransformManager
+
+class ShrinkResourcePlugin : Transform(){
+    override fun getName(): String {
+       return "Test"
+    }
+
+    override fun getInputTypes(): MutableSet<QualifiedContent.ContentType> {
+        return TransformManager.CONTENT_CLASS
+    }
+
+    override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
+        return TransformManager.SCOPE_FULL_PROJECT
+    }
+
+    override fun isIncremental(): Boolean {
+        return false
+    }
+
+    override fun transform(transformInvocation: TransformInvocation?) {
+        ...//这里需要自己实现之前的逻辑，否则会打包出错，可添加自己的逻辑
+    }
+}
+```
+
+默认正确的transform函数如下，这是使用groovy实现的：
+
+```groovy
+ @Override
+    void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
+        def inputs = transformInvocation.inputs
+        def outputProvider = transformInvocation.outputProvider
+        inputs.each {
+            it.jarInputs.each {
+                File dest = outputProvider.getContentLocation(it.name, it.contentTypes, it.scopes, Format.JAR)
+                FileUtils.copyFile(it.file, dest)
+            }
+
+            it.directoryInputs.each {
+                File dest = outputProvider.getContentLocation(it.name, it.contentTypes, it.scopes, Format.DIRECTORY)
+                println "Dest: ${it.file}"
+                FileUtils.copyDirectory(it.file, dest)
+            }
+        }
+    }
+```
+
+Transform插件实现过程中需要实现的几个函数作用如下：
+
+* getName
+
+返回task的名字
+
+* getInputTypes()
+
+处理的文件的类型
+
+* getScopes()
+
+处理的文件范围
+
+* isIncremental()
+
+在transform()函数中对文件列表是否有增删改
+
+* transform()
+
+具体的实现逻辑函数
