@@ -137,4 +137,110 @@ return fd;
 * 对返回的fd使用mmap，这样Binder驱动就会分配一块内存来接收数据。
 * 由于ProcessState具有唯一性，因此一个进程只打开设备一次
 
+### sp<IserviceManager> sm = defaultServiceManager();:调用defaultServiceManager，得到一个IServiceManager。
+
+defaultServiceManager函数的实现在IServiceManager.cpp中完成。它会返回一个IServiceManager对象，通过这个对象，我们可以神奇地与另一个进程ServiceManager进行交互。
+
+1. defaultServiceManager调用的函数
+
+defaultServiceManager的代码藏在IServiceManager中，如下：
+
+```cpp
+sp<IServiceManager> defaultServiceManager() {
+//看样子又是一个单例，英文名字叫Singleton，Android是一个优秀的源码库，大量使用了设计模式
+if (gDefaultServiceManager != NULL)
+return gDefaultServiceManager;
+{
+AutoMutex_I(gDefaultServiceManagerLock);
+if (gDefaultServiceManger == NULL) {
+//真正的gDefaultServiceManger是在这里创建的。
+gDefaultServiceManager = interface_cast<IServiceManager> {
+Process::self() -> getContextObject(NULL));
+}
+}
+return gDefaultServiceManager;
+```
+
+这里可以看到，gDefaultServiceManager是调用了ProcessState的getContextObject函数来赋值的，getContextObject函数在ProcessState.cpp文件中，如下所示：
+
+```cpp
+sp<IBinder> ProcessState::getContextObject(const sp<IBinder> &caller) {
+/* caller的只为0，因为它传入的参数为NULL。
+support函数根据openDriver函数是否可成功打开设备来判断它是否支持process。
+真实设备肯定支持process。
+*/
+if (supportsProcesses()) {
+//真实设备上肯定是支持进程的，所以会调用下面这个函数。
+return getStrongProxyForHandle(0);
+} else {
+return getContextObject(String16("default"), caller);
+}
+}
+```
+
+getStrongProxyForHandle的函数实现如下：
+
+```cpp
+sp<IBinder> ProcessState::getStrongProxyForHandle(int32_t handle)
+{
+sp<IBinder> result;
+AutoMutex_I(mLock);
+/*
+根据索引查找对应的资源。如果lookupHandleLocked发现没有对应的资源项，则会创建一个新的项并返沪。这个新项的内容需要填充。
+*/
+handle_entry *e = lookupHandleLocked(handle);
+if (e != NULL) {
+IBinder *b = e -> binder;
+if (b == NULL || !e -> refs -> attemptIncWeak(this)) {
+//对于新创建的资源项，它的binder为空，所以走这个分支。注意，handle的值为0
+b = new BpBinder(handle); //创建一个bpBinder
+e -> binder = b;//填充entry的内容
+if (b) e -> refs = b -> getWeakRefs();
+result = b; 
+} else {
+result.force_set(b);
+e -> refs -> decWeak(this);
+}
+}
+return result; //返回BpBinder(handle),注意，handle的值为0
+```
+
+上述代码中出现的BpBinder和它的孪生兄弟BBinder都是Android中与Binder通信相关的代表，他们都是从IBinder类中派生而来。
+
+关于BpBinder和BBinder的关系可以这么理解：
+
+* BpBinder是客户端用来与Server交互的代理类，p即Proxy的意思
+* BBinder则是与proxy相对的一端，它是proxy交互的目的端，可以这么理解，BpBinder为客户端，那么BBinder则是对应的服务端，BpBinder和BBinder是一一对应的，某个BpBinder只能与对应的BBinder交互。
+
+BpBinder是由Binder系统通过handler来标识对应的BBinder。
+
+> 注意，我们给BpBinder构造函数传的参数handle的值是0，这个0在整个Binder系统中有重要含义--因为0代表的就是ServiceManager所对应的BBinder。
+
+下面是BpBinder的代码，卸载BpBinder.cpp中：
+
+```cpp
+BpBinder::BpBinder(int32_t handle)
+:mHandle(handle) //handle是0
+,mAlive(1)
+,mObitsSent(0)
+,mObituaries(NULL)
+{
+extendObjectLifetime(OBJECT_LIFTTIME_WEAK);
+//另一个重要对象是IPCThreadState，我们稍后会详细讲解。
+IPCThreadState::self() -> incWeakHandle(handle);
+}
+```
+
+可以看到，BpBinder和BBinder两个类没有任何地方操作ProcessState打开的那个/dev/binder设备
+
+所以这段代码中
+
+```cpp
+gDefaultServiceManager = interface_cast<IServiceManager> {
+Process::self() -> getContextObject(NULL));
+}
+```
+
+这里的 *interface_cast*函数就显得十分重要
+
 
