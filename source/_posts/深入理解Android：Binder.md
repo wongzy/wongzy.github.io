@@ -52,7 +52,7 @@ int main(int argc,char **argv)
 sp<ProcessState> proc(ProcessState::self());
 //2.MS作为ServiceManager的客户端，需要向ServiceManager注册服务。
 //调用defaultServiceManager，得到一个IServiceManager。
-sp<IserviceManager> sm = defaultServiceManager();
+sp<IServiceManager> sm = defaultServiceManager();
 //初始化音频系统的AudioFlinger服务。
 AudioFlinger::instantiate();
 //3.多媒体系统的MediaPlayer服务，我们将以它作为主切入点。
@@ -243,4 +243,46 @@ Process::self() -> getContextObject(NULL));
 
 这里的 *interface_cast*函数就显得十分重要
 
+interface_cast的具体实现如下
 
+```cpp
+templaate<typename INTERFACE>>
+intline sp<INTERFACE> interface_cast(const sp<IBinder> &obj)
+{
+return INTERFACE::asInterface(obj);
+}
+```
+
+这里仅仅是一个模板函数，真实的实现其实是下面这样的。
+
+```cpp
+inline sp<IServiceManager> interface_cast(const sp<IBinder> &obj)
+{
+return IServiceManager::asInterface(obj);
+}
+```
+
+所以这个函数真正的实现还是在IServiceManager中的的，IServiceManager定义了ServiceManager中所提供的服务。
+
+那么interface_cast是如何把BpBinder指针转换成一个IServiceManager指针的呢？答案就是下面这段代码。
+
+```cpp
+intr = new BpServiceManager(obj);
+```
+
+由代码当中可以看出，interface_cast不是指针的转换，而是利用BpBinder对象作为参数新建了一个BpServiceManager对象。到这里我们已经看到了IServiceManager和BpServiceManager的身影，所有的类关系图谱如下：
+
+![IServiceManager类图.PNG](https://i.loli.net/2019/09/01/Utr2SFfJudDsKZX.png)
+
+从这张类图中我们可以看到BnServiceManager是同时继承了IServiceManager和BBinder，所以它可以直接地与Binder交互，但是BpServiceManager则没有直接继承关于Binder的类，它是通过BpRefBase与Binder进行交互的，因为BpRefBase中mRemote的值就是BpBinder。
+
+再回到最开始的这段代码
+
+```cpp
+sp<IServiceManager> sm = defaultServiceManager();
+```
+
+通过defaultServiceManger函数，我们可以得到两个关键的对象：
+
+* 一个BpBinder对象，它的handle值是0
+* 有一个BpServiceManager对象，它的mRemote值是BpBinder
