@@ -56,7 +56,7 @@ sp<IServiceManager> sm = defaultServiceManager();
 //初始化音频系统的AudioFlinger服务。
 AudioFlinger::instantiate();
 //3.多媒体系统的MediaPlayer服务，我们将以它作为主切入点。
- MidiaPlayerService::Instantiate();
+ MediaPlayerService::Instantiate();
 //CameraService服务。
  CameraService::instantiate();
 //音频系统的AudioPolicy服务。
@@ -286,3 +286,135 @@ sp<IServiceManager> sm = defaultServiceManager();
 
 * 一个BpBinder对象，它的handle值是0
 * 有一个BpServiceManager对象，它的mRemote值是BpBinder
+
+defaultServiceManager()实际返回的对象是BpServiceManager
+
+### 初始化多媒体系统的MediaPlayer服务：MediaPlayerService::Instantiate();
+
+MediaPlayerService的代码如下所示：
+
+```cpp
+void MediaPlayerService::instance() {
+defaultServiceManager()-> addService(
+String16("media.player"),new MediaPlayerService());
+}
+```
+
+因为defaultServiceManager实际返回的对象是BpServiceManager，所以实际的代码是这样的：
+
+```cpp
+vitual status_t addService(const String16 & name, const sp<IBinder> & service)
+{
+//Parcel：就把她当作是一个数据包
+Parcel data，reply；
+data.writeInterfaceToken(IServiceManager::getInterfaceDescripter());
+data.writeString16(name);
+data.writeStrongBinder(service);
+//remote返回的是mRemote,也就是BpBinder对象
+status_err err = remote()->transact(ADD_SERVICE_TRANSACTION,data, &reply);
+return err = NO_ERROR?reply.readInt32():err;
+```
+
+很明显，addService函数就做了一件事情：*就是把请求数据打包成data后，传给了BpBinder的transact函数，把通信的工作交给了BpBinder去完成。*
+
+BpBinder 的transact函数实现如下所示：
+
+```cpp
+status_t BpBinder::transact(uint32_t code, const Parcel & data, Parcel *reply, uint32_t flag)
+{
+if (mAlive) {
+//BpBinder果然是道具，它把transact工作交给了IPCThreadState。
+status_t status = IPCThreadState::self()->transact(
+mHandle, code, data, reply, flag);//mHandle也是参数
+if (status == DEAD_OBJECT) mAlive = 0;
+return status;
+}
+return DEAD_OBJECT;
+}
+```
+
+这里可以看出来，BpBinder把transact工作马上交给了IPCThreadState。现在我们来分析以下IPCThreadState与transact（）
+
+1. IPCThreadState
+
+IPCThreadState的实现代码如下：
+
+```cpp
+IPCThreadState *IPCThreadState::self() 
+{
+if (gHavaTLS) {//第一次进来为false
+restart:
+const pthread_key_t k = gTLS;
+/*
+TLS是Thread Local Strage（线程本地存储空间）的简称。相当于Java的ThreadLocal
+通过pThread——getspecific/pthread_setspececific函数可以获取/设置这些空间中的内容。从线程本地存储空间中获取保存在其中的IPCThreadState对象。
+有调用pthread_getspecific的地方，肯定也有pthread_setspecific的地方
+*/
+IPCThread State*st = （IPCThreadState*）pthread_getspectfic(k);
+if (st) return st;
+//new一个对象，构造函数中会调用pthread_setspecific.
+return new IPCThreadState;
+}
+if(gShoutdown) return NULL;
+pthread_mutex_lock(&gTLSMutex);
+if (!gHaveTLS) {
+if (pThread_key_create(&gTLS, threadDestructor)!=0) {
+pthread_mutex_unlock(&gTLSMutex);
+return NULL;
+}
+gHavaTLS = true;
+}
+pthread_mutex_unlock(&gTLSMutex);
+return NULL;
+}
+gHavaTLS = true;
+}
+pthread_mutex_unlock(&gTLSMutex);
+goto restart;
+```
+
+它的构造函数如下：
+
+```cpp
+IPCThreadState::IPCthreadState()
+:mProcess(ProcessState::self()),mMyThreadId(androidGetTid())
+{
+//在构造函数中，把自己设置到线程本地存储当中去。
+pthread_setspectfic(gTLS,this);
+clearCaller();
+//mIn和mOut是两个Parcel。把它看成是发送和接收命令的两个缓冲区即可。
+mIn.setDataCapacity(256);
+mOut.setDataCapacity(256);
+}
+```
+
+每个线程都有一个IPCThreadState，每个IPCThreadState中都有一个mIn，一个mOut，其中，mIn是用来接收来自Binder设备的数据的，而mOut则是用来存储发往Binder设备的数据的。
+
+2. transact（）
+
+这个函数实际完成了与Binder通信的工作，如下代码所示：
+
+```cpp
+//注意，handle的值为0，代表通信的目的端
+status_t IPCThreadState::transact(int32_t handle,uint32_t code,const Parcel & data, Parcel *reply,uint32_t flags)
+{
+status_t err = data.errorCheck();
+flag |= TF_ACCEPT_FPS;
+......
+/*
+注意这里的第一个参数BC_TRANSACTION,它是应用程序向binder设备发送消息的消息码，而binder设备向应用程序回复消息的消息码以BR_开头。消息码的定义在binder_module.h中，请求消息码和回应消息码的对应关系，需要查看Binder驱动的实现才能将其理清楚，我们这里暂时用不上。
+*/
+err = writeTransactionData(BC_TRNASACTION,flags,handle,code, data, NULL);
+......
+err = waitForResponse(reply);
+......
+return err;
+```
+
+这个流程很简单：先发数据，然后等结果。
+
+writeTransaction函数的作用是把请求命令写在mOut中了，handle的值为0，用来标识目的端，其中0是ServiceManager的标志。
+
+waitForResponse函数的作用是发送请求和接收回复。收到回复后，就会调用talkWithDriver函数，在talkWithDriver函数中就会调用ioctl方式与Binder交互。
+
+>  ioctl是设备驱动程序中对设备的I/O通道进行管理的函数。
