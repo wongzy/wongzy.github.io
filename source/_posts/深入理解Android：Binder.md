@@ -418,3 +418,93 @@ writeTransaction函数的作用是把请求命令写在mOut中了，handle的值
 waitForResponse函数的作用是发送请求和接收回复。收到回复后，就会调用talkWithDriver函数，在talkWithDriver函数中就会调用ioctl方式与Binder交互。
 
 >  ioctl是设备驱动程序中对设备的I/O通道进行管理的函数。
+
+### ProcessState::self()->startThreadPool():创建线程池
+
+startThread的实现如下面代码所示：
+
+````cpp
+void PeocessState::startThreadPool()
+{
+AutoMutex_I(mLock);
+//如果已经startThreadPool的话，这个函数就没有什么实质作用了。
+if (!mThreadPoolStarted){
+mThreadPoolStarted = true;
+spawnPooledThread(true);//注意，传进去的参数是true。
+}
+}
+````
+
+上面的spawnPooledThread函数的实现如下所示：
+
+```cpp
+void PeocessState::spawnPooledThread(bool isMain)
+{
+//注意，isMain参数是true
+if(mThreadPoolStarted) {
+int32_t s = android_atomic_add(1,&mThreadPoolSeq);
+char buf[32];
+spritf(buf, "Binder Thread#%d",s);
+sp<Thread> t = new PoolThread(isMain);
+t -> run(buf);
+}
+}
+```
+
+可以看到，这里又新建了一个线程并运行，而这个新创建的线程（PoolThread）也调用了joinThreadPool这个函数。
+
+### IPCThreadState::self()->joinThreadPool();
+
+具体实现如下：
+
+```cpp
+void IPCThreadState::joinThreadPool(bool isMain) 
+{
+//注意，如果isMain为true，我们则需要循环处理。把请求信息写到mOut中，待会儿则一起发出去
+mOut.writeInt32(isMain?BC_ENTER_LOOPER:BC_REGISTER_LOOPER);
+androidSetSchedulingGroup(mMyThreadId,ANDROID_TGROUP_DEFAULT);
+status_t result:
+do{
+int32_t cmd;
+if(mIn.dataPosition()>=mIn.dataSize())
+{
+size_t numPending = mPendingWeakDerefs.size();
+if (numPending > 0) {
+for(size_t i = 0; i < numPending;i ++) {
+RefBase::weakref_type*refs = mPendingWeakDeref[i];
+refs->decWeak(mProcess.get());
+}
+mPendingStrongDerefs.clear();
+}
+}
+//发送命令，读取请求
+result = talkWithDriver();
+if (result >= NO_ERROR){
+size_t IN = mIn.dataAvail();
+if (IN < sizeof(int32_t)) continue;
+cmd = mIn.readInt32();
+result = executeCommand(cmd);//处理消息
+}
+......
+} while(result != -ECONNREFUSED && result != -EBADF);
+mOut.writeInt32(BC_EXIT_LOOPER);
+talkWithDriver(false);
+}
+```
+
+原来，这里也使用了talkWithDriver,两个调用了joinThreadPool的线程看看从Binder设备那里能不能找点可做的事情。
+
+### MediaPlayerService总结
+
+目前看来MediaPlayerService调用了两个线程为Service服务，分别是：
+
+* startThreadPool中新启动的线程（即第四步：ProcessState::self()->startThreadPool()）通过joinThreadPool读取binder设备，查看是否有请求。
+
+* 主线程也调用joinThreadPool读取binder设备，查看是否有请求。看来，binder设备是支持多线程操作的。
+
+MediaPlayerService总共注册了四个服务。
+
+Binder体系中通信层和业务层的交互关系可以通过这个图来表示：
+
+![Binder业务层通信层关系.PNG](https://i.loli.net/2019/09/03/FRxbt4ywqJjSE3r.png)
+
