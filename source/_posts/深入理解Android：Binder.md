@@ -508,3 +508,101 @@ Binder体系中通信层和业务层的交互关系可以通过这个图来表�
 
 ![Binder业务层通信层关系.PNG](https://i.loli.net/2019/09/03/FRxbt4ywqJjSE3r.png)
 
+## 服务总管ServiceManager
+
+### ServiceManager的原理
+
+defaultServiceManager返回的是一个BpServiceManager，通过它可以把命令请求发送给handle值为0的目的端。而这些请求都被ServiceManger处理了。
+
+#### ServiceManger的入口函数
+
+ServiceManager的入口函数如下所示。
+
+```cpp
+int mian(int argc, char **argv) 
+{
+//BINDER_SERVICE_MANAGER的值为NULL,是一个magic number
+void *svcmgr = BINDER_SERVICE_MANAGER;
+//1.应该是打开binder设备吧？
+bs = binder_open(128*1024);
+//2.成为manager，是不是把自己的handle置为0？
+binder_become_context_manager(bs);
+svcmgr_handle = scvmgr;
+//3.处理客户端发过来的请求
+binder_loop(bs,svcmgr_handler);
+```
+
+1. 打开binder设备:binder_open
+
+binder_open函数用于打开binder设备，它的实现如下所示：
+
+```c
+/*
+这里的binder_open应该与我们之前在ProcessState中看到的一样：
+1）打开binder设备
+2）内存映射
+*/
+struct binder_state*binder_open(unsigned mapsize)
+{
+struct binder_state *bs;
+bs = malloc(sizeof(*bs));
+.......
+bs->fd=open("/dev/binder",O_RDWR);
+......
+bs->mapsize = mapsize;
+bs->mapped = mmap(NULL, mapsize,PROT_READ,MAP+PRIVATE,bs->fd,0);
+}
+```
+
+2. 成为manager:binder_become_context_manager(bs)
+
+manager的实现如下面代码所示：
+
+```c
+int binder_become_context_manager(struct binder_state *bs)
+{
+return ioctl(bs->fd,BINDER_SET_CONTEXT_MGR,0);
+```
+
+3. 处理客户端发过来的请求:binder_loop
+
+binder_loop函数代码如下所示：
+
+```c
+/*
+注意binder_handler参数，它是一个函数指针，binder_loop读取请求后将解析这些请求，最后调用binder_handler完成最终的处理
+*/
+void binder_loop(struct binder_state *bs,binder_handler func)
+{
+int res;
+struct binder_write_read bwr;
+readbuf[0]=BC_ENTER_LOOPER;
+binder_write(bs,readbuf,sizeof(unsigned));
+for(;;){ //死循环
+bwr.read_size=sizeof(readbuf);
+bwr.read_consumed=0;
+bwr=read_buffer = (unsigned)readbuf;
+res = ioctl(bs->fd,BINDER_WRITE_READ,&bwr);
+//接收到请求，交给binder_parse,最终会调用func来处理这些请求。
+res=binder_parse(bs,0,readbuf,bwr.read_consumed,func);
+}
+```
+
+binder_handler指针func实际上就是svcmgr_handler,svcmgr_handler会使用一个switch/case语句调用对应的IServiceManagerManager中定义的各个业务函数，其中有一个业务函数为addService，这个函数主要的作用是判断注册服务的进程是否有权限，如果进程的用户组是root用户或system用户才允许注册，如果达不到root或system权限的进程，则需要在allowed结构数据中添加相应的项目。它的定义大概像下面这样：
+
+```cpp
+static struct{
+unsigned uid;
+const char*name;
+}allowed[]={ //如果达不到root或system权限的进程，则需要在allowed结构数据中添加相应的项目
+#ifdef LVMX
+{AID_MEDIA,"com.lifevibes.mx.ipc"},
+#endif
+{AID_MEDIA,"media.audio_flinger"},
+....
+};
+```
+
+总结以下，ServiceManager不过就是保存了一些服务的信息。
+
+
