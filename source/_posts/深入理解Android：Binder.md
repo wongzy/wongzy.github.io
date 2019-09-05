@@ -519,7 +519,7 @@ defaultServiceManager返回的是一个BpServiceManager，通过它可以把命�
 ServiceManager的入口函数如下所示。
 
 ```cpp
-int mian(int argc, char **argv) 
+int main(int argc, char **argv) 
 {
 //BINDER_SERVICE_MANAGER的值为NULL,是一个magic number
 void *svcmgr = BINDER_SERVICE_MANAGER;
@@ -603,6 +603,55 @@ const char*name;
 };
 ```
 
-总结以下，ServiceManager不过就是保存了一些服务的信息。
+总结一下，ServiceManager不过就是保存了一些服务的信息。
 
+### ServiceManager存在的意义
+
+* ServiceManager能集中管理系统内的所有服务，它能施加权限控制，并不是任何进程都能注册服务的。
+
+* ServiceManager支持通过字符串名称来查找对应的Service。这个功能很像DNS。
+
+* 由于各种原因的影响，Service进程可能生死无常，如果让每个Client都去检测，压力实在太大了。现在有了统一的管理机构，Client只需要查询ServiceManager，就能把我动向，得到最新信息。
+
+## MediaPlayerService和它的Client
+
+前面一直讨论ServiceManager和它的Client，现在我们以MediaPlayerService的Client来进行分析。由于ServiceManager不是从BnServiceManager中派生的，所以之前没有讲数据请求是如何从通信层传递到业务层并进行处理的。我们以MediaPlayerService和它的Client作为分析对象，试着解决这些遗留问题。
+
+### 查询ServiceManager
+
+一个Client想要得到某个Service的信息，就必须先和ServiceManager打交道，通过调用getService函数来获取对应Service的信息。getService函数的代码如下：
+
+```cpp
+/*
+这个函数通过与ServiceManager通信，获得一个能够与MediaPlayerService通信的BpBinder，然后再通过障眼法interface_cast，转换成一个BpMediaPlayerService。
+*/
+IMediaDeathNotifier::getMediaPlayerService() 
+{
+sp <IServiceManager> sm = defaultServiceManager();
+sp<IBinder>binder;
+do {
+//向ServiceManager查询对应服务的信息，返回BpBinder。
+binder = sm->getService(String16("media.player"));
+if(binder!=0){
+break;
+}
+//如果ServiceManager上还没有注册对应的服务，则需要等待，直到对应服务注册
+//到ServiceManager中为止。
+usleep(500000);
+}while(true);
+/*
+通过interface_casr,将这个binder转化成BpMediaPlayer，binder中handle标识的一定是目的端MediaPlayerService。
+*/
+sMediaPlayerService=interface_cast<IMediaPlayerService>(binder);
+}
+return sMediaPlayerService;
+}
+```
+
+有了BpMediaPlayerService，就能够使用任何IMediaPlayerService提供的业务逻辑函数了。
+
+调用这些函数都能够把请求数据打包发送给Binder驱动，并由BpBinder的handle值找到对应端的处理者来处理，这中间的过程如下所示：
+
+1. 通信层接收到请求。
+2. 提交给业务层处理
 
