@@ -655,3 +655,97 @@ return sMediaPlayerService;
 1. 通信层接收到请求。
 2. 提交给业务层处理
 
+### MediaPlayerService两个线程的工作
+
+在上文中我们可以看到，MediaPlayerService驻留在MediaPlayer进程中，这个进程有两个线程在talkWithDriver,假设其中有一个线程收到了请求消息，它最终通过executeCommand调用来处理这个请求，实现代码如下所示：
+
+```cpp
+status_t IPCThreadState::executeCommand(int32_t cmd)
+{
+BBinder *obj;
+RefBase::weakref_type*refs;
+status_t result = NO_ERROR;
+switch(cmd) {
+case BR_ERROR:
+result = mIn.readInt32();
+break;
+......
+case BR_TRANSACTION:
+{
+binder_transaction_data tr;
+result = mIn.read(&tr, sizeof(tr));
+if(result != NO_ERROR)break;
+Parcel buffer;
+Parcel reply;
+if(tr.target.ptr) {
+/*
+看到BBinder想起图6-3了吗？BnServiceXXX从BBinder派生，这里的b实际就是实现BnServiceXXX的那个对象，这样就直接定位到了业务层的对象。
+*/
+sp<BBinder> b ((BBinder*)tr.cookie);
+const status_T error = b -> transact(tr.code,buffer,&reply,0);
+if (error < NO_ERROR)reply.setError(error);
+} else{
+/*
+the_context_object是IPCThreadState.cpp中定义的一个全局变量。可通过setTheContextObject函数设置。
+*/
+const status_t error = the_context_object->transact(tr.code,buffer,&reply,0);
+if (error < NO_ERROR) reply.setError(error);
+}
+break;
+......
+```
+
+BBinder与业务层的关系我们可以通过这张图来梳理一下：
+
+![BBinder_MediaPlayerService.PNG](https://i.loli.net/2019/09/06/h2D7ucwqQFpXHti.png)
+
+BnMediaPlayerService实现了onTransact函数，它将根据消息码调用对应的业务逻辑函数，这些业务逻辑函数由MediaPlayerService来实现，这些过程写在了Binder.cpp和IMediaPlayerService.cpp中，如下所示：
+
+```cpp
+status_t BBinder::transact(
+uint32_t code,const Parcel & data,Parcel*reply,uint32_t flags)
+{
+data.setDataPosition(0);
+status_t err = NO_ERROR;
+switch(code) {
+case PING_TRANSACTION:
+break;
+default:
+//调用子类的onTransact,这是一个虚函数
+err = onTransact(code, data, reply, flags);
+break;
+}
+if(reply != NULL) {
+reply->setDataPosision(0);
+}
+return err;
+}
+```
+
+```cpp
+status_t BnMediaPlayerService::onTransact(uint32_t code,const Parcel & data,Parcel *reply,uint32_t flags)
+{
+switch(code) {
+......
+case CREATE_MEDIA_RECORDED:{
+CHECK_INTERFACE(IMediaPlayerService,data,reply);
+//从请求数据中解析对应的参数
+pid_t pid = data.readInt32();
+//子类要实现createMediaRecorder函数
+sp<IMediaRecorder> recorder = createMediaRecorder(pid);
+reply -> writeStrongBinder(recorder->asBinder());
+return NO_ERROR;
+}break;
+case CREATE_METADATA_RETRIEVER:{
+CHECK_INTERFACE(IMediaPlayerService,data,reply);
+pid_t pid = data.readInt32();
+//子类要实现createMetadataRetriever函数
+sp<IMediaMetadataRetriever> retriever = createMetadataRetriever(pid);
+reply -> writeStrongBinder(retriever->asBinder());
+return NO_ERROR;
+}break;
+default:
+return BBinder::onTransact(code,data,reply,flags);
+}
+}
+```
