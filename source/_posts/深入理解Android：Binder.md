@@ -655,7 +655,7 @@ return sMediaPlayerService;
 1. 通信层接收到请求。
 2. 提交给业务层处理
 
-### MediaPlayerService两个线程的工作
+### MediaPlayerService细节
 
 在上文中我们可以看到，MediaPlayerService驻留在MediaPlayer进程中，这个进程有两个线程在talkWithDriver,假设其中有一个线程收到了请求消息，它最终通过executeCommand调用来处理这个请求，实现代码如下所示：
 
@@ -749,3 +749,73 @@ return BBinder::onTransact(code,data,reply,flags);
 }
 }
 ```
+
+## Binder的实现
+
+
+Binder的驱动代码在kernel/drivers/staing/android/binder.c中，另外该目录下还有一个binder.h头文件。/proc/binder目录下的内容可用来查看Binder设备的运行状态。
+
+### Binder和线程的关系
+
+以MS（MediaPlayerService）为例，如果现在程序运行正常，那么MS在进行两个动作：
+
+1. 通过startThreadPool启动一个线程，这个线程在talkWithDriver.
+
+2. 主线程通过joinThreadPool也在talkWithDriver.
+
+如果在业务逻辑上需要与ServiceManager交互，比如说要调用listServices打印所有服务的名字，假设这是MS中的第三个线程，按照之前的分析，它最终会调用IPCThreadState的transact函数，这个函数会talkWithDriver并把请求发到ServiceManager进程，然后等待来自Binder设备的回复。现在有三个进程在talkWithDriver。
+
+ServiceManager处理完了listServices，把回复结果写回Binder驱动，调用listServices的那个线程就会得到这个结果，一一对应。
+
+### Binder消息通知
+
+在Binder系统中，如果对应的BnXXX被终止了，那么我们可以通过一些方式收到这个通知
+
+注册对应的监听需要做以下两件事：
+
+1. 从IBinder::DeathRecipient派生一个类，并实现其中的通知函数binderDied。这个函数会在BnXXX被终止时调用。
+
+2. 把这个类注册到系统中，告诉它你关系哪一个BnXXX的生死
+
+这个消息是这么被收到的呢？其实也在executeCommand中，通过Proxy（对应着已经死亡的BBinder）发送消息
+
+如果注册监听的进程率先被终止了，那么可以通过调用unlinkToDeath取消对对应的BnXXX死亡的监听
+
+### 匿名Service
+
+匿名Service就是没有注册的Service，包含了以下两个意思：
+
+1. 没有注册Service意味着这个Service没有在ServiceManager上注册
+2. 它是一个Service又表示它确实是一个基于Binder通信的C/S结构
+
+可以通过下面这个例子来了解：
+
+```cpp
+status_t BnMediaPlayerService::onTransact(uint32_t code, const Parcel & data,Parcel *reply,uint32_t flags)
+{
+switch(code) {
+case CREATE_URL: {
+CHECK_INTERFACE(IMediaPlayerService,data,reply);
+...
+//player是一个IMediaPlayer类型的对象。
+sp<IMediaPlayer> player = create(pid,client,url,numHeaders>0?&headers:NULL);
+//下面这句话也很重要
+reply->writeStrongBinder（player->asBinder());
+return NO_ERROR;
+} break;
+```
+
+当MediaPlayerClient调用create函数时，MediaPlayerService会返回一个IMediaPlayer对象，此后，MediaPlayerClient即可直接使用这个IMediaPlayer来进行跨进程的函数调用了。
+
+BpMediaPlayer实际上是通过这个方法来得到BnMediaPlayer的handle的值的。
+
+```cpp
+reply->writeStrongBinder（player->asBinder());
+```
+
+当这个reply写到Binder驱动中时，驱动可能会特殊处理这种IBinder类型的数据，例如为这个BBinder建立一个独一无二的handle，这其实相当于在Binder驱动中注册了一项服务。
+
+通过这种方式，MS输出了大量的Service，例如IMediaPlayer和IMediaRecorder等。
+
+
+
