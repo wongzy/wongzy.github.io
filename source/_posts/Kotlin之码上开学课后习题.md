@@ -189,3 +189,23 @@ fun main() {
 }
 ```
 
+# Kotlin 的泛型
+
+## 实现一个 fill 函数，传入一个 Array 和一个对象，将对象填充到 Array 中，要求 Array 参数的泛型支持逆变（假设 Array size 为 1）。
+
+```kotlin
+fun<T> fill(array : Array<T>, item : T) {
+    array[0] = item
+}
+```
+
+## 实现一个 copy 函数，传入两个 Array 参数，将一个 Array 中的元素复制到另外个 Array 中，要求 Array 参数的泛型分别支持协变和逆变。（提示：Kotlin 中的 for 循环如果要用索引，需要使用 Array.indices）
+
+```kotlin
+fun<T> copy(arrayIn : Array<in T>, arrayOut : Array<out T>) {
+    for (i in arrayIn.indices) {
+        arrayIn[i] = arrayOut[i]
+    }
+}
+```
+
