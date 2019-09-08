@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/Kotlin之码上开学课后习题.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Kotlin之码上开学课后习题.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/themes/next/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/themes/next/_config.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,34 +20,6 @@
         <option value="HTML File" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>scheme</find>
-      <find>_config.</find>
-      <find>schedule</find>
-      <find>language</find>
-      <find>social_icons:</find>
-      <find>reward_comment</find>
-      <find>jiathis</find>
-      <find>&lt;span title</find>
-      <find>post_wordcount:</find>
-      <find>Sit</find>
-      <find>pace:</find>
-      <find>comm</find>
-      <find>hy</find>
-      <find>weibo</find>
-      <find>github.com/</find>
-      <find>JoshuaRogue</find>
-      <find>menu</find>
-      <find>sitemap</find>
-      <find>github</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-      <replace>schedu</replace>
-      <replace>scheme</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
