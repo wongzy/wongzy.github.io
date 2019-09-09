@@ -817,5 +817,92 @@ reply->writeStrongBinder（player->asBinder());
 
 通过这种方式，MS输出了大量的Service，例如IMediaPlayer和IMediaRecorder等。
 
+### Service的实现实例（Native层）
+
+纯Native的Service表示代码都在Native层。Native层有有很多Service，前面的MediaPlayerService就是一个例子。
+
+如果我们要新建实现一个Service，也完全可以模仿MS，代码示例如下：
+
+```cpp
+int main() 
+{
+sp<ProcessState> proc(ProcessState::self());
+sp<IServiceManager> sm = defaultServiceManager();
+//记住注册你的服务，否则谁也找不到你
+sm->addService("service.name",new Test());
+//如果压力不大，可以不用单独搞一个线程
+ProcessState::self()->startThreadPool();
+//这个是必须的，否则主线程退出了，你也完了
+IPCThreadState::self()->joinThread();
+}
+```
+
+Test是这么定义的呢？我们是跨进程的C/S,所以本地需要一个BnTest，对端需要提供一个代理BpTest。为了不暴露Bp的身份，Bp的定义和实现都放在BnTest.cpp中了。
+
+ITest接口表明了它所能提供的服务，例如getTest和setTest等，这个与业务逻辑相关，代码如下所示：
+
+```cpp
+//需要从IInterface派生
+class ITest:public IInterface。
+{
+public:
+//神奇的宏 DECLEAR_MATA_INTERFACE。
+DECLEAR_META_INTERFACE(Test);
+virtual void getTest() = 0;
+virtual void setTest() = 0;
+}//ITest是一个接口类
+```
+
+为了把ITest融入到Binder系统，需要定义BnTest和对客户端透明的BpTest。BnTest定义既可以与上面的Test定义放在一块，也可以分开，如下所示：
+
+```cpp
+class BnTest:public BnInterface<ITest>
+{
+public:
+//由于ITest是个纯虚类，而BnTest只实现了onTransact函数，所以BnTest依然是一个纯虚类
+virtual status_t onTransact(uint32_T code, const Parcel & data,Parcel *reply, uint32_t flags = 0);
+};
+```
+
+另外，我们还要使用IMPLEMENT宏。参考BnMediaPlayerService的方法，把BnTest和BpTest的实现都放在ITest.cpp中，如下所示：
+
+```cpp
+IMPLEMENT_META_INTERFACE(Test,"android.Test.ITest");//IMPLEMENT宏
+status_t BnTest::onTransact(
+uint32_t code, const Parcel & data,Parcel *reply,uint32_t flags)
+{
+switch(code) {
+case GET_Test:{
+CHECK_INTERFACE(ITest,data,reply);
+getTest();//子承父业，由Test完成
+return NO_ERROR;
+}break;//SET_XXX类似
+```
+
+BpTest示例如下：
+
+```cpp
+class BpTest:public BpInterface<ITest>
+{
+public:
+BpXXX(const sp<IBinder> & impl)
+:BpInterface<ITest>(Impl)
+{
+}
+vitural getTest()
+{
+Parcel data,reply;
+data.writeInterfaceToken(ITest::getInterfaceDescriptor());
+data.writeInt32(pid);
+//打包请求数据，然后交给BpBinder通信层处理。
+remote()->transact(GET_Test,data, &reply);
+return;
+?
+//setTest类似
+......
+```
+
+这样C/S的框架就写好了。
+
 
 

@@ -149,8 +149,6 @@ social:
 social_icons:
   enable: true
   GitHub: github
-  LeetCode: terminal
-  CSDN: code
   微博: weibo
   E-mail: envelope
   LinkedIn: user-circle
