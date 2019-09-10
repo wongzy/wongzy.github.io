@@ -904,5 +904,90 @@ return;
 
 这样C/S的框架就写好了。
 
+### Service的实现实例（Java层）
+
+在Java层中，如果想要利用Binder进行跨进程的通信，也得定义一个类似ITest的接口，不过，这是一个aidl文件，假设服务端程序都在com.test.service包中。
+
+ITest.aidl文件内容如下：
+
+```aidl
+package com.test.service;
+import com.test.complicatedDataStructure;
+interface ITest{
+//complicatedDataStructure类是自己定义的复杂数据结构，in表示输入参数，out表示输出参数。
+//in和out的表示一定要准备却。切记！
+int getTest(out complicateddataStructure c);
+int setTest(in String name, in boolean reStartServer);
+}
+```
+
+编译之后，会在gen目录下生成一个com.test.ITest.java文件，它实现了类似BnTest的一个东西，具体的业务实现还需要从ITest.Stub派生，实现代码如下所示：
+
+```java
+/* 
+ITest.Stub是在aidl生成的那个Java文件中定义的，非常类似Native层的BnTest。
+ITestImpl必须从ITest.Stub中派生，用来实现具体的业务函数。
+package com.test.service;
+class ITestImpl extends ITest.Stub{
+public void getTest(complicatedData Structure cds) throws RemoteException {
+//在这里实现具体的getTest
+}
+public void setTest(in String name, in boolean reStartServer) throws RemoteException {
+//在这里实现具体的setTest
+}
+}
+```
+
+此时根目录下有这两个目录：
+
+* src下有一个com.test.service包结构目录
+
+* gen下也有一个com.test.service包结构目录
+
+
+实现代理端：代理端往往在另一个程序中使用，假设是com.test.client包，把刚才com.test.service工程中gen下的com.test.service目录全部复制到com.test.client中，这样，client工程也就有两个包结构目录了：
+
+* com.test.client
+
+* com.test.service。不过这个目录中仅有aidl生成的Java文件
+
+服务端一般驻留于Service进程，所以可以在Client端的onServiceConnected函数中获得代理对象，实现代码如下所示：
+
+```
+//不一定是在onServiceConnected中，但它是比较合适的。
+private ServiceConnection serviceConnection = new ServiceConnection() {
+@override
+public void onServiceConnected(ConponentName name, IBinder service) {
+if (ITestProxy == null) {
+ITestProxy = ITest.Stub.asInterface(service);
+}
+}
+}
+```
+
+AIDL支持简单数据结构与Java中String类型的数据进行跨进程传递，如果想做到跨进程传递复杂的数据结构，还须另做一些工作。
+
+以ITest.aidl文件中使用的complicatedDataStructure为例：
+
+* 它必须实现implementsParcelable接口
+
+* 内部必须有一个静态的CREATOR类
+
+* 定义一个complicatedDataStructure文件。
+
+在实现了Java文件后，我们还需要实现aidl类，如下：
+
+```aidl
+package com.test.service;
+parcelable complicatedDataStructure;
+```
+
+然后在使用它的aidl文件中添加这行代码即可：
+
+```aidl
+import com.test.complicatedDataStrucrure;
+```
+
+
 
 
