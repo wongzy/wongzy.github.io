@@ -988,6 +988,23 @@ parcelable complicatedDataStructure;
 import com.test.complicatedDataStrucrure;
 ```
 
+# 总结
+
+在本章的学习中，我们大概分为了这三个几个部分学习：
+
+1. Binder体系的总体架构，Client、Server和ServiceManager三者之间的关系（包括交互的先后关系）、
+
+2. MediaPlayerService注册服务解析，通过handle=0找到ServiceManager注册，最后MediaPlayerService有两个线程处理请求
+
+3. ServiceManager解析，ServiceManager成为manager需要将自己的handle置为0，它的作用是对需要注册的服务进行管理，包括权限控制等，同时帮助Client找到对应的Server
+
+4. Client通过字符串（Service的名称）来得到对应的服务，这里以MediaPlayerService为例，展示了Client与MediaPlayerService交互的细节，哪个线程发起请求，答复就会送回到哪个请求
+
+5. Binder对于匿名Service的管理，匿名Service可以通过在Binder驱动中的操作来注册自己（其实就是给自己一个独一无二的handle），以及对死亡进程的监听，native层与Java层Service的实现
+
+
+
+
 
 
 
