@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0502a39d-85e7-48a5-83de-62d34ea53132" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/source/_posts/LeetCode-01矩阵.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/LeetCode-根据身高重建队列.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/使用GeForce Experience在Android studio上截图与录视频.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/使用git bash下载Android源码.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/用Github桌面版实现最简单的hexo部署到Github.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/深入理解Android：Binder.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/深入理解Android：Binder.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

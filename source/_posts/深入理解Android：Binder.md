@@ -9,7 +9,7 @@ Binder是Android提供给我们的一种跨进程通信方案，Android虽然说
 
 从宏观的角度来看，Android可以看作是一个基于Binder通信的C/S架构。Binder在里面起到了一个网络的作用，它将Android系统的各个部分连接在了一起。
 
-# 总体架构
+# Native Binder 总体架构
 
 在基于Binder通信的C/S架构体系中，除了C/S架构所包括的Client端和Server端外，Android还有一个全局的ServiceManager端，它的作用是管理系统中的各种服务（Service）。这三者之间的关系如下图所示：
 
@@ -988,9 +988,37 @@ parcelable complicatedDataStructure;
 import com.test.complicatedDataStrucrure;
 ```
 
+# Java Binder整体架构
+
+Java层的Binder其实也是一个C/S架构，而且在类的命名上尽量保持与Native层一致，因此也可认为，Java层的Binder架构是Native层Binder架构的一个镜像。Java Binder中的成员如下图所示：
+
+![JavaBinder.PNG](https://i.loli.net/2019/09/14/w8AjvftVremi5BT.png)
+
+其中：
+
+* Binder和BinderProxy类分别实现了IBinder接口。其中Binder类作为服务端的Bn的代表，而BinderProxy作为客户端的Bp的代表（由linkToDeath（）函数也可见一斑，native层中Bp正是由这个函数来实现消息通知）
+
+* BinderInternal类是一个仅供Binder框架使用的类。它内部有一个GcWatcher类，该类专门用于处理和Binder相关的垃圾回收
+
+> IBinder接口类中定义了一个叫FLAG_ONEWAY的整型变量，在调用Binder函数时，在指明了FLAG_ONEWAY标志后，函数就变成了非阻塞式调用（类似于回调）
+
+Java层Binder需要借助Native层Binder系统来开展工作，即镜像和Native有着千丝万缕的关系，一定要在Java层Binder正式工作之前建立这种关系，Java层Binder框架的初始化顺序如下：
+
+Java初创初期，系统会提前注册一些JNI函数，其中有一个register_android_os_Binder函数来专门搭建Java Binder和Native交互关系，在register_android_os_Binder函数中，完成了JavaBinder架构中最重要的三个类的初始化工作，顺序如下：
+
+1. Binder类的初始化：使用gBinderOffsets对象保存了和Binder类相关的某些在JNI层使用的信息，用来在JNI层对Java层的Binder对象进行操作
+
+2. BinderInternal类的初始化：获取一些有用的methodID和fieldID，表明JNI层一定会向上调用Java层的函数，以及注册相关类中native函数的实现。
+
+3. BinderProxy类的初始化：获取WeakReference类和ERROR类的一些信息，BinderProxy对象的生命周期会委托WeakReference来管理，所以JNI层会获取该类get函数的MethodID
+
+> 框架的初始化其实就是提前获取一些JNI层的使用信息，如类成员的MethodID、类成员变量的fieldID等。它能节省每次使用时获取这些信息的时间。当Binder调用频繁时，这些时间的积累也不容小觑。同时，这个过程中所创建的几个全局静态对象为JNI层访问Java层的对象提供了依据。每个初始化函数中所执行的registerNativeMethods（）方法则为Java层访问JNI层打通了道路。换句话说，Binder初始化的工作就是通过JNI建立起Native Binder与Java Binder之间互相通信的桥梁。
+
+
+
 # 总结
 
-在本章的学习中，我们大概分为了这三个几个部分学习：
+在本章的学习中，我们大概分为了这几个部分学习：
 
 1. Binder体系的总体架构，Client、Server和ServiceManager三者之间的关系（包括交互的先后关系）、
 
