@@ -988,6 +988,8 @@ parcelable complicatedDataStructure;
 import com.test.complicatedDataStrucrure;
 ```
 
+> Android提供AIDL语言以及AIDL解释器自动生成一个服务器的Bn端，即Bp端用于处理Binder通信的代码，当我们写好ITest.aidl文件之后，我们使用aidl工具将其解析为一个实现了Bn端及Bp端通过Binder进行通信的Java代码，当完成aidl解析之后，开发者需要继承XXX.Stub类并实现其抽象方法。
+
 # Java Binder整体架构
 
 Java层的Binder其实也是一个C/S架构，而且在类的命名上尽量保持与Native层一致，因此也可认为，Java层的Binder架构是Native层Binder架构的一个镜像。Java Binder中的成员如下图所示：
@@ -1014,11 +1016,36 @@ Java初创初期，系统会提前注册一些JNI函数，其中有一个registe
 
 > 框架的初始化其实就是提前获取一些JNI层的使用信息，如类成员的MethodID、类成员变量的fieldID等。它能节省每次使用时获取这些信息的时间。当Binder调用频繁时，这些时间的积累也不容小觑。同时，这个过程中所创建的几个全局静态对象为JNI层访问Java层的对象提供了依据。每个初始化函数中所执行的registerNativeMethods（）方法则为Java层访问JNI层打通了道路。换句话说，Binder初始化的工作就是通过JNI建立起Native Binder与Java Binder之间互相通信的桥梁。
 
+## ActivityManagerService
+
+与native中MediaServer的例子一样，这里我们也使用一个具体的例子来解释Java层Binder的工作原理
+
+### AMS如何将自己注册到ServiceManager
+
+AMS通过addService函数将一个叫做JavaBBinder的对象添加到Parcel中，而最终传递到Binder驱动的正是这个JavaBBinder对象。Java层中所有的Binder对应的都是这个JavaBBinder对象，不同的Binder对象对应不同的JavaBBinder对象。
+
+> JavaBBinder是从BBinder（native）派生的
+
+### ActivityManagerService相应请求
+
+JavaBBinder仅仅是一个传声筒，它本身不实现任何业务函数，其工作是：
+
+1. 当它收到请求时，只是简单地调用它所绑定的Java层的Binder对象的exeTransact
+
+2. 该Binder对象的exeTransact调用其子类实现的onTransact函数
+
+3. 子类的onTransact函数将业务又派给其子类来完成
+
+通过这种方式，来自客户端的请求就能传递到正确的Java Binder对象了，下图展示了AMS相应请求的整个流程。
+
+![AMS响应过程.PNG](https://i.loli.net/2019/09/15/ng2K67ZuPajXBOd.png)
 
 
 # 总结
 
-在本章的学习中，我们大概分为了这几个部分学习：
+在本章的学习中，我们学习了native中的Binder和Java中的Binder，总结分别如下：
+
+## native层Binder
 
 1. Binder体系的总体架构，Client、Server和ServiceManager三者之间的关系（包括交互的先后关系）、
 
@@ -1029,6 +1056,12 @@ Java初创初期，系统会提前注册一些JNI函数，其中有一个registe
 4. Client通过字符串（Service的名称）来得到对应的服务，这里以MediaPlayerService为例，展示了Client与MediaPlayerService交互的细节，哪个线程发起请求，答复就会送回到哪个请求
 
 5. Binder对于匿名Service的管理，匿名Service可以通过在Binder驱动中的操作来注册自己（其实就是给自己一个独一无二的handle），以及对死亡进程的监听，native层与Java层Service的实现
+
+## native层Binder
+
+Java层的Binder可以用一张图来总结，因为Java层的Binder十分依赖native层的Binder。
+
+![Java层Binder架构.PNG](https://i.loli.net/2019/09/15/VbfDFe5L8pTMUro.png)
 
 
 
