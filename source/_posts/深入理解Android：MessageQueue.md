@@ -50,3 +50,54 @@ Handler在构造函数中其实就应用了当前线程的Looper，如果没有L
 
 3. 如果上述都没有(1中消息没有自带的callback切2返回false),则交给Handler子类实现的handleMessage来处理,这里要求重写handleMessage函数
 
+## Looper和Handler的结合：HandlerThread
+
+Looper和Handler会有什么同步关系呢？它们之间确实有同步关系，同步关系肯定与多线程有关，这种错误一般发生在Looper在初始化在不同的线程，可能发生Looper为空的情况，所以Android为我们提供了HandlerThread来避免类似的问题。
+
+HandlerThread中使用了一个getLooper函数，当Looper还没被创建时，如果需要调用Looper则需要等待（wait()），创建后则notifyAll()，那么调用Looper的线程就会被唤醒。
+
+# 心系两界的MessageQueue
+
+MessageQueue类封装了与消息队列有关的操作，在一个以消息驱动的系统中，最重要的两部分就是消息队列和消息处理循环。在Android2.3以前，只有Java层有资格向MessageQueue添加消息，但从Android2.3开始，MessageQueue的核心部分下移至Native层，让Native层也能通过消息循环处理任务。
+
+## MessageQueue的创建
+
+在Java中，MessageQueue的构造函数是这样的：
+
+```java
+MessageQueue() {
+nativeInit();//构造函数调用nativeInit,该函数由Native层实现
+}
+```
+
+nativeInit()方法真正实现为android_os_message_nativeInit()函数，其代码如下：
+
+```cpp
+static void android_os_MessageQueue_nativeInit(JNIEnv * env,jobject obj) {
+//NativeMessageQueue是MessageQueue在Native层的代表
+NativeMessageQueue * nativeMessageQueue = new NativeMessageQueue();
+......
+//将这个NativeMessageQueue对象设置到Java层保存
+android_os_MessageQueue_setNativeMessageQueue(env,obj,nativeMessageQueue);
+}
+```
+
+nativeInit函数在Native层创建了一个与MessageQueue对应的NativeMessageQueue对象，其构造函数如下：
+
+```cpp
+NativeMessageQueue::NativeMessageQueue() {
+/* 代表消息循环的Looper也在Native层中呈现了，根据消息驱动的知识，一个线程会有一个Looper来处理消息队列中的消息。下面一行的调用就是取得保存在线程本地存储空间
+(Thread Local Storage)中的Looper对象*/
+mLooper = Looper::getForThread();
+if (mLooper == NULL) {
+/*如果是第一次进来，则该线程没有设置本地存储，需要新创建一个Looper，然后再将其保存到TLS中，这是很常见的一种以线程为单位的单例模式*/
+mLooper = new Looper(false);
+Looper::setForThread(mLooper);
+}
+}
+```
+
+Native的Looper是Native世界中参会消息循坏的一位重要角色。虽然它的类名和Java层的Looper类一样，但此二者其实并无任何关系。
+
+
+
