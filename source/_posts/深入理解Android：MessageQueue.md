@@ -99,5 +99,64 @@ Looper::setForThread(mLooper);
 
 Native的Looper是Native世界中参会消息循坏的一位重要角色。虽然它的类名和Java层的Looper类一样，但此二者其实并无任何关系。
 
+## 提取消息
+
+当一切准备就绪后，Java层的消息循环处理，也就是Looper会在一个循环中提取并处理消息。消息的提取就是调用MessageQueue的next()方法。当消息队列为空时，next就会阻塞。MessageQueue同时支持Java层和Native层的事件，那么其next()方法该如何实现呢？具体代码如下：
+
+```cpp
+final Message next() {
+int pendingIdleHandlerCount = -1;
+int nextPoollTImeoutMills = 0;
+for (;;) {
+......
+//mPtr保存了NativeMessageQueue的指针，调用nativePoolOnce进行等待
+nativePoollOnce(mPtr, nextPollTimeoutMills);
+sychronized(this) {
+final long now = SystemClock.uptimeMills();
+//mMessages用来存储消息，这里从其中取一个消息进行处理
+final Message msg = mMessages;
+if (msg != null) {
+final long when = msg.when;
+if (now >= when) {
+mBlocked = false;
+mMessages = msg.next;
+msg.next = null;
+msg.markInUse();
+return msg;
+//返回一个Message用于给Looper进行派发和处理
+} else {
+nextPoolTimeoutMillis = (int) Math.min(when - now, Integer.MAX_VALUE);
+}
+} else {
+nextPoolTimeoutMillis = -1;
+}
+......
+/*处理注册的IdleHandler，当MessageQueue中没有Message时，Looper会调用IdleHandler做一些工作，例如垃圾回收等*/
+......
+pendingIdleHandlerCount = 0;
+nextPollTimeoutMills = 0;
+}
+}
+}
+```
+
+从上面的代码我们可以得到，进行消息处理的流程是从nativePollOnce开始的，那么这个nativePollOnce什么时候才会返回呢？我们可以从投递Message入手
+
+
+MessageQueue的enqueueMessage函数完成将一个Message投递到MessageQueue的工作，大概是如下过程：
+
+1. 将Message按执行时间排序，并加入消息队列
+
+2. 根据情况调用nativeWake函数，以触发nativePollOnce函数，结束等待
+
+nativeWake函数则会调用native Looper的wake函数，向通道（Pipe）的写端写入一个字符“W”，这样管道的读端就会因为有数据可读而从等待状态中醒来。
+
+当写端被唤醒之后，nativePollOnce就会返回，从而Message就会被处理。
+
+```
+在Windows上，线程间通知无外乎就是使用Event，在Linux上，使用POSIX的condition+mutex，也能完成同样的操作，但是这种方式在linux中用得相对较少，而是大量使用pipe，创建两个fd。当线程1想唤醒线程2的时候，就可以往writeFD中写数据，这样线程2阻塞在readFD中就能返回。我之前及其没搞明白为何要使用pipe，后来突然想明白了。因为Linux上阻塞的方法就是用select,poll和epoll，其中等待的都是FD，那么采用FD这种方式，能够统一调用方法。 
+```
+
+
 
 
