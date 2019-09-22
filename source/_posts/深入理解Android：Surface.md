@@ -108,6 +108,140 @@ return mWindow;//返回一个类型为Window的mWindow
 
 * View：View是一个基本的UI单元，占据屏幕的一块矩形区域，可用于绘制，并能处理事件。
 
+那么Window是一个抽象类，它实际的对象是什么类型的？Window Manager究竟是什么？
+
+Windows实际的创建在这段代码里面：
+
+```
+//利用PolicyManager来创建Window对象
+mWindow = PolicyManager.makeNewWindow(this);
+```
+
+PolicyManager的代码如下：
+
+```java
+public final class PolicyManger{
+private static final String POLICY_IMPL_CLASS_NAME = "com.android.internal.policy.impl.Policy";
+private static final IPolicy sPolicy;
+static {
+//
+try{
+    Class policyClass = Class.forName(POLICY_IMPL_CLASS_NAME);
+    //创建Policy对象。
+    sPolicy = (IPolicy) policyClass.newInstace();
+} catch (ClassNotFoundException e)  {
+
+}
+}
+private PolicyManger() {
+}
+//通过Policy对象的makeNewWindow创建一个Window。
+public static Window makeNewWindow(Context context) {
+return sPolicy.makeNewWindw(context);
+}
+}
+```
+
+这里有一个单例的sPolicy对象，它是Policy类型的，定义如下：
+
+```java
+public class Policy implements  IPolicy {
+private static final String TAG = "PhonePolicy";
+private static final String[] preload_classes = new String[] {
+"com.android.internal.policy.impl.PhoneLayoutInflater",
+//......
+};
+//加载所有的类
+static {
+for (String s:preload_classes) {
+    try{
+        Class.forName(s);
+    } catch (ClassNotFoundException ex) {
+        ......
+    }
+}
+}
+public PhoneWindow makeNewWindow(Context context) {
+//makeNewWindow返回的是PhoneWindow对象
+return new PhoneWindow(context);
+}
+}
+```
+
+在这里就能确定了，mWindow对象实际上是一个PhoneWindow，而WindowManger的实际创建代码如下：
+
+```
+wm = WindowManager.getDefault();
+mWindowManger = new LocalWindowManager(wm);
+```
+
+LocalWindowManager是在Window中定义的内部类，请看它的构造函数，定义如下：
+
+```java
+private class LocalWindowManager implements WindowManager {
+LocalWindowManager(WindowManager wm) {
+    mWindowManager = wm;
+    mDefaultDisplay = mContext.getResources().getDefaultDisplay(
+        mWindowManager.getDefaultDisplay());
+}
+}
+```
+
+wm的实际类型为WindowManagerImpl，他们的类关系如下：
+
+![WindowManager.PNG](https://i.loli.net/2019/09/22/92akqKvLtngONM4.png)
+
+从这个图可以得出以下结论：
+
+* Activity的mWindow成员变量其真实类型是PhoneWindow，而mWindowManager成员变量的真实类型是LocalWindowManager。
+
+* LocalWindowManager和WindowManagerImpl都实现了WindowManager接口。这里采用的是Proxy模式，表明LocalWindowManager将把它的工作委托给WindowManagerImpl来完成。
+
+Activity的setContent函数实际上调用的是PhoneWindow的setContent函数，PhoneWindow的setContent函数如下所示：
+
+```
+public void setContentView(View view) {
+//调用另一个setContentView
+setContentView(view, new ViewLayoutParams(MATCH_PARENT,MATCH_PAENT));
+}
+public void setContentView(View view,ViewGroup.LayoutParams params) {
+//mContentParaent为ViewGroup类型，它的初值为null
+if（mContentParent == null {
+installDecor();
+} else {
+mContentParent.removeAllViews();
+}
+//把view加入到ViewGroup中。
+mContentParent.addView(view, params);
+......
+}
+```
+
+installDecor函数如下：
+
+```
+private void installDecor() {
+if (mDeocr == null) {
+//创建mDecor,它为DecorView类型，从FrameLayout派生
+mDecor = generateDecor();
+......
+}
+if (mContentParent == null) {
+//得到这个mContentParent
+mContentParent = generateLayout(mDecor);
+//创建标题栏
+mTitleView (TextView)findViewById(com.android.internal.R.id.title);
+```
+
+而generateLayout的作用就是获取对应的标题栏，然后将它加入到ViewGroup中，最后将ViewGroup返回。
+
+PhoneWindow、WindowManager、DecorView的关系如下：
+
+![window、phonewindow关系.PNG](https://i.loli.net/2019/09/22/N5E4Rz2diKeL3Hq.png)
+
+从上图可以看出，在Activity的onCreate函数中，通过setContentView设置的View，其实只是DecorView的子View。DecorView还处理了标题栏显示等一系列的工作。
+
+
 #### handleResumeActivity分析
 
 ```
@@ -127,5 +261,3 @@ wm.addView(decor,I);
 ......//其他处理
 }
 ```
-
-
