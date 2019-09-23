@@ -261,3 +261,88 @@ wm.addView(decor,I);
 ......//其他处理
 }
 ```
+
+在上文中，我们分析了DecorView和ViewManager等对象，那么最后的wm.addView（decor， I）是什么呢？实际上，这里创建了一个ViewRoot对象，并把刚刚的View设置到这个ViewRoot对象中。
+
+* ViewRoot是什么？
+
+ViewRoot实现了ViewParent接口，但是它不处理绘画，因为它没有onDraw函数。
+
+ViewRoot的定义如下：
+
+```java
+public final class ViewRoot extends Handler implements ViewParent,View.Attachinfo.Callbacks {
+private final Surface mSurface = new Surface();//这里创建了一个Surface对象
+final W mWindow;//这个是什么？
+View mView;
+}
+```
+
+这个定义表达了三点：
+
+1. ViewRoot继承了Handler类，看来它能处理消息。ViewRoot重写了handleMessage函数。
+
+2. ViewRoot有一个成员变量叫mSurface，它是Surface类型
+
+3. ViewRoot还有W类型的mWindow和一个View类型的mView变量
+
+其中，W是ViewRoot定义的一个静态内部类：
+
+```
+static class W extends IWindow.Stub
+```
+
+这个类将参与Binder的通信。
+
+其中，Surface是Android真正的画布，它包含了以下几点：
+
+1. 有一块Raw buffer，至于是内存还是显存，不必管它。
+
+2. Surface操作这块Raw buffer
+
+3. Screen compositor（其实就是SurfaceFlinger）管理这块Raw buffer
+
+Surface和SF、ViewRoot的关系图如下：
+
+![画布工作原理.PNG](https://i.loli.net/2019/09/23/WVzh1ujvUMKAYe4.png)
+
+这张图表达了以下几点：
+
+1. ViewRoot有一个成员变量mSurface，它是Surface类型，它和一块RawBuffer有关联。
+
+2. ViewRoot是一个ViewParent，它的子View的绘画操作，是在画布Surface上展开的。
+
+3. Surface和SurfaceFlinger有交互
+
+ViewRoot的构造如下：
+
+```
+public ViewRoot(Context context) {
+super();
+....
+getWindowSession(context.getMainLooper());
+......//ViewRoot的mWindow是一个W类型，注意它不是Window类型，而是IWindow类型
+mWindow = new W(this, context);
+```
+
+getWindowsession函数，将建立Activity的ViewRoot和WindowManagerService的关系。代码如下所示：
+
+```
+ublic static IWindowSession getWindowSession(Looper mainLooper) {
+synchronized(mStaticInit) {
+if (!mInitialized) {
+try {
+InputMethodManager imm = InputMethodManager.getInstance(mainLooper);
+//下面这个函数先得到WindowManagerService的Binder代理，然后调用它的OpenSession。
+sWindowSession = IWindowManager.Stub.asInterface{
+ServiceManager.getService("window")).openSession(imm.getClient(),imm.getInputContext());
+mInitalized = true;
+} catch (RemoteException e) {
+}
+}
+return sWindowSession;
+}
+}
+```
+
+WindowManagerService由System_Server进程启动，SurfaceFligner也在这个进程中，Activity的显示还需要与WMS建立联系。
