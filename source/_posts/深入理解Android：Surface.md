@@ -345,4 +345,30 @@ return sWindowSession;
 }
 ```
 
-WindowManagerService由System_Server进程启动，SurfaceFligner也在这个进程中，Activity的显示还需要与WMS建立联系。
+WindowManagerService由System_Server进程启动，SurfaceFligner也在这个进程中，Activity的显示还需要与WMS建立联系。我们先看setView的处理。
+
+ViewRoot的setView函数做了三件事：
+
+1. 保存传入的view参数为mView，这个mView指向PhoneWindow的DecorView。
+
+2. 调用requestLayout
+
+3. 调用IWindowSession的add函数，这是一个跨进程的Binder通信，第一个参数是mWindow，它是W类型，从IWindow.stub派生。
+
+可以看出，ViewRoot和远端进程SystemServer的WMS有交互，先来总结以下它和WMS的交互流程。
+
+1. ViewRoot调用openSession，得到一个IWindowSession对象
+
+2. 调用WindowSession对象的add函数，把一个W类型的mWindow对象作为参数传入
+
+* ViewRoot和WMS的关系
+
+上面总结了ViewRoot和WMS的交互流程，其中一共有两个跨进程的调用，ViewRoot和WMS之间的关系如下：
+
+![View和WMS.PNG](https://i.loli.net/2019/09/24/n2OGipwtIYmga3A.png)
+
+这张图中的知识点如下：
+
+1. ViewRoot通过IWindowSession和WMS进程进行跨进程通信。IWindowSession定义在IWindowSession.aidl文件中。这个文件在编译由aidl工具处理，最后会生成类似于Native Binder中Bn端和Bp端的代码。每个App进程都会和WMS建立一个IWindowSession对话，这个会话会被App进程用于和WMS通信。
+
+2. ViewRoot内部有一个W类型的对象，它也是一个基于Binder通信的类，W是IWindow的Bn端，用于响应请求。IWindow定义在另一个aidl文件IWindow.aidl中。IWindow主要用于Android案件事件的分发，当WMS所在的SystemServer进程接收到按键事件后，会把它交给这个IWindow对象。
