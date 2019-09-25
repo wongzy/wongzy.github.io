@@ -49,6 +49,10 @@ handleResumeActivity(r.token, false, r.isForward);
 
 handleLaunchActivity函数中列出了两个关键点：
 
+1. perforLaunchActivity
+
+2. handleResumeActivity
+
 #### 创建Activity
 
 第一个关键函数performLaunchActivity返回一个Activity，这个Activity就是App中的那个Activity（仅仅考虑App中只有一个Activity的情况），它的代码如下：
@@ -372,3 +376,32 @@ ViewRoot的setView函数做了三件事：
 1. ViewRoot通过IWindowSession和WMS进程进行跨进程通信。IWindowSession定义在IWindowSession.aidl文件中。这个文件在编译由aidl工具处理，最后会生成类似于Native Binder中Bn端和Bp端的代码。每个App进程都会和WMS建立一个IWindowSession对话，这个会话会被App进程用于和WMS通信。
 
 2. ViewRoot内部有一个W类型的对象，它也是一个基于Binder通信的类，W是IWindow的Bn端，用于响应请求。IWindow定义在另一个aidl文件IWindow.aidl中。IWindow主要用于Android案件事件的分发，当WMS所在的SystemServer进程接收到按键事件后，会把它交给这个IWindow对象。
+
+
+## Activity的UI绘制
+
+在ViewRoot的setView函数中有一个requestLayout函数，它会向ViewRoot发送一个DO_TRAVERSAL消息，handleMessage函数中，对这个消息的处理是调用performTraversal函数，在performTraversal函数中，它会调用relayoutWindow和draw，这两个函数的作用分别如下：
+
+* relayWindow
+
+relayoutWindow中会调用IWindowSession的relayout函数。
+
+* draw
+
+在mSurface中lock一块Canvas，调用DecorView的draw函数，canvas就是画布，最后unlock画布，屏幕上马上就会显示了。
+
+## Activity的总结
+
+Activity的创建和显示，可以提炼成如下几条：
+
+* Activity的顶层View是DecorView，而我们在onCreate函数中通过setContentView设置的View只不过是这个DecorView中的一部分罢了。DecorView是一个FrameLayout类型的ViewGroup。
+
+* Activity和UI有关，它包括一个Window（真实类型是PhoneWindow）和一个WindowManager（真实类型是LocalWindowManager）对象。这两个对象将控制整个Activity的显示。
+
+* LocalWindowManager使用了WindowManagerImpl作为最终的处理对象（Proxy模式），这个WindowManagerImpl中有一个ViewRoot对象。
+
+* ViewRoot实现了ViewParent接口，它有两个重要的成员变量，一个是mView，它指向Activity顶层UI单元的DecorView，另外一个是mSurface，这个Surface包含了一个Canvas（画布）。除此之外，ViewRoot还通过Binder系统和WindowManagerService进行了跨进程通信。
+
+* ViewRoot能处理Handler的消息，Activity的显示就是由ViewRoot在它的performTraversals函数中完成的
+
+* 整个Activity的绘图流程就是从mSurface中lock一块Canvas，然后交给mView去自由发挥画画的才能，最后unLockCanvasAndPost释放这块Canvas
