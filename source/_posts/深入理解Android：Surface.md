@@ -405,3 +405,33 @@ Activity的创建和显示，可以提炼成如下几条：
 * ViewRoot能处理Handler的消息，Activity的显示就是由ViewRoot在它的performTraversals函数中完成的
 
 * 整个Activity的绘图流程就是从mSurface中lock一块Canvas，然后交给mView去自由发挥画画的才能，最后unLockCanvasAndPost释放这块Canvas
+
+
+初识Surface
+
+Surface对象是纵跨Java/JNI层的对象，与它相关的流程如下：
+
+1. 在ViewRoot构造时，会创建一个Surface，它使用无参构造函数，代码如下：
+
+```
+private final Surface mSurface = new Surface();
+```
+
+2. ViewRoot通过IWindowSession和WMS交互，而WMS调用中调用的一个attach函数会构造一个SurfaceSession，代码如下：
+
+```
+void windowAddedLocked() {
+if (mSurfaceSession == null) {
+mSurfaceSession = new SurfaceSession();
+mNumWindow++;
+}
+}
+```
+
+3. ViewRoot在performTransval的处理过程中会调用IWindowSession的relayout函数。
+
+4. ViewRoot调用Surfaced lockCanvas，得到一块画布
+
+5. ViewRoot调用Surface的unLockCanvasAndPost释放这块画布。
+
+下面来看一下relayout函数的本质，relayout函数是一个跨进程的调用，由WMS完成实际处理。
