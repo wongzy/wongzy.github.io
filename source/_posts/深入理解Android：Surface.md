@@ -435,3 +435,25 @@ mNumWindow++;
 5. ViewRoot调用Surface的unLockCanvasAndPost释放这块画布。
 
 下面来看一下relayout函数的本质，relayout函数是一个跨进程的调用，由WMS完成实际处理。
+
+Surface的创建流程如下：
+
+![Surface创建流程.png](https://i.loli.net/2019/09/27/VGY6esrb3QHuE8t.png)
+
+> 来自CSDN邓老师博客
+
+由此图可以看出：
+
+* WMS中的Surface才是真正的Surface，它的构造使用了带SurfaceSession参数的构造函数
+
+* ViewRoot中的Surface是一个“伪”Surface，它的构造使用了无参构造函数。
+
+* copyFrom就是进行转移，它将真正的Surface信息拷贝到“伪”Surface即outSurface里
+
+而这个过程则需要使用aidl帮助完成，这个过程发生在ViewRoot调用IWindowSession的relayout函数中，它在IWindowSession.aidl的定义如下：
+
+
+![乾坤大挪移真相.png](https://i.loli.net/2019/09/27/XGYKPN836lrQpTD.png)
+
+
+### 创建Surface的JNI层分析
