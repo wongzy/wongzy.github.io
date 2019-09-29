@@ -457,3 +457,35 @@ Surface的创建流程如下：
 
 
 ### 创建Surface的JNI层分析
+
+在JNI层，第一个被调用的是Surface的无参构造函数，其代码如下所示：
+
+```
+public Surface() {
+//CompatibleCanvas从Canvas类派生
+mCanvas = new CompatibleCanvas();
+}
+```
+
+Canvas是画图所需要的四个类其中之一，这四个类分别是：
+
+* Bitmap：用于存储像素，也就是画布。可把它当作一块数据存储区域。
+
+* Canvas：用于记载画图的动作，比如画一个圆，画一个矩形等。Canvas类提供了这些基本的绘图函数。
+
+* Drawing primitive：绘图基本元素，例如矩形、圆、弧线、文本、图片等。
+
+* Paint：它用来描述绘画时使用的颜色、风格（如实线、虚线等）
+
+在一般情况下，Canvas会封装一块Bitmap，而作图就是基于这块Bitmap的。前面所说的画布，其实指的就是Canvas中的这块Bitmap。
+
+
+那么，真正的Surface怎么对它进行替换呢？可以分为以下几个流程：
+
+1. 创建一个SurfaceComposerClient
+
+2. 调用SurfaceComposerClient的createSurface得到一个SurfaceControl对象
+
+3. 调用SurfaceControl的writeToParcel把一些信息写到Parcel包中
+
+4. 根据Parcel包的信息构造一个Surface对象。把这个Surface对象保存到Java层的mSurface对象中，这样，ViewRoot最终得到了一个Native的Surface对象。
