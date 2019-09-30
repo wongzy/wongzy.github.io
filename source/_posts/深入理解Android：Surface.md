@@ -489,3 +489,17 @@ Canvas是画图所需要的四个类其中之一，这四个类分别是：
 3. 调用SurfaceControl的writeToParcel把一些信息写到Parcel包中
 
 4. 根据Parcel包的信息构造一个Surface对象。把这个Surface对象保存到Java层的mSurface对象中，这样，ViewRoot最终得到了一个Native的Surface对象。
+
+### Surface和画图
+
+最后两个和Surface相关的函数调用是lockCanvas和unlockCanvasAndPost。
+
+* lockCanvas： 先获得一块存储区域，然后将它和Canvas绑定到一起，这样，UI绘画的结果就记录在这块存储里了
+
+* unlockCanvasAndPost：调用Surface对象的unlockAndPost函数
+
+### Surface流程
+
+Surface精简流程可以由如下这个图概括
+
+![Surface精简流程.PNG](https://i.loli.net/2019/09/30/BvamZsL78q5KgYn.png)
