@@ -527,3 +527,16 @@ ViewRoot提供Canvas给它所控制的View，所以他们使用同一个Canvas�
 * 同一个ViewRoot下，不同类型的View使用同一个Surface吗？
 
 是的，但是SurfaceView要除外。因为SurfaceView的绘制一般在独立的线程上，并且由应用层主动调用lockCanvas，draw和unlockCanvasAndPost来完成绘制流程。应用层相当于抛开了ViewRoot的控制直接和屏幕打交道，这在camera、video方面用的最多。
+
+# Surface总结
+
+主要是这两点：
+
+* 应用程序和Surface的关系
+
+* Surface和SurfaceFlinger的关系
+
+应用程序与Surface的关系从应用程序的Activity开始，一路追踪到ViewRoot、WindowManagerService。
+
+SurfaceFlinger则主要负责视图的显示，App 端 copyFrom() 出来 NativeSurface 时会创建一个 SharedBufferClient 与 SharedClient 这块共享内存关联。当客户端 addView() 或者需要更新 View 时，会通过 SharedBufferClient 写入数据到 ShareClient 中，SurfaceFlinger 中的 SharedBufferServer 接收到通知会将 FrameBuffer 中的数据传输到屏幕上。HWComposer 是基于硬件来产生 VSync 信号的，来通知 SurfaceFlinger 重绘控制显示的帧率。
+                         
