@@ -503,3 +503,27 @@ Canvas是画图所需要的四个类其中之一，这四个类分别是：
 Surface精简流程可以由如下这个图概括
 
 ![Surface精简流程.PNG](https://i.loli.net/2019/09/30/BvamZsL78q5KgYn.png)
+
+## ViewRoot总结
+
+ViewRoot是Surface系统甚至UI系统中一个非常重要的类，VieRoot的总结如下：
+
+* ViewRoot和View类的关系是上面？
+ 
+ViewRoot是View视图体系的根，每一个Window（注意是Window，比如PhoneWindow）有一个ViewRoot，它的作用是处理layout和View视图体系的绘制工作。视图体系包括Views和ViewGroupa，也就是SDK中能看到的View类都属于视图体系。根据前面的根系可知，这些View是需要通过draw画出来的。而ViewRoot就是用来draw他们的，ViewRoot本身没有draw/onDraw函数。
+
+* ViewRoot和它所控制的View及其子View使用同一个Canvas吗？
+
+ViewRoot提供Canvas给它所控制的View，所以他们使用同一个Canvas。但Canvas使用的内存却不是固定的，而是通过Surface的lockCanvas得到的。
+
+* View、Surface和Canvas之间的关系？
+
+一个Window将和一个Surface绑定在一起，绘制前ViewRoot会从Surface中lock除一个Canvas。
+
+* Canvas有一个bitmap，那么绘制UI时，数据是画在Canvas的这个bitmap中吗？
+
+是的，bitmap实际上包括了一块内存，绘制的数据最终都在这块内存上。
+
+* 同一个ViewRoot下，不同类型的View使用同一个Surface吗？
+
+是的，但是SurfaceView要除外。因为SurfaceView的绘制一般在独立的线程上，并且由应用层主动调用lockCanvas，draw和unlockCanvasAndPost来完成绘制流程。应用层相当于抛开了ViewRoot的控制直接和屏幕打交道，这在camera、video方面用的最多。
