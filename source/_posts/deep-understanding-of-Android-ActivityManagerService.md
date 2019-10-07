@@ -62,4 +62,6 @@ Watchdog.getInstance().start(); // launch Watchdog
 
 in the codes above, listed six significant point and sample explain about these invoke, in this session we all analyze interaction with WindowManagerService(AMS) except 4,5 point.
 
+## analysis to ActivityManagerService's main method 
 
+AMS's Main method would return a Context object, what can be slather used by other services. With this context, we can do many things(for example, obtain the resources in environment and java class message). but what a context does AMS's main method returned?see the code followed:
