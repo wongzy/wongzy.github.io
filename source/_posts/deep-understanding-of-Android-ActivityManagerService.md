@@ -65,3 +65,53 @@ in the codes above, listed six significant point and sample explain about these 
 ## analysis to ActivityManagerService's main method 
 
 AMS's Main method would return a Context object, what can be slather used by other services. With this context, we can do many things(for example, obtain the resources in environment and java class message). but what a context does AMS's main method returned?see the code followed:
+
+```
+public static final Context main(int factoryTest) {
+AThread thr = new AThread(); //1.build a AThread Object
+thr.start();
+......//wait until build thr success
+ActivityManagerService m = thr.mService;
+mSelf = m;
+//2.invoke ActivityThread's systemMain Method
+ActivityThread at = ActivityThread.systemMain();
+mSystemThread = at;
+//3.obtain a Context Object, attenation, the method be invoked named getSystemContext, what is SystemContext?
+Context context = at.getSystemContext();
+context.setTheme(android.R.style.Theme_Holo);
+m.mContext = context;
+m.mfactoryTest = factoryTest;
+//ActivityStack is the vital class for AMS to manage Activity's launch and dispatch, we will analyze it in the future
+m.mMainStack = new ActivityStack(m, context, true);
+//invoke BSS's publish method, this knowledge point we are introduced before.
+m.mBatteryStatsService.publish(context);
+// another service: UsageStatsService.
+m.mUsageStatsService.publish(context);
+synchronized(thr) {
+thr.mReady = true;
+thr.notifyAll();//inform thr thread that this thread's mission finished
+}
+//4.invoke AMS's startRunning method
+m.startRunning(null, null, null, null);
+return context;
+}
+```
+
+in Main method, we enumerated four viral method, they are:
+
+* build AThread thread. Although AMS's main method was invoked by ServerThread, but AMS's own job did not put to ServerThread to finish, it create a new thread - AThread thread.
+
+* ActivityThread.systemMain method. init ActivityThread object.
+
+* ActivityThread.getSystemContext method. to acquire a Context object, from this method name we can see, this Context represent System's context environment.
+
+* AMS's startRunning method.
+
+attention! in main method, there is a "wait" and a "notifyAll", because:
+
+1. main method need wait for AThread's thread launch and finish a part of mission.
+
+2. after AThread finishing a part of job, it will wait for the finish of main method.
+
+> this situation of two thread waiting for each other, is rare in Android code 
+
