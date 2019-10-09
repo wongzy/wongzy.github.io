@@ -115,3 +115,22 @@ attention! in main method, there is a "wait" and a "notifyAll", because:
 
 > this situation of two thread waiting for each other, is rare in Android code 
 
+### analysis to AThread
+
+in essence, AThread is a thread which supports message loop and transact, its main job is to build AMS object, then notify AMS's main method. so, this AMS object is what the main method waited.
+
+#### the construct method of AMS
+
+there are several mission which AMS has done:
+
+* build BSS, USS, mProcessStat(type of ProcessState), mProcessStatsThread thread, those are all related to system's running status statistics.
+
+* build /data/system catalog,  assign to mCompatModePackage (type of CompatModePackage) and mConfiguration (type of Configuration)'s fields.
+
+#### analysis to ActivityThread.systemMain
+
+ActivityThread is a vital class in Android framework, it represent the main thread in a application's process(for application process, Activity Thread's main method was certainly invoked by process's main thread). its responsibility is dispatch and transact the four component which runs in this thread.
+
+attention! Application process are indicate those process which runs APK, they are derived(fork) by Zyote, relatively, there are system process(include Zygote and system_server).
+
+
