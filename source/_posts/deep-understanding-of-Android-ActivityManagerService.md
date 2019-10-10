@@ -133,4 +133,56 @@ ActivityThread is a vital class in Android framework, it represent the main thre
 
 attention! Application process are indicate those process which runs APK, they are derived(fork) by Zyote, relatively, there are system process(include Zygote and system_server).
 
+the code of ActivityThread.systemMain
+
+```
+public static final ActivityThread systemMain(){
+HardwareRender.disable(true);//forbid hardware render accelerate
+// build a ActivityThread object, its construct method is very simple
+ActivityThread thread = new ActivityThread();
+thread.attach(true); //invoke its attach method, its params is true
+return thrad;
+```
+
+as see above, ActivityThread represent its application process(which runs APK) main thread,but system_server was not a application process. so why here need ActivityThread?
+
+remember framework-res.apk? which mentioned in the analysis of PackageManagerService. this APK does not only includes resource file, but also includes some Activity(for example, power-off dialog), these Activity are actually runs at system_server process. From ths perspective, can regard system_server as a special application process.
+
+the code of ActivityThread's attach method
+
+
+```
+private void attach(boolean system) {
+sThreadLocal.set(this);
+mSystemThread = system; //judge whether it is system process
+if (!system) {
+......//application process's transact flow
+} else { //system process's transact flow, this situation can only be transactted in system_server 
+//when set DDMS, we can see that system_server process named system_process
+android.ddm.DdmHandleAppName.setAppName("system_process");
+try {
+//there are serveral vital role appear, see the analysis followed
+mInstrumentation = new Instrumentation();
+ContextImpl context = new ContextImpl();
+//init context, notice  the first parameter is getSystemContext
+context.init(getSystemContext(),mPackageInfo, null, this);
+//use Instrumentation to construct a Application object
+Application app = Instrumentation.newApplication(Application.class, context);
+//a process support several Application, mAllApplication are saved in its process's Application object
+mAllApplications.add(app);
+mInitialApplication = app; //set mInitialApplication
+app.onCreate(); //invoke Application's onCreate method
+} ......// try/catch end
+} //if (!system) to judge if end
+//register Configuration change's callback notification 
+ViewRootImpl.addConfigCallback(new ComponentCallbacks2(){
+public void onConfiguarationChanged(Configuaration newConfig){
+.......//when system configuaration change(for example, language change), need invoke this callback
+}
+public void onLowMemory(){}
+public void onTrimMemory(int level){}
+});
+}
+```
+
 
