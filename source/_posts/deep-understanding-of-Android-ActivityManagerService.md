@@ -185,4 +185,47 @@ public void onTrimMemory(int level){}
 }
 ```
 
+there are several vital number, respectively are type of Instrumentation class, Application class and Context class, there is their affects:
+
+* Instrumentation: Instrumentation is a tool class.When it be used, system will build it first, then build other component via it.Otherwise, the interaction between system and components will be transmitted by Instrumentation, as thus, Instrumentation can monitor the interaction between system and those components.
+ In actually use,we can build Instrumentation's derived class to process transact.
+ 
+ * Application: Application class saved a overall application status.Application are declared by <application> label of AndroidManifest.xml.We need to define Application's derived class in actual use.
+ 
+ * Context: Context is a interface that we can obtain and operate Application's corresponding resources, classes, even the four components via it.
+ 
+ > Application  in here is a Android concept, we can realize it as a container which the four components included. otherwise, a process can run several Applications(a apk can include other apks)
+
+Context is a abstract class, but what built by AMS was its subclass, ContextImpl.As above, Context supplied Application's contextual message, and how does those message transmitted to Context? This problem include two aspects:
+
+1. What Context actually is ?
+2. What are the contextual message in Context?
+
+next step, we will analyze getSystemContext method, which be invoked above.
+
+```
+public ContextImpl getSystemContext()
+{
+synchronized(this) {
+if(mSystemContext == null){ //singleton mode
+ContextImpl context = ContextImpl.createSystemContext(this);
+//LoadApk is a new class imported by android2.3, which represent a APK loaded to system
+LoadApk info = new LoadedApk(this, "android", context, null,
+CompatibiltyInfo.DEFAULT_COMPATIBILITY_INFO);
+//init this ContextImpl object
+context.init(info, null,this);
+//init resource message
+context.getResources().updateConfiguration(
+getConfiguaration(),getDisplayMetrcsLocked(
+Compatibility.DEFAULT_COMPATIBILITY_INFO,false));
+mSystemContext = context;//save this special ContextImpl object
+}
+}
+return mSystemContext;
+```
+
+why method's name is getSystemContext? because it use a LoadedApk object in the init flow path of ContextImpl. As the annotation, LoadedApk is a class imported by Android2.3，this class is used to save messages about APK(for example, resource file location, JNI library location, etc).The package which represented by LoadedApk that has the method getSystemContext to init ContextImpl, named "android", actually is framework-res.apk, because this APK was solely used by system_server process, so call it getSystemContext.
+
+
+
 
