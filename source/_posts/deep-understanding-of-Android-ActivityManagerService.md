@@ -226,6 +226,38 @@ return mSystemContext;
 
 why method's name is getSystemContext? because it use a LoadedApk object in the init flow path of ContextImpl. As the annotation, LoadedApk is a class imported by Android2.3，this class is used to save messages about APK(for example, resource file location, JNI library location, etc).The package which represented by LoadedApk that has the method getSystemContext to init ContextImpl, named "android", actually is framework-res.apk, because this APK was solely used by system_server process, so call it getSystemContext.
 
+We can display those classes's relationship by this picture:
 
 
+![image002.png](https://i.loli.net/2019/10/13/SKUbmkCwZPGQ35I.png)
+
+form the chapter we can see:
+
+* from the derive relationship, ApplicationContentResolver was derived by ContentResolver, it mainly used to interact with ContentProvider. ContextImpl and ContextWrapper are both derived by Context, but Application was derived by ContextWrapper.
+
+* form involved aspect, the involved area of ContextImpl is most extensive. it refers Resources via mResources, refers LoadedApk via mPackageInfo, refers ActivityThread via mMainThread, and refers ApplicationContentResolver via mContentResolver.
+
+* ActivityThread represent main thread, it refers Instrumentation via mInstrumentation. Otherwise, it also saved several Application object.
+
+> be attention, some field number's type is its base type in the method, but we directly refers to its real object in the picture.
+
+the summary of systemMain
+
+after the invoke of systemMain method, we get those:
+
+1. obtain a ActivityThread, it represent application process's main thread
+
+2. obtain a Context object, the Application environment it slinkingly referred is related with framework-res.apk
+
+In summary, systemMain Method will build a Android runtime environment which is same as application process for system_server process.This sentence include two concepts:
+
+1. process: derived by operate system, is a running body in os, the code we coding must be running at a process
+
+2. Android Runtime environment: Android build a runtime environment for itself. in this environment, the concept of process is blurred, component's running status and their interaction are all in this environment.
+
+Android Runtime environment was built above process. Applications are only interact with android environment in a general way.As the same, system_server expect its inter services interact with Android environment, thus, it request to build a run environment for system_server.Because of the specialization of system_server, it invoke systemMain method, but general application invoke ActivityThread's main method to build android environment.
+
+Otherwise, although ActivityThread was defined to represent process's main thread, but as a java class, which thread derive its instance ? In system_server we can see, Activity object was built by other thread, but in application process, ActivityThread was build by main thread.
+ 
+#### the analysis to ActivityThread.getSystemContext
 
