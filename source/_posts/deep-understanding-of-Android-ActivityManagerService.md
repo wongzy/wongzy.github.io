@@ -261,3 +261,5 @@ Otherwise, although ActivityThread was defined to represent process's main threa
  
 #### the analysis to ActivityThread.getSystemContext
 
+We have seen ActivityThread.getSystemContext Method in the previous session. After the invoke of this method, we will obtain a Context object which can represent System process.But what actually the Context is? We can see its family chapter follows:
+
