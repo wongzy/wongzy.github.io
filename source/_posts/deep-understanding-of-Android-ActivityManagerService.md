@@ -261,5 +261,19 @@ Otherwise, although ActivityThread was defined to represent process's main threa
  
 #### the analysis to ActivityThread.getSystemContext
 
-We have seen ActivityThread.getSystemContext Method in the previous session. After the invoke of this method, we will obtain a Context object which can represent System process.But what actually the Context is? We can see its family chapter follows:
+We have seen ActivityThread.getSystemContext Method in the previous session. After the invoke of this method, we will obtain a Context object which can represent System process.But what actually the Context is? We can see its family picture follows:
+
+
+![Context家族.PNG](https://i.loli.net/2019/10/17/QavJiGgsxnAP83l.png)
+
+
+From this picture we can see:
+
+* ContextWrapper is very interesting, ContextWrapper is a proxy class actually is ContextImpl, which indicated by number mBase.Its inter function's detail realization are totally achieved by mBase.The goal of this design is to hide ContextImpl.
+
+* Application is derived by ContextWrapper, and realized ComponentCallBacks2 interface. There is a LoadedApk type number mLoadedApk in Application.LoadedApk represent a Apk file. Because a AndroidManifest.xml file can only declared a Application label, so a Application must be bound with a LoadedApk.
+
+* Service are derived by ContextWrapper,  therein inter number mApplication indicate Application(in AndroidManifest.xml, Service can only as Application's sub label, so Service must be bound with a Application)
+
+* ContextThemeWrapper override two methods which are related with Theme.This is related with interface, so Activity as UI container in Android system, must be derived by ContextThemeWrapper too.As same as Service, Activity indicated Application via number mApplication internally.
 
