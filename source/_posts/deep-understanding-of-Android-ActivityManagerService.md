@@ -264,7 +264,7 @@ Otherwise, although ActivityThread was defined to represent process's main threa
 We have seen ActivityThread.getSystemContext Method in the previous session. After the invoke of this method, we will obtain a Context object which can represent System process.But what actually the Context is? We can see its family picture follows:
 
 
-![Context家族.PNG](https://i.loli.net/2019/10/17/QavJiGgsxnAP83l.png)
+![context_family](https://i.loli.net/2019/10/17/QavJiGgsxnAP83l.png)
 
 
 From this picture we can see:
@@ -276,4 +276,42 @@ From this picture we can see:
 * Service are derived by ContextWrapper,  therein inter number mApplication indicate Application(in AndroidManifest.xml, Service can only as Application's sub label, so Service must be bound with a Application)
 
 * ContextThemeWrapper override two methods which are related with Theme.This is related with interface, so Activity as UI container in Android system, must be derived by ContextThemeWrapper too.As same as Service, Activity indicated Application via number mApplication internally.
+
+
+#### analysis to AMS's startRunning method
+
+the code as follows:
+
+```
+public final void startRunning(String pkg, String cls, String action,String data) {
+synchronized(this) {
+if(mStartRunning)
+return; //if has invoked this method, return
+mStartRunning = true;
+//mTopComponent eventually be signed to null
+mTopComponent = pkg != pkg != null && cls != null ?
+new ComponentName(pkg, cls):null;
+mTopAction = action != null? action:Intent.ACTION_MAIN;
+mTopData = data; //mTopData enentually be signed to null
+if (!mSystemReady) return; //mSystemReady is false, so return directlly
+}
+systemReady(null); //this method is very important, but it's a pity it not be invoked in startRunning method
+```
+
+startRunning method is sample,so we do not write a lot to analyze it.
+
+In here, we had analyzed all four acknowledge points, we can review what did AMS's main method do.
+
+#### the summary of ActivityManagerService's main method
+
+two goal of AMS's main method:
+
+1. the first goal is easy to think out, build AMS object
+
+2. the other goal is obscure but vital, is to apply a android environment to be used by system_server process.
+
+On the basis of the code analyze before, Android run environment will include two class number: Activity Thread and ContextImpl(usually its base class Context).
+
+Picture follows shows some number variables in those two class, we can see ActivityThread and ContextImpl's function via those.
+
 
