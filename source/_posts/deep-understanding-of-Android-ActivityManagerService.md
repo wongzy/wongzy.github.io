@@ -314,4 +314,16 @@ On the basis of the code analyze before, Android run environment will include tw
 
 Picture follows shows some number variables in those two class, we can see ActivityThread and ContextImpl's function via those.
 
+![ActivityandContextImpl.PNG](https://i.loli.net/2019/10/21/6FKdcyGLweQmRlM.png)
 
+from the picture we can see:
+
+* there is a mLooper number in ActivityThread, it represent a message loop. It afraid is a direct evidence for ActivityThread be called "Thread".Otherwise, mServices is used to save Service, Activities is used to save ActivityClientRecord, and mAllApplications is used to save Application.We will introduce those variable's function when met it.
+
+* for ContextImpl, its number variable represent thar it are related with resources and APK file.
+
+now we will analyze the third method - setSystemProcess.
+
+> actually, SettingsProvider.apk is run in system_server process too.
+
+### the analysis to AMS's setSystemProcess
