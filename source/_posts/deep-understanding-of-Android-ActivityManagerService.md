@@ -327,3 +327,58 @@ now we will analyze the third method - setSystemProcess.
 > actually, SettingsProvider.apk is run in system_server process too.
 
 ### the analysis to AMS's setSystemProcess
+
+The code of AMS's setSystemProcess as follows:
+
+```
+public static void setSystemProcess() {
+try{
+ActivityManagerService m = mSelf;
+//register several services to ServiceManager
+ServiceManager.addService("activity", m);
+//used to print memory message
+ServiceManager.addService("meminfo", new MemBinder(m));
+/*
+the new service that android 4.0 added, used to output Applications Graphics Acceleration info. Reader can check details via command adb shell dumpsys gfxinfo.
+*/
+Servicemanager.addService("gfxinfo", new GraphicsBinder(m));
+if (MONITOR_CPU_USAGE) //this value is default true, add cpuinfo service
+ServiceManager.addService("couinfo", new CpuBinder(m));
+//regist permission manager service PermissionController
+ServiceManager.addService("permission", new PermissionController(m));
+/* important explaination:
+query ApplicationInfo whose package named android to PackagemanagerService.
+attation this invoke, althought PKMS and AMS belong to same process, but the interaction between those still need Context.
+actually, here they can invoke PKMS's function directly, why it takes a lot effort? we will explain it clearly.
+*/
+//use AMS's mContext object
+Application info = mSelf.mContext.getPackageManager().getApplicationInfo("android", STOCK_PM_FLAFS);
+//1. invoke ActivityThread's installSYstemApplication method
+mSystemThread.installSystemApplicationInfo(info);
+synchronized(mSelf){
+//2. here refers to the processes's management of AMS, see the analysis as follows
+ProcessRecord app = mSelf.newProcessRecordLocked(mSYstemThread.getApplicationThread(),info,info.processName);
+//attation, the last parameter is a char sequence, its value is system
+app.persistent = true;
+app.pid = MY_PID;
+app.maxAdj = ProcessList.SYSTEM_ADJ;
+//3. save ProcessRecord object
+mSelf.mProcessNames.put(app.processName, app.info.uid, app);
+synchronized(mSelf.mPidsSelfLocked) {
+mSelf.mPidsSelfLocked.put(app.pid, app);
+}
+//in the basis of system's current status, adjust process's dispatch priority  and OOM_Adj, we will analyze it after
+mSelf.updateLruProcessLocked(app, true, true);
+}
+}...... //throw exception
+}
+```
+
+we enumerate one important explanation and two important points:
+
+* important explanation: AMS query ApplicationInfo named android to PKMS. In here, the interaction between AMS and PKMS was finished by Context, check the code invoked by a services of functions, we will find that AMS will request PKMS's query function via Binder.AMS and PKMS are belong to one process, they can totally interact without Context. Why here spend a lot ? the reason is sample, Android expect the services in system_server are also interacting by android environment, for example, the unify between components's interact interfaces and system's future expandability.
+
+* important point one: ActivityThread's installSystemApplicationInfo method.
+
+* important point two: ProcessRecord class, it is related with the management to process of AMS.
+
