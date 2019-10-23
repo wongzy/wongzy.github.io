@@ -382,3 +382,38 @@ we enumerate one important explanation and two important points:
 
 * important point two: ProcessRecord class, it is related with the management to process of AMS.
 
+#### ActivityThread's installSystemApplication function
+
+installSystemApplicationInfo function's parameter is a ApplicationInfo object, this object was derived by querying the package named android of PKMS via Context(based on the knowledge above, there is only framework-res.apk is declared its package name android at current).
+
+see installSystemApplicationInfo's code, as follows:
+
+```
+public void installSystemApplicationInfo(Application info) {
+synchronized(this){
+//the ContextImpl object returned is the object which built in AMS's main method
+ContextImpl context = getSystemContext();
+//invoke init method again, is this a repetitive invoke?
+context.init(new pk(this, "android", context, info, CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO), null, this);
+//create a Profiler object, used to performance statistics
+mProfiler = new Profiler();
+}
+}
+```
+
+We can see the code which invoke context.init() method, reader may doubt that getSystemContext method would return mSystemContext, but there mSystemContext was initialized, why it initialized again?
+
+check the code we can see:
+
+* when first performed init, the fourth parameter in LoadedApk struct function represent ApplicationInfo is null.
+
+* when second performed init, the fourth parameter in LoadedApk struct function is not null, means that this parameter was real referred to a actual ApplicationInfo, this ApplicationInfo was derived from framework-res.apk.
+
+On the basis of the message above, readers may think: the goal for Context to perform init is only to create a Android environment, but this Context was not bound with actual ApplicationInfo.Before the second perform of init, obtain a real ApplicationInfo via the interaction between Context and PKMS,then bind this context with ApplicationInfo via init function.
+
+But although we resolve the question that why init function performs twice, but a more difficult problem occurs: the Context obtained by the first time perform init was not bind with ApplicationInfo, but it is also useful, why it is necessary to bind with a ApplicationInfo ? The result is sample, because framework-res.apk(include SettingsProvider.apk we will introduced after) run in system_server. As same as all other Apk, its running need a Android environment which correctly init.
+
+because framework-res.apk is a APK file, and as same as APK file, it should run in a process. AMS was used to the management and dispatch to process, so the process which run the APK should have a refer manage struct, so the next step of AMS is to match run environment and process manage struct to a unity, and manage it unified by AMS.
+
+The process management struct of AMS is ProcessRecord.  
+
