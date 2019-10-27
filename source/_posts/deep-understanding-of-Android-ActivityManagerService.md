@@ -415,5 +415,34 @@ But although we resolve the question that why init function performs twice, but 
 
 because framework-res.apk is a APK file, and as same as APK file, it should run in a process. AMS was used to the management and dispatch to process, so the process which run the APK should have a refer manage struct, so the next step of AMS is to match run environment and process manage struct to a unity, and manage it unified by AMS.
 
-The process management struct of AMS is ProcessRecord.  
+The process management struct of AMS is ProcessRecord.
+
+#### ProcessRecord and IApplicationThread
+
+before the analysis to ProcessRecord, we think a problem first: how AMS interact with application process ? For example, when AMS launch a activity in other process, because this activity is running in other process, so it is necessary to AMS to interact with this process. The answer is interacting via Binder. For this, Android apply a IApplicationThread interface, this interface defined the interact function between AMS and application process. Chart follows is the interface's family chart.
+
+![接口的家族图谱.PNG](https://i.loli.net/2019/10/27/8gyVjeQOxUoNK5C.png)
+
+From the chart we can see:
+ 
+ * ApplicationThreadNative realized IApplicationThread interface. From the method name the interface defined we can see, AMS interact with application via it. For example, when launch a Activity it invoke its interface's scheduleLaunchActivity method.
+ 
+ * ApplicationThread refers its intern class ApplicationThread via number variable mAppThread, and Application derived from ApplicationThreadNative.
+ 
+ now there is IApplicationThread interface, with it, AMS can interact with application process via it. For example, for a sample method follows:
+ 
+```
+public final void scheduleStopActivity(IBinder token, boolean showWindow, int configChanges) {
+queueOrSendMessage(// this method will send message to a Handle intern
+showWindow? H.STOP_ACTIVITY_SHOW:H.STOP_ACTIVITY_HIDE, token, 0, configChanges);
+}
+```
+
+When AMS want to stop a Activity, it will invoke corresponding process IApplicationThread Binder client's scheduleStopActivity method. What the function realized is send a message to the process which ActivityThread is in.In application process, ActivityThread runs in main thread, os this message will be transacted in main thread.
+
+> tips：Activity's onStop function will be invoked in main thread.
+
+IApplication is rarely a interface for interacting between AMS and another process, except this, AMS need more message about this process.In AMS, process's massage saved in ProcessRecord data struct.So, what is ProcessRecord? We need see newProcessRecordLocked function before answer the method, its codes as follows:
+
+
 
