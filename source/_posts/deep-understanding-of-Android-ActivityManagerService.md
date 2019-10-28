@@ -444,5 +444,43 @@ When AMS want to stop a Activity, it will invoke corresponding process IApplicat
 
 IApplication is rarely a interface for interacting between AMS and another process, except this, AMS need more message about this process.In AMS, process's massage saved in ProcessRecord data struct.So, what is ProcessRecord? We need see newProcessRecordLocked function before answer the method, its codes as follows:
 
+```
+final ProcessRecord newProcessReoordLocked(IApplicationThread thread, ApplicationInfo info, String customProcess) {
+String proc = customProcess != null ? customProcess:info.processName;
+BatteryStatsImpl.Uid.Proc ps = null;
+BatteryStatsImpl stats = mBatteryStatsService.getActiveStatistics();
+synchronized(stats) {
+//BSImpl will build a battery statics item for this process
+ps = stats.getProcessStatsLocked(info.uid, proc);
+}
+//build a ProcessRecord object represent corresponding process. AMS and its process's object is the second parameter thread.
+return new ProcessRecord(ps, thread, info, proc);
+```
+
+There are a lot of number variable in ProcessRecord, we see which number variable init in its construct function:
+
+```
+ProcessRecord(BatteryStatsImpl.Uid.Proc_BatteryStats, IApplicationThread_thread.ApplicationInfo_info, String_processName) {
+batteryStats = _batteryStats; //used to statics for battery
+info = _info; //save ApplicationInfo
+processName = _processName; //save process name
+//a process can run several package, pkgList used to store package name
+pkgList.add(_info.packageName);
+thread = _thread; //save IApplicationThread, can interact with application process via it
+//variables below here are related with process priority, OOM_adj. We will analyze their function later.
+maxAdj = ProcessList.EMPTY_APP_ADJ;
+hiddenAdj = ProcessList.HIDDEN_APP_MIN_ADJ;
+curRawAdj = setRawAdj = -100;
+curAdj = setAdj = -100;
+//used to controll whether this process process is always standed in memory(it will be rebotted by system even be killed), only vital process have this priority.
+persistent = false;
+removed = false;
+}
+```
+
+Except saving IApplicationThread which interacted with application process, ProcessRecord also saved process name, different state corresponding Oom_adj value and a ApplicationInfo. Although a process can run several Application, but ProcessRecord usually saved the ApplicationInfo whose Application run in advance.
+
+For now, a ProcessRecord object was built, different from other application processes, the process it corresponded is system_server.To represent it specialization, AMS signed specific value for some number variable:
+
 
 
