@@ -482,5 +482,25 @@ Except saving IApplicationThread which interacted with application process, Proc
 
 For now, a ProcessRecord object was built, different from other application processes, the process it corresponded is system_server.To represent it specialization, AMS signed specific value for some number variable:
 
+```
+app.persistent = true; //sign value to true
+app.pid = MY_PID; //sign pid to system_server's process number
+app.maxAdj = ProcessList.SYSTEM_ADJ; //set max OOM_Adj, system process's default value is -16
+//In addition, app's processName was signed to "system"
+```
 
+Now, a ProcessRecord object which indicate system_server was built.After that AMS put it in its sphere of influence.
 
+There are two number variables used to save ProcessRecord, one is mProcessNames, the other is mPidsSelfLocked.Chapter follows is the struct of two number variables.
+
+![数据结构示意图.PNG](https://i.loli.net/2019/10/29/BMsAYCJQFLfSpbh.png)
+
+#### summary of AMS's setSystemProcess
+
+Now we review what job setSystemProcess do:
+
+* Register AMS, meminfo, gfxinfo and other services to ServiceManager.
+
+* On the basis of ApplicationInfo which from PKMS init Android running environment, and build a ProcessRecord which represents system_server process, from now, system_server was included in AMS's sphere of manage.
+
+#### analysis of installSystemProviders method
