@@ -504,3 +504,18 @@ Now we review what job setSystemProcess do:
 * On the basis of ApplicationInfo which from PKMS init Android running environment, and build a ProcessRecord which represents system_server process, from now, system_server was included in AMS's sphere of manage.
 
 #### analysis of installSystemProviders method
+
+Do you remeber Setting database? In system_server there are many Service need to query configuration message from it. For this, Android apply a SettingsProvider to help developer.This Provider is in SettingsProvider.apk, installSystemProviders will load this APK and put SettingProvider to system_server process for running.
+
+Now system_server process loaded framework-res.apk, after that there is another apk will be loaded, this is a sample which several apks runs in one process, otherwise, we can see ContentProvider's install flow via installSystemProvider method. We will analyze installSystemProvider method, its detail code as follows:
+
+> tips:When readers build their own Android system, should not delete /system/app/SettingsProvider.apk, unless system would not boost.
+
+```
+public static final void installSystemProviders() {
+List<ProviderInfo> providers;
+synchronized(mSelf) {
+/*
+
+```
+
