@@ -516,6 +516,30 @@ public static final void installSystemProviders() {
 List<ProviderInfo> providers;
 synchronized(mSelf) {
 /*
-
+find process name was "system" and uid is SYSTEM_UID's ProcessRecord from mProcessNames, it represent SystemServer process
+*/
+ProcessRecord app = mSelf.mProcessNames.get("system", Process.SYSTEM_UID);
+//1. vital invoke, see analysis follows
+providers = mSelf.generateApplicationProvidersLocked(app);
+if (providers != null) {
+....//remove Provider which applied by non-system apk (not set ApplicationInfo.FLAG_SYSTEM flag) from providers list
+}
+if (providers != null) {
+//2.install Provider for SystemServer
+mSystemThread.installSystemProviders(providers);
+}
+//monitor Secure list variation in Settings database, only focus on long_press_time configuration's variation now 
 ```
+
+we listed two important invoke in the code, they are:
+
+1. invoke generateApplicationProvidersLocked function, this function return a ProviderInfo List.
+
+2. invoke ActivityThread's installSystemProviders function, ActivityThread can regard as process's android run environment, so installSystemProviders represent install ContentProvider for that process.
+
+> attention, in there we do not differentiate system process or application process.Because only interact with ActivityThread, so it doesn't matter which process it runs.
+
+see the first vital function generateApplicationProvidersLocked as follows:
+
+
 
