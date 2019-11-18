@@ -503,43 +503,22 @@ Now we review what job setSystemProcess do:
 
 * On the basis of ApplicationInfo which from PKMS init Android running environment, and build a ProcessRecord which represents system_server process, from now, system_server was included in AMS's sphere of manage.
 
-#### analysis of installSystemProviders method
+# the summary of ActivityManagerService
 
-Do you remeber Setting database? In system_server there are many Service need to query configuration message from it. For this, Android apply a SettingsProvider to help developer.This Provider is in SettingsProvider.apk, installSystemProviders will load this APK and put SettingProvider to system_server process for running.
+there are four vital and complicated method in ActivityManagerService, the knowledge point summary as follows:
 
-Now system_server process loaded framework-res.apk, after that there is another apk will be loaded, this is a sample which several apks runs in one process, otherwise, we can see ContentProvider's install flow via installSystemProvider method. We will analyze installSystemProvider method, its detail code as follows:
+* AMS's main function : build a instance of AMS, the most important work is to build Android runtime environment, obtain a ActivityThread and a Context object.
 
-> tips:When readers build their own Android system, should not delete /system/app/SettingsProvider.apk, unless system would not boost.
+* AMS's setSystemProcess function: this function register AMS and meminfo services to ServiceManager, otherwise, it build a ProcessRecord object for system_server object.Because AMS is the process manage and dispatch center in java world, to treat equally without discrimination to java processes, although system_server is a system process, it will be included in AMS's manage scope.
 
-```
-public static final void installSystemProviders() {
-List<ProviderInfo> providers;
-synchronized(mSelf) {
-/*
-find process name was "system" and uid is SYSTEM_UID's ProcessRecord from mProcessNames, it represent SystemServer process
-*/
-ProcessRecord app = mSelf.mProcessNames.get("system", Process.SYSTEM_UID);
-//1. vital invoke, see analysis follows
-providers = mSelf.generateApplicationProvidersLocked(app);
-if (providers != null) {
-....//remove Provider which applied by non-system apk (not set ApplicationInfo.FLAG_SYSTEM flag) from providers list
-}
-if (providers != null) {
-//2.install Provider for SystemServer
-mSystemThread.installSystemProviders(providers);
-}
-//monitor Secure list variation in Settings database, only focus on long_press_time configuration's variation now 
-```
+* AMS's installSystemProviders function: load SettingProvider for system_server
 
-we listed two important invoke in the code, they are:
+* AMS's systemReady function: do ending task before finishing launch. After invoking function, Home Activity will display in user.
 
-1. invoke generateApplicationProvidersLocked function, this function return a ProviderInfo List.
+the analysis to AMS invoke trace is the first line we  crack AMS.
 
-2. invoke ActivityThread's installSystemProviders function, ActivityThread can regard as process's android run environment, so installSystemProviders represent install ContentProvider for that process.
+# the analysis of startActivity
 
-> attention, in there we do not differentiate system process or application process.Because only interact with ActivityThread, so it doesn't matter which process it runs.
+We will spend a lot on the launch flow of Activity in this section, it is the most difficult way of five ways, believe read can realize it if work hard.
 
-see the first vital function generateApplicationProvidersLocked as follows:
-
-
-
+## start with am
