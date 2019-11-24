@@ -522,3 +522,8 @@ the analysis to AMS invoke trace is the first line we  crack AMS.
 We will spend a lot on the launch flow of Activity in this section, it is the most difficult way of five ways, believe read can realize it if work hard.
 
 ## start with am
+
+am is the same as pm, it is a script, it used to interact with AMS, for example, launch Activity, launch Service, send Broadcast.When we use am script to launch a activity, it eventually will invoke AMS's startActivityAnd Wait function to deal with this launch request, it is a sample way to analyze Activity's launch via am.
+
+## analysis to AMS's startActivityAndWait
+
