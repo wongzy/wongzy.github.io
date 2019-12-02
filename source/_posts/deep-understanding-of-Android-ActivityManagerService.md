@@ -527,3 +527,38 @@ am is the same as pm, it is a script, it used to interact with AMS, for example,
 
 ## analysis to AMS's startActivityAndWait
 
+startActivityAndWait method has lots of parameters, we acquaint with them first.
+
+```
+public final WaitResult startActivityAndWait{
+/*
+in most situaction, a launch of Activity is called by a application process, IApplicationThread is a channel which application interact with application process, it is a mark to invoke process, in this example, am is not a application process, so the caller transfer is null
+*/
+IApplicationThread caller,
+//Intent and resolvedType, in this example,resolvedType is null
+Intent intent,String resolvedType,
+//grantedUriPermissions and granteMode are relatived with perimission
+Uri[] grantedUriPermissions, //in this example, is null
+int grantedMode, //in this example, is null, used to received startActivityForResult's result
+String resultWho, //in this example, is null
+//requestCode, in this example, is 0,its value's  significance was defined by its invoker,if its value equal or bigger than zero, AMS will save it by itself,and return it by onActivityResult method.
+int requestCode,
+boolean onlyIfNeeded, // in this example, is false
+boolean debug, //is a debug process
+//those three parameters are relatvied with performance statistics
+String profileFile,
+ParceIFileDescriptor profileFd, boolean autoStopProfiler)
+```
+
+the code of startActivityAndWait as follows:
+
+```
+public final WaitResult startActivityAndWait(IApplicationThread caller, Intent intent,String resolvedType, Uri[] grantedUriPermissions,int grantedMode, IBinder resultTo, String resultWho, int requestCode, boolean onlyifNeeded, boolean debug, String profileFile, ParcelFileDescriptor profileFd, boolean autoStopProfiler) {
+// create a WaitResult object to save transact result
+WaitResult res = new WaitResult();
+//mMainStack is ActivityStack type, invoke its startActivityMayWait function
+mMainStack.startActivityMayWait(caller, -1, intent, resolvedType, grantedUriPermissions, grantedMode, resultTo, resultWho,requestCode, onlyIfNeeded, debug, profileFile, profileFd, autoStopProfiler, res, null);//last parameter is Configuration,in this example ,is null
+return res;
+```
+
+mMainStack is AMS's member variable, type is ActivityStack, this class is Activity dispatch's core role,we will introduce base knowledge first.
