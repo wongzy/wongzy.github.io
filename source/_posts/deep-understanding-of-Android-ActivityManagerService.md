@@ -562,3 +562,11 @@ return res;
 ```
 
 mMainStack is AMS's member variable, type is ActivityStack, this class is Activity dispatch's core role,we will introduce base knowledge first.
+
+### Task, Back Stack, ActivityStack and Launch mode
+
+#### introduce for Task and Back Stack
+
+Task is a gather of activities. Why call it Activity? Activity is an organizational unit for performing a specific function.
+
+We can see a picture to distinguish task and activity, as follows:
