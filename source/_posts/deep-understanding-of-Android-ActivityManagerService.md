@@ -570,3 +570,9 @@ mMainStack is AMS's member variable, type is ActivityStack, this class is Activi
 Task is a gather of activities. Why call it Activity? Activity is an organizational unit for performing a specific function.
 
 We can see a picture to distinguish task and activity, as follows:
+
+![stack3.PNG](https://i.loli.net/2019/12/05/OZJi4cqz8DSTGrW.png)
+
+from this picture,A、B those two task uses different Activity to accomplish mission.Take a attention, there is no reuse in A and B task.
+
+see C task again, it can subdivide to four Activities, in C task there are two activities, one use task A's A1, task B's B2, why task C do not create its own Activity, but use other task's activity? Because although the thing user want to do is different, when subdivide task, it is possible to appear situation that functions of Activity is similar with other.As A1, B2 are meet requirements, it is not necessary to create activity. Otherwise, it can apply users same interface and experience via reuse activity.
