@@ -575,4 +575,22 @@ We can see a picture to distinguish task and activity, as follows:
 
 from this picture,A、B those two task uses different Activity to accomplish mission.Take a attention, there is no reuse in A and B task.
 
-see C task again, it can subdivide to four Activities, in C task there are two activities, one use task A's A1, task B's B2, why task C do not create its own Activity, but use other task's activity? Because although the thing user want to do is different, when subdivide task, it is possible to appear situation that functions of Activity is similar with other.As A1, B2 are meet requirements, it is not necessary to create activity. Otherwise, it can apply users same interface and experience via reuse activity.
+see C task again, it can subdivide to four Activities, in C task there are two activities, one use task A's A1, task B's B2, why task C do not create its own Activity, but use other task's activity? Because although the thing user want to do is different, when subdivide task, it is possible to appear situation that functions of Activity is similar with other.As A1, B2 are meet requirements, it is not necessary to create activity. 
+
+When there are several tasks in the system, system only support task in foreground, so the activity user see is foreground, other tasks are in background, the order in background tasks is not changed.User can move the whole task to background or foreground.
+
+> tips: readers who had used android system should know, when you long pressed Home key, system would show recent task list, users can switch in several task.
+
+Content above introduce what is Task and how Android divide Task and manage Activity in a abstract way, but in real code, how it designed?
+
+#### introduce to ActivityStack
+
+There are two point we should consider:
+
+1. The way to organize Activity in Task.We know that Android organize Activity by first in, last out way, as same as Stack in data struct.
+
+2. The way to organize and manage several Task.
+
+Android designed a ActivityStack class to take responsibility to those mission, the struct as picture follows:
+
+![ActivityStack.PNG](https://i.loli.net/2019/12/06/NYxtLlcM65HBfGF.png)
