@@ -594,3 +594,20 @@ There are two point we should consider:
 Android designed a ActivityStack class to take responsibility to those mission, the struct as picture follows:
 
 ![ActivityStack.PNG](https://i.loli.net/2019/12/06/NYxtLlcM65HBfGF.png)
+
+
+From this picture we can see:
+
+* Activity is shown by ActivityRecord, Task is shown by TaskRecord. ActivityRecord's task member refers to the Task which its Activity in. state variable used to represent the state the Activity stand(including INITIALIZING, RESUMED, PAUSED).
+
+* ActivityStack use ArrayList mHistory to save ActivityRecord, to our surprise, this mHistory saved all Task's ActivityRecord in System, not just for a certain Task.
+
+* ActivityStack's mMainStack member is interesting, it represent whether this ActivityStack is main ActivityStack. Where there is a Lord, there is a servant, but current System only has a ActivityStack, and its mMainStack is true.From the name of ActivityStack we can guess, in the initialize process Android developer want to use ActivityStack to manage single Task's ActivityRecord(this class is "State and management of a single stack of activities"), but do not know why in current code it put all Task's ActivityRecord to mHistory, and remained mMainStack.
+
+* There are no member in ActivityStack to save TaskRecord.
+
+from content above, ActivityStack use array way to save all Task's ActivityRecord, and no member used to save TaskRecord. But this way has its advantage and disadvantage.
+
+* the advantage is cut the manage of TaskRecord level, directly use ActivityRecord as manage unit, this method can reduce the spend of manage.
+
+* the disadvantage is weak the concept of Task, its struct is not clearly enough.   
