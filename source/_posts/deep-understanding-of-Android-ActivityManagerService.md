@@ -610,4 +610,41 @@ from content above, ActivityStack use array way to save all Task's ActivityRecor
 
 * the advantage is cut the manage of TaskRecord level, directly use ActivityRecord as manage unit, this method can reduce the spend of manage.
 
-* the disadvantage is weak the concept of Task, its struct is not clearly enough.   
+* the disadvantage is weak the concept of Task, its struct is not clearly enough.
+
+We will see several useful method which search ActivityRecord, code as follows:
+ 
+```
+/* topRunningActivityLocked:
+find first ActivityRecord which is different from notTop and not in finishing state.When notTop is null, this method would return the first ActvitiyRecord which need to display. The enter of Stack can only be Stack peek. Although mHistory is a array, but find order is from end to start, so its behavir is same as Stack.
+*/
+final ActivityRecord topRunningActivityLocked(ActivityRecord notTop) {
+int i = mHistory.size() - 1;
+while(i >= 0) {
+ActivityRecord r = mHistory.get(i);
+if (!r.finishing&&r!=notTop) return r;
+i --;
+}
+return null;
+}
+```
+
+there are several similar method:
+
+```
+/*topRunningNonDelayedActivityLocked are similar with topRunningActivityLocked, but ActivityRecord request add a item: delayeResume set false*/
+final ActivityRecord topRunningNonDelayedActivityLocked(ActivityRecord notTop) {
+int i = mHistory.size() - 1;
+while(i >= 0){
+ActivityRecord r = mHistory.get(i);
+//delayedResume variable control whether delay resume Activity
+if (!r.finishing && !r.delayedResume && r != notTop) return r;
+i --;
+}
+return null;
+}
+```
+
+Activity also apply findActivityLocked method and find matched ActivityRecord based on Intent and ActivityInfo, as same, finding is start from end of mHistory, and another method findTaskLocked's return value is ActivityRecord, findTaskLocked do corresponding find mission based on Task which mHistory's ActivityRecord belong to.
+
+Above is four methods are useful method in ActivityStack.
