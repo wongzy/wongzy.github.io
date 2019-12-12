@@ -648,3 +648,17 @@ return null;
 Activity also apply findActivityLocked method and find matched ActivityRecord based on Intent and ActivityInfo, as same, finding is start from end of mHistory, and another method findTaskLocked's return value is ActivityRecord, findTaskLocked do corresponding find mission based on Task which mHistory's ActivityRecord belong to.
 
 Above is four methods are useful method in ActivityStack.
+
+#### Introduce about Launch Mode
+
+Launch Mode used to describe Activity's launch mode, there are four mode at current, they are "standard", "singleTop", "singleTask" and "singleInstance". First see it, it was difficult to understand, but actually, it is only a "jugglery" android played.Launch Mode is designed to control relation between Activity and Task.
+
+* standard: a Task could have several same type's Activity, attention, it is same type, not same object.For example, there are four activities A, B, C, D in Task, if start A type's Activity again, Task will include A, B, C, D, A. The first A and the last A is the same type, but not same object. Otherwise, there can be same type Activity in several Task.
+
+* singleTop: When a certain Task includes A, B, C, D activities, if D want to start a D type Activity, what would task be ? In singleTop mode,Task is still include A, B, C, D, but D's onNewIntent method will be invoked, but in standard mode, Task will be included A, B, C, D, D, the last D is new created.In singleTop mode, only target Activity is at peek of the Task, it can work, For example, only when start D, it worked,if it start A, B, C, it is useless.
+
+* singleTask: in this launch mode, this Activity can only exist one instance, and it will bind with a Task.When need start this Activity, system will invoke onNewIntent method to launch it, but not create new Task and Activity. Attention, although this Activity only has a instance, but except it in Task, it can have other Activity.
+
+* singleInstance:it is a reinforced singleTask mode, a Task can only has a Activity which set singleInstance, there would be other Activity in this task. But in singleTask mode, Task can have other Activity.
+
+Attention, Android suggest normal application developer do not use the last two launch mode easily. Because those mode although those modes are named Launch Mode, but them will influence the order Activity poll, cause user acquire different experience when pressed back key.
