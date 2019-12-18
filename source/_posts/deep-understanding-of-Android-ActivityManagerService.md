@@ -662,3 +662,12 @@ Launch Mode used to describe Activity's launch mode, there are four mode at curr
 * singleInstance:it is a reinforced singleTask mode, a Task can only has a Activity which set singleInstance, there would be other Activity in this task. But in singleTask mode, Task can have other Activity.
 
 Attention, Android suggest normal application developer do not use the last two launch mode easily. Because those mode although those modes are named Launch Mode, but them will influence the order Activity poll, cause user acquire different experience when pressed back key.
+
+Except launch mode, there are other flags to control relationship between Activity and Task, we just enumerate a little part, detail message please see Intent introduction about Intent in SDK document.
+
+* FLAG_ACTIVITY_NEW_TASK: put target Activity to a new Task
+
+* FLAG_ACTIVITY_CLEAR_TASK: when launch a Activity, kill tasks which are related with target Activity, and launch a new Task, and start a new Task, and put target Activity to this new task, this flag must be used with FLAG_ACTIVITY_NEW_TASK.
+
+* FLAG_ACTIVITY_CLEAR_TOP: when launch a Activity which was not in the peek of stack, remove Activity which above it.For example, there are A, B, C, D in the task, when want to start B, it should remove C, D from the task, but not create a new B.
+
