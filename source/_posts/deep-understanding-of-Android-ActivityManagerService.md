@@ -671,3 +671,26 @@ Except launch mode, there are other flags to control relationship between Activi
 
 * FLAG_ACTIVITY_CLEAR_TOP: when launch a Activity which was not in the peek of stack, remove Activity which above it.For example, there are A, B, C, D in the task, when want to start B, it should remove C, D from the task, but not create a new B.
 
+#### the analysis of startActivityMayWait of ActivityStack
+
+the target of startActivityMayWait is to start com.dfp.test.TestActivity, if system do not started this Activity before, the result of this example is:
+
+* because set FLAG_ACTIVITY_NEW_TASK flag in am, so except build a new Activity, it will also build a TaskRecord.
+
+* also need start a new application to load and run com.dfp.test.TestActivity's instance.
+
+* if TestActivity is not Home, it need to stop Activity which is displaying.
+
+startActivityMayWait can be mainly divide into three stage.
+
+the first stage include those parts:
+
+* search ActivityInfo which responding this Intent
+
+* transact the situation that FLAG_CANT_SAVE_STATE exist, not system do not support this situation
+
+* otherwise, acquire invoker's pid and uid, because in this example caller is null, so obtained pid and uid are owned by process which am in.
+
+the second stage is sample, it mainly about startActivityLocked function, this function is very complicated, we will introduce it in next session.
+
+the third stage's job is do some transact after value returned, but why it need wait even the result is IActivityManager.START_SUCCESS? Because target Activity need to run in a new application process, it must wait until that application process started normally and transact related request.Attention! only if am set -W option, it can be into wait status.
