@@ -694,3 +694,19 @@ the first stage include those parts:
 the second stage is sample, it mainly about startActivityLocked function, this function is very complicated, we will introduce it in next session.
 
 the third stage's job is do some transact after value returned, but why it need wait even the result is IActivityManager.START_SUCCESS? Because target Activity need to run in a new application process, it must wait until that application process started normally and transact related request.Attention! only if am set -W option, it can be into wait status.
+
+##### analysis to startActivityLocked
+
+startActivityLocked is the important job in the second stage of startActivityMayWait, this function is quite long.
+
+The main job startActivityLocked dose include that:
+
+* transact sourceRecord and resultRecord. sourceRecord represent Activity which send this request, resultRecord represent Activity which will receive transact result(when target Activity finish things, it need to inform requester the result), in normal situation, sourceRecord and resultRecord refers to same Activity.
+
+* transact app switch.If AMS forbid app switch, it will save this launch request, wait for the time app switch is permitted.Before transact this request, it will invoke doPendingActivityLaunchesLocked method,it will first start the Pending request saved because app switch is forbidden before.
+
+* invoke startActivityUncheckedLocked to transact this pending request.
+
+## the half summary of startActivity method
+
+we can use a picture to summarize it:
