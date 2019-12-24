@@ -707,6 +707,10 @@ The main job startActivityLocked dose include that:
 
 * invoke startActivityUncheckedLocked to transact this pending request.
 
-## the half summary of startActivity method
+# the summary of startActivity
 
-we can use a picture to summarize it:
+* the start of this journey is am, am is important program in Android, we use am start command to start target Activity's launch request.
+
+* then into ActivityManagerService and ActivityStack those two core class, to launching Activity, the first stage is to find or create ActivityRecord and corresponding TaskRecord. The second is to transact Activity launch or switch related job.
+
+:
