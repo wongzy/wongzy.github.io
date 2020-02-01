@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="OkHttp中，我们对请求报文和返回报文的处理都是在拦截器中进行的，所以熟悉OkHttp中的各个拦截器以及它们是怎样的处理流程是理解OkHttp的重点  拦截器链首先，我们所最后得到的Response是通过这个函数得到的。 1Response result = getResponseWithInterceptorChain(); 而这个函数当中，就定义了各个拦截器的处理位置，并把每个拦截器都加入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OkHttp中拦截器流程解析">
+<meta property="og:url" content="https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="OkHttp中，我们对请求报文和返回报文的处理都是在拦截器中进行的，所以熟悉OkHttp中的各个拦截器以及它们是怎样的处理流程是理解OkHttp的重点  拦截器链首先，我们所最后得到的Response是通过这个函数得到的。 1Response result = getResponseWithInterceptorChain(); 而这个函数当中，就定义了各个拦截器的处理位置，并把每个拦截器都加入">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.357Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OkHttp中拦截器流程解析">
+<meta name="twitter:description" content="OkHttp中，我们对请求报文和返回报文的处理都是在拦截器中进行的，所以熟悉OkHttp中的各个拦截器以及它们是怎样的处理流程是理解OkHttp的重点  拦截器链首先，我们所最后得到的Response是通过这个函数得到的。 1Response result = getResponseWithInterceptorChain(); 而这个函数当中，就定义了各个拦截器的处理位置，并把每个拦截器都加入">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/">
+
+
+
+
+
+  <title>OkHttp中拦截器流程解析 | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OkHttp中拦截器流程解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-10T20:11:05+08:00">
+                2018-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Android网络开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2,575 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  14 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>OkHttp中，我们对请求报文和返回报文的处理都是在拦截器中进行的，所以熟悉OkHttp中的各个拦截器以及它们是怎样的处理流程是理解OkHttp的重点</p>
+</blockquote>
+<h4 id="拦截器链"><a href="#拦截器链" class="headerlink" title="拦截器链"></a>拦截器链</h4><p>首先，我们所最后得到的Response是通过这个函数得到的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Response result = getResponseWithInterceptorChain();</span><br></pre></td></tr></table></figure>
+<p>而这个函数当中，就定义了各个拦截器的处理位置，并把每个拦截器都加入到了拦截器链当中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Response getResponseWithInterceptorChain() throws IOException &#123;</span><br><span class="line">    // Build a full stack of interceptors.</span><br><span class="line">    List&lt;Interceptor&gt; interceptors = new ArrayList&lt;&gt;();</span><br><span class="line">    interceptors.addAll(client.interceptors());</span><br><span class="line">    interceptors.add(retryAndFollowUpInterceptor);</span><br><span class="line">    interceptors.add(new BridgeInterceptor(client.cookieJar()));</span><br><span class="line">    interceptors.add(new CacheInterceptor(client.internalCache()));</span><br><span class="line">    interceptors.add(new ConnectInterceptor(client));</span><br><span class="line">    if (!forWebSocket) &#123;</span><br><span class="line">      interceptors.addAll(client.networkInterceptors());</span><br><span class="line">    &#125;</span><br><span class="line">    interceptors.add(new CallServerInterceptor(forWebSocket));</span><br><span class="line"></span><br><span class="line">    Interceptor.Chain chain = new RealInterceptorChain(interceptors, null, null, null, 0,</span><br><span class="line">        originalRequest, this, eventListener, client.connectTimeoutMillis(),</span><br><span class="line">        client.readTimeoutMillis(), client.writeTimeoutMillis());</span><br><span class="line"></span><br><span class="line">    return chain.proceed(originalRequest);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到拦截器的顺序大概是：</p>
+<ol>
+<li>自定义的拦截器（可定义多个）</li>
+<li>retryAndFollowUpInterceptor</li>
+<li>BridgeInterceptor</li>
+<li>CacheInterceptor</li>
+<li>ConnectInterceptor</li>
+<li>自定义networkInterceptors（可定义多个）</li>
+<li>CallServerInterceptor</li>
+</ol>
+<p>我们来一个个看看各个拦截器都做了什么，或者说能做什么（自定义拦截器）</p>
+<h4 id="各个拦截器的作用"><a href="#各个拦截器的作用" class="headerlink" title="各个拦截器的作用"></a>各个拦截器的作用</h4><h5 id="自定义拦截器"><a href="#自定义拦截器" class="headerlink" title="自定义拦截器"></a>自定义拦截器</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public okhttp3.Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">                Request request = chain.request();</span><br><span class="line">                Request.Builder builder = request.newBuilder();</span><br><span class="line">                builder.addHeader(..., ...); //添加Header</span><br><span class="line">                okhttp3.Response response= chain.proceed(builder.build());</span><br><span class="line">                return response;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).build();</span><br></pre></td></tr></table></figure>
+<p>自定义拦截器是对初始的请求报文进行最先的预处理，我们可以在请求报文中加入统一的Header，比如说可以加入Authorization的Header,这样在认证失效后可以进行自动重新认证。</p>
+<h5 id="retryAndFollowUpInterceptor"><a href="#retryAndFollowUpInterceptor" class="headerlink" title="retryAndFollowUpInterceptor"></a>retryAndFollowUpInterceptor</h5><p>我们可以看到它的intercept分发如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    Request request = chain.request();</span><br><span class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</span><br><span class="line">    Call call = realChain.call();</span><br><span class="line">    EventListener eventListener = realChain.eventListener();</span><br><span class="line"></span><br><span class="line">    StreamAllocation streamAllocation = new StreamAllocation(client.connectionPool(),</span><br><span class="line">        createAddress(request.url()), call, eventListener, callStackTrace);</span><br><span class="line">    this.streamAllocation = streamAllocation;</span><br><span class="line"></span><br><span class="line">    int followUpCount = 0;</span><br><span class="line">    Response priorResponse = null;</span><br><span class="line">    while (true) &#123;</span><br><span class="line">      if (canceled) &#123;</span><br><span class="line">        streamAllocation.release();</span><br><span class="line">        throw new IOException(&quot;Canceled&quot;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      Response response;</span><br><span class="line">      boolean releaseConnection = true;</span><br><span class="line">      try &#123;</span><br><span class="line">        response = realChain.proceed(request, streamAllocation, null, null);</span><br><span class="line">        releaseConnection = false;</span><br><span class="line">      &#125; catch (RouteException e) &#123;</span><br><span class="line">        // The attempt to connect via a route failed. The request will not have been sent.</span><br><span class="line">        if (!recover(e.getLastConnectException(), streamAllocation, false, request)) &#123;</span><br><span class="line">          throw e.getLastConnectException();</span><br><span class="line">        &#125;</span><br><span class="line">        releaseConnection = false;</span><br><span class="line">        continue;</span><br><span class="line">      &#125; catch (IOException e) &#123;</span><br><span class="line">        // An attempt to communicate with a server failed. The request may have been sent.</span><br><span class="line">        boolean requestSendStarted = !(e instanceof ConnectionShutdownException);</span><br><span class="line">        if (!recover(e, streamAllocation, requestSendStarted, request)) throw e;</span><br><span class="line">        releaseConnection = false;</span><br><span class="line">        continue;</span><br><span class="line">      &#125; finally &#123;</span><br><span class="line">        // We&apos;re throwing an unchecked exception. Release any resources.</span><br><span class="line">        if (releaseConnection) &#123;</span><br><span class="line">          streamAllocation.streamFailed(null);</span><br><span class="line">          streamAllocation.release();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      // Attach the prior response if it exists. Such responses never have a body.</span><br><span class="line">      if (priorResponse != null) &#123;</span><br><span class="line">        response = response.newBuilder()</span><br><span class="line">            .priorResponse(priorResponse.newBuilder()</span><br><span class="line">                    .body(null)</span><br><span class="line">                    .build())</span><br><span class="line">            .build();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      Request followUp = followUpRequest(response, streamAllocation.route());</span><br><span class="line"></span><br><span class="line">      if (followUp == null) &#123;</span><br><span class="line">        if (!forWebSocket) &#123;</span><br><span class="line">          streamAllocation.release();</span><br><span class="line">        &#125;</span><br><span class="line">        return response;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      closeQuietly(response.body());</span><br><span class="line"></span><br><span class="line">      if (++followUpCount &gt; MAX_FOLLOW_UPS) &#123;</span><br><span class="line">        streamAllocation.release();</span><br><span class="line">        throw new ProtocolException(&quot;Too many follow-up requests: &quot; + followUpCount);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (followUp.body() instanceof UnrepeatableRequestBody) &#123;</span><br><span class="line">        streamAllocation.release();</span><br><span class="line">        throw new HttpRetryException(&quot;Cannot retry streamed HTTP body&quot;, response.code());</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (!sameConnection(response, followUp.url())) &#123;</span><br><span class="line">        streamAllocation.release();</span><br><span class="line">        streamAllocation = new StreamAllocation(client.connectionPool(),</span><br><span class="line">            createAddress(followUp.url()), call, eventListener, callStackTrace);</span><br><span class="line">        this.streamAllocation = streamAllocation;</span><br><span class="line">      &#125; else if (streamAllocation.codec() != null) &#123;</span><br><span class="line">        throw new IllegalStateException(&quot;Closing the body of &quot; + response</span><br><span class="line">            + &quot; didn&apos;t close its backing stream. Bad interceptor?&quot;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      request = followUp;</span><br><span class="line">      priorResponse = response;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>其实顾名思义，我们可以从它的名字就看出来它的作用就是在失败时进行重试，以及遇到重定向后决定是否进行后续请求。</p>
+<h5 id="BridgeInterceptor"><a href="#BridgeInterceptor" class="headerlink" title="BridgeInterceptor"></a>BridgeInterceptor</h5><p>BridgeInterceptor所做的事情很多，它可以说是将一些必要的Header都加入到了请求报文当中。它的Intercept方法如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    Request userRequest = chain.request();</span><br><span class="line">    Request.Builder requestBuilder = userRequest.newBuilder();</span><br><span class="line"></span><br><span class="line">    RequestBody body = userRequest.body();</span><br><span class="line">    if (body != null) &#123;</span><br><span class="line">      MediaType contentType = body.contentType();</span><br><span class="line">      if (contentType != null) &#123;</span><br><span class="line">        requestBuilder.header(&quot;Content-Type&quot;, contentType.toString());</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      long contentLength = body.contentLength();</span><br><span class="line">      if (contentLength != -1) &#123;</span><br><span class="line">        requestBuilder.header(&quot;Content-Length&quot;, Long.toString(contentLength));</span><br><span class="line">        requestBuilder.removeHeader(&quot;Transfer-Encoding&quot;);</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        requestBuilder.header(&quot;Transfer-Encoding&quot;, &quot;chunked&quot;);</span><br><span class="line">        requestBuilder.removeHeader(&quot;Content-Length&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (userRequest.header(&quot;Host&quot;) == null) &#123;</span><br><span class="line">      requestBuilder.header(&quot;Host&quot;, hostHeader(userRequest.url(), false));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (userRequest.header(&quot;Connection&quot;) == null) &#123;</span><br><span class="line">      requestBuilder.header(&quot;Connection&quot;, &quot;Keep-Alive&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // If we add an &quot;Accept-Encoding: gzip&quot; header field we&apos;re responsible for also decompressing</span><br><span class="line">    // the transfer stream.</span><br><span class="line">    boolean transparentGzip = false;</span><br><span class="line">    if (userRequest.header(&quot;Accept-Encoding&quot;) == null &amp;&amp; userRequest.header(&quot;Range&quot;) == null) &#123;</span><br><span class="line">      transparentGzip = true;</span><br><span class="line">      requestBuilder.header(&quot;Accept-Encoding&quot;, &quot;gzip&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    List&lt;Cookie&gt; cookies = cookieJar.loadForRequest(userRequest.url());</span><br><span class="line">    if (!cookies.isEmpty()) &#123;</span><br><span class="line">      requestBuilder.header(&quot;Cookie&quot;, cookieHeader(cookies));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (userRequest.header(&quot;User-Agent&quot;) == null) &#123;</span><br><span class="line">      requestBuilder.header(&quot;User-Agent&quot;, Version.userAgent());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Response networkResponse = chain.proceed(requestBuilder.build());</span><br><span class="line"></span><br><span class="line">    HttpHeaders.receiveHeaders(cookieJar, userRequest.url(), networkResponse.headers());</span><br><span class="line"></span><br><span class="line">    Response.Builder responseBuilder = networkResponse.newBuilder()</span><br><span class="line">        .request(userRequest);</span><br><span class="line"></span><br><span class="line">    if (transparentGzip</span><br><span class="line">        &amp;&amp; &quot;gzip&quot;.equalsIgnoreCase(networkResponse.header(&quot;Content-Encoding&quot;))</span><br><span class="line">        &amp;&amp; HttpHeaders.hasBody(networkResponse)) &#123;</span><br><span class="line">      GzipSource responseBody = new GzipSource(networkResponse.body().source());</span><br><span class="line">      Headers strippedHeaders = networkResponse.headers().newBuilder()</span><br><span class="line">          .removeAll(&quot;Content-Encoding&quot;)</span><br><span class="line">          .removeAll(&quot;Content-Length&quot;)</span><br><span class="line">          .build();</span><br><span class="line">      responseBuilder.headers(strippedHeaders);</span><br><span class="line">      String contentType = networkResponse.header(&quot;Content-Type&quot;);</span><br><span class="line">      responseBuilder.body(new RealResponseBody(contentType, -1L, Okio.buffer(responseBody)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return responseBuilder.build();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，BridgeInterceptor将请求报文的长度，以及能够接收传输的方法（分块），以及请求报文内容的格式等都加入了，需要特别注意的是，这里也加入了<em>保持长连接</em> 与 <em>可接收压缩格式</em> 的Header，在加入可接受压缩格式的Header的同时，它也在获得返回报文后对报文进行了解压，也就是说，如果返回报文没有经过BridgeInterceptor的话，我们看到的将是压缩的响应报文。</p>
+<h5 id="CacheInterceptor"><a href="#CacheInterceptor" class="headerlink" title="CacheInterceptor"></a>CacheInterceptor</h5><p>CacheInterceptor可以说是在真正地进行网络请求时的最后一重关卡，如果发现当前请求报文所请求的数据已经请求过了并存放在Cache当中，那么将会直接使用Cache（缓存）中的数据进行返回，它的Intercept方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    Response cacheCandidate = cache != null</span><br><span class="line">        ? cache.get(chain.request())</span><br><span class="line">        : null;</span><br><span class="line"></span><br><span class="line">    long now = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    CacheStrategy strategy = new CacheStrategy.Factory(now, chain.request(), cacheCandidate).get();</span><br><span class="line">    Request networkRequest = strategy.networkRequest;</span><br><span class="line">    Response cacheResponse = strategy.cacheResponse;</span><br><span class="line"></span><br><span class="line">    if (cache != null) &#123;</span><br><span class="line">      cache.trackResponse(strategy);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (cacheCandidate != null &amp;&amp; cacheResponse == null) &#123;</span><br><span class="line">      closeQuietly(cacheCandidate.body()); // The cache candidate wasn&apos;t applicable. Close it.</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // If we&apos;re forbidden from using the network and the cache is insufficient, fail.</span><br><span class="line">    if (networkRequest == null &amp;&amp; cacheResponse == null) &#123;</span><br><span class="line">      return new Response.Builder()</span><br><span class="line">          .request(chain.request())</span><br><span class="line">          .protocol(Protocol.HTTP_1_1)</span><br><span class="line">          .code(504)</span><br><span class="line">          .message(&quot;Unsatisfiable Request (only-if-cached)&quot;)</span><br><span class="line">          .body(Util.EMPTY_RESPONSE)</span><br><span class="line">          .sentRequestAtMillis(-1L)</span><br><span class="line">          .receivedResponseAtMillis(System.currentTimeMillis())</span><br><span class="line">          .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // If we don&apos;t need the network, we&apos;re done.</span><br><span class="line">    if (networkRequest == null) &#123;</span><br><span class="line">      return cacheResponse.newBuilder()</span><br><span class="line">          .cacheResponse(stripBody(cacheResponse))</span><br><span class="line">          .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Response networkResponse = null;</span><br><span class="line">    try &#123;</span><br><span class="line">      networkResponse = chain.proceed(networkRequest);</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      // If we&apos;re crashing on I/O or otherwise, don&apos;t leak the cache body.</span><br><span class="line">      if (networkResponse == null &amp;&amp; cacheCandidate != null) &#123;</span><br><span class="line">        closeQuietly(cacheCandidate.body());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // If we have a cache response too, then we&apos;re doing a conditional get.</span><br><span class="line">    if (cacheResponse != null) &#123;</span><br><span class="line">      if (networkResponse.code() == HTTP_NOT_MODIFIED) &#123;</span><br><span class="line">        Response response = cacheResponse.newBuilder()</span><br><span class="line">            .headers(combine(cacheResponse.headers(), networkResponse.headers()))</span><br><span class="line">            .sentRequestAtMillis(networkResponse.sentRequestAtMillis())</span><br><span class="line">            .receivedResponseAtMillis(networkResponse.receivedResponseAtMillis())</span><br><span class="line">            .cacheResponse(stripBody(cacheResponse))</span><br><span class="line">            .networkResponse(stripBody(networkResponse))</span><br><span class="line">            .build();</span><br><span class="line">        networkResponse.body().close();</span><br><span class="line"></span><br><span class="line">        // Update the cache after combining headers but before stripping the</span><br><span class="line">        // Content-Encoding header (as performed by initContentStream()).</span><br><span class="line">        cache.trackConditionalCacheHit();</span><br><span class="line">        cache.update(cacheResponse, response);</span><br><span class="line">        return response;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        closeQuietly(cacheResponse.body());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Response response = networkResponse.newBuilder()</span><br><span class="line">        .cacheResponse(stripBody(cacheResponse))</span><br><span class="line">        .networkResponse(stripBody(networkResponse))</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">    if (cache != null) &#123;</span><br><span class="line">      if (HttpHeaders.hasBody(response) &amp;&amp; CacheStrategy.isCacheable(response, networkRequest)) &#123;</span><br><span class="line">        // Offer this request to the cache.</span><br><span class="line">        CacheRequest cacheRequest = cache.put(response);</span><br><span class="line">        return cacheWritingResponse(cacheRequest, response);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (HttpMethod.invalidatesCache(networkRequest.method())) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          cache.remove(networkRequest);</span><br><span class="line">        &#125; catch (IOException ignored) &#123;</span><br><span class="line">          // The cache cannot be written.</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return response;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在这里我们需要注意的是，我们如果需要让CacheInterceptor发挥作用，那么我们必须手动配置Cache，且OkHttp中存在着两个Cache（Cache与InteralCache），只能选择配置其中的一个。</p>
+<h5 id="ConnectInterceptor"><a href="#ConnectInterceptor" class="headerlink" title="ConnectInterceptor"></a>ConnectInterceptor</h5><p>在ConnectInterceptor中，会开始建立真正的连接，具体是TCP连接还是TLS连接则需要看具体的网络请求。</p>
+<p>它的Intercept方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</span><br><span class="line">    Request request = realChain.request();</span><br><span class="line">    StreamAllocation streamAllocation = realChain.streamAllocation();</span><br><span class="line"></span><br><span class="line">    // We need the network to satisfy this request. Possibly for validating a conditional GET.</span><br><span class="line">    boolean doExtensiveHealthChecks = !request.method().equals(&quot;GET&quot;);</span><br><span class="line">    HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);</span><br><span class="line">    RealConnection connection = streamAllocation.connection();</span><br><span class="line"></span><br><span class="line">    return realChain.proceed(request, streamAllocation, httpCodec, connection);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="networkInterceptors-自定义）"><a href="#networkInterceptors-自定义）" class="headerlink" title="networkInterceptors(自定义）"></a>networkInterceptors(自定义）</h5><p>这里也是添加自定义的拦截器，添加方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.addNetworkInterceptor(new Interceptor() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public okhttp3.Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).build();</span><br></pre></td></tr></table></figure>
+<p>与之前的自定义拦截器不同的是，这个拦截器可以看到最完整的请求报文与最原始的响应报文</p>
+<h5 id="CallServerInterceptor"><a href="#CallServerInterceptor" class="headerlink" title="CallServerInterceptor"></a>CallServerInterceptor</h5><p>这个拦截器是请求报文的最后一个拦截器，也是响应报文的第一个拦截器，它是真正与服务器进行交互的拦截器，它负责请求与响应的I/O工作，Intercept方法如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</span><br><span class="line">    HttpCodec httpCodec = realChain.httpStream();</span><br><span class="line">    StreamAllocation streamAllocation = realChain.streamAllocation();</span><br><span class="line">    RealConnection connection = (RealConnection) realChain.connection();</span><br><span class="line">    Request request = realChain.request();</span><br><span class="line"></span><br><span class="line">    long sentRequestMillis = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    realChain.eventListener().requestHeadersStart(realChain.call());</span><br><span class="line">    httpCodec.writeRequestHeaders(request);</span><br><span class="line">    realChain.eventListener().requestHeadersEnd(realChain.call(), request);</span><br><span class="line"></span><br><span class="line">    Response.Builder responseBuilder = null;</span><br><span class="line">    if (HttpMethod.permitsRequestBody(request.method()) &amp;&amp; request.body() != null) &#123;</span><br><span class="line">      // If there&apos;s a &quot;Expect: 100-continue&quot; header on the request, wait for a &quot;HTTP/1.1 100</span><br><span class="line">      // Continue&quot; response before transmitting the request body. If we don&apos;t get that, return</span><br><span class="line">      // what we did get (such as a 4xx response) without ever transmitting the request body.</span><br><span class="line">      if (&quot;100-continue&quot;.equalsIgnoreCase(request.header(&quot;Expect&quot;))) &#123;</span><br><span class="line">        httpCodec.flushRequest();</span><br><span class="line">        realChain.eventListener().responseHeadersStart(realChain.call());</span><br><span class="line">        responseBuilder = httpCodec.readResponseHeaders(true);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if (responseBuilder == null) &#123;</span><br><span class="line">        // Write the request body if the &quot;Expect: 100-continue&quot; expectation was met.</span><br><span class="line">        realChain.eventListener().requestBodyStart(realChain.call());</span><br><span class="line">        long contentLength = request.body().contentLength();</span><br><span class="line">        CountingSink requestBodyOut =</span><br><span class="line">            new CountingSink(httpCodec.createRequestBody(request, contentLength));</span><br><span class="line">        BufferedSink bufferedRequestBody = Okio.buffer(requestBodyOut);</span><br><span class="line"></span><br><span class="line">        request.body().writeTo(bufferedRequestBody);</span><br><span class="line">        bufferedRequestBody.close();</span><br><span class="line">        realChain.eventListener()</span><br><span class="line">            .requestBodyEnd(realChain.call(), requestBodyOut.successfulCount);</span><br><span class="line">      &#125; else if (!connection.isMultiplexed()) &#123;</span><br><span class="line">        // If the &quot;Expect: 100-continue&quot; expectation wasn&apos;t met, prevent the HTTP/1 connection</span><br><span class="line">        // from being reused. Otherwise we&apos;re still obligated to transmit the request body to</span><br><span class="line">        // leave the connection in a consistent state.</span><br><span class="line">        streamAllocation.noNewStreams();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    httpCodec.finishRequest();</span><br><span class="line"></span><br><span class="line">    if (responseBuilder == null) &#123;</span><br><span class="line">      realChain.eventListener().responseHeadersStart(realChain.call());</span><br><span class="line">      responseBuilder = httpCodec.readResponseHeaders(false);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Response response = responseBuilder</span><br><span class="line">        .request(request)</span><br><span class="line">        .handshake(streamAllocation.connection().handshake())</span><br><span class="line">        .sentRequestAtMillis(sentRequestMillis)</span><br><span class="line">        .receivedResponseAtMillis(System.currentTimeMillis())</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">    int code = response.code();</span><br><span class="line">    if (code == 100) &#123;</span><br><span class="line">      // server sent a 100-continue even though we did not request one.</span><br><span class="line">      // try again to read the actual response</span><br><span class="line">      responseBuilder = httpCodec.readResponseHeaders(false);</span><br><span class="line"></span><br><span class="line">      response = responseBuilder</span><br><span class="line">              .request(request)</span><br><span class="line">              .handshake(streamAllocation.connection().handshake())</span><br><span class="line">              .sentRequestAtMillis(sentRequestMillis)</span><br><span class="line">              .receivedResponseAtMillis(System.currentTimeMillis())</span><br><span class="line">              .build();</span><br><span class="line"></span><br><span class="line">      code = response.code();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    realChain.eventListener()</span><br><span class="line">            .responseHeadersEnd(realChain.call(), response);</span><br><span class="line"></span><br><span class="line">    if (forWebSocket &amp;&amp; code == 101) &#123;</span><br><span class="line">      // Connection is upgrading, but we need to ensure interceptors see a non-null response body.</span><br><span class="line">      response = response.newBuilder()</span><br><span class="line">          .body(Util.EMPTY_RESPONSE)</span><br><span class="line">          .build();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      response = response.newBuilder()</span><br><span class="line">          .body(httpCodec.openResponseBody(response))</span><br><span class="line">          .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (&quot;close&quot;.equalsIgnoreCase(response.request().header(&quot;Connection&quot;))</span><br><span class="line">        || &quot;close&quot;.equalsIgnoreCase(response.header(&quot;Connection&quot;))) &#123;</span><br><span class="line">      streamAllocation.noNewStreams();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if ((code == 204 || code == 205) &amp;&amp; response.body().contentLength() &gt; 0) &#123;</span><br><span class="line">      throw new ProtocolException(</span><br><span class="line">          &quot;HTTP &quot; + code + &quot; had non-zero Content-Length: &quot; + response.body().contentLength());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return response;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/07/DNS/">DNS</a></li><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">Rxjava2和Retrofit2实现解析bing每日一图JSON</a></li><li><a href="/2018/11/08/UDP-and-TCP/">传输层协议：UDP与TCP（一）</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li><li><a href="/2018/11/28/客户端Socket/">Java Socket(TCP)</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/25/Android绘制流程总结/" rel="next" title="Android绘制流程总结">
+                <i class="fa fa-chevron-left"></i> Android绘制流程总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/15/常见排序算法汇总及Java中默认实现/" rel="prev" title="常见排序算法汇总及Java中默认实现">
+                常见排序算法汇总及Java中默认实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#拦截器链"><span class="nav-number">1.</span> <span class="nav-text">拦截器链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#各个拦截器的作用"><span class="nav-number">2.</span> <span class="nav-text">各个拦截器的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#自定义拦截器"><span class="nav-number">2.1.</span> <span class="nav-text">自定义拦截器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#retryAndFollowUpInterceptor"><span class="nav-number">2.2.</span> <span class="nav-text">retryAndFollowUpInterceptor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BridgeInterceptor"><span class="nav-number">2.3.</span> <span class="nav-text">BridgeInterceptor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CacheInterceptor"><span class="nav-number">2.4.</span> <span class="nav-text">CacheInterceptor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ConnectInterceptor"><span class="nav-number">2.5.</span> <span class="nav-text">ConnectInterceptor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#networkInterceptors-自定义）"><span class="nav-number">2.6.</span> <span class="nav-text">networkInterceptors(自定义）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CallServerInterceptor"><span class="nav-number">2.7.</span> <span class="nav-text">CallServerInterceptor</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

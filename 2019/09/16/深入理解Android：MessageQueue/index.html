@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Looper与Handler就应用程序而言，Android程序的应用程序和其他系统上先相同，都是靠消息驱动来工作的，它们大致的工作原理如下：  有一个消息队列，可以往这个消息队列中投递消息。  有一个消息队列，不断从消息队列中取出消息，然后处理   我们用下图来展示这个工作过程：  从图中可以看出：  事件源把待处理的消息加入到消息队列中，一般是加至队列头。事件源提交的消息可以是案件、触摸屏等物理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Android：Looper、Handler及MessageQueue">
+<meta property="og:url" content="https://wongzhenyu.cn/2019/09/16/深入理解Android：MessageQueue/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="Looper与Handler就应用程序而言，Android程序的应用程序和其他系统上先相同，都是靠消息驱动来工作的，它们大致的工作原理如下：  有一个消息队列，可以往这个消息队列中投递消息。  有一个消息队列，不断从消息队列中取出消息，然后处理   我们用下图来展示这个工作过程：  从图中可以看出：  事件源把待处理的消息加入到消息队列中，一般是加至队列头。事件源提交的消息可以是案件、触摸屏等物理">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/09/16/rV2hZpR1Lv3A9OJ.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Android：Looper、Handler及MessageQueue">
+<meta name="twitter:description" content="Looper与Handler就应用程序而言，Android程序的应用程序和其他系统上先相同，都是靠消息驱动来工作的，它们大致的工作原理如下：  有一个消息队列，可以往这个消息队列中投递消息。  有一个消息队列，不断从消息队列中取出消息，然后处理   我们用下图来展示这个工作过程：  从图中可以看出：  事件源把待处理的消息加入到消息队列中，一般是加至队列头。事件源提交的消息可以是案件、触摸屏等物理">
+<meta name="twitter:image" content="https://i.loli.net/2019/09/16/rV2hZpR1Lv3A9OJ.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2019/09/16/深入理解Android：MessageQueue/">
+
+
+
+
+
+  <title>深入理解Android：Looper、Handler及MessageQueue | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2019/09/16/深入理解Android：MessageQueue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解Android：Looper、Handler及MessageQueue</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-16T21:00:38+08:00">
+                2019-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深入理解Android系列丛书学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深入理解Android系列丛书学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,906 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Looper与Handler"><a href="#Looper与Handler" class="headerlink" title="Looper与Handler"></a>Looper与Handler</h1><p>就应用程序而言，Android程序的应用程序和其他系统上先相同，都是靠消息驱动来工作的，它们大致的工作原理如下：</p>
+<ol>
+<li><p>有一个消息队列，可以往这个消息队列中投递消息。</p>
+</li>
+<li><p>有一个消息队列，不断从消息队列中取出消息，然后处理</p>
+</li>
+</ol>
+<p>我们用下图来展示这个工作过程：</p>
+<p><img src="https://i.loli.net/2019/09/16/rV2hZpR1Lv3A9OJ.png" alt="线程和消息处理.PNG"></p>
+<p>从图中可以看出：</p>
+<ol>
+<li><p>事件源把待处理的消息加入到消息队列中，一般是加至队列头。事件源提交的消息可以是案件、触摸屏等物理事件产生的消息，也可以是系统或应用程序本身发出的请求消息。</p>
+</li>
+<li><p>处理线程不断从消息队列头中取出消息并处理，事件源可以把优先级高的消息放到队列头，这样，优先级高的消息就会首先被处理。</p>
+</li>
+</ol>
+<p>在Android系统中，这些工作主要由Looper和Handler实现。</p>
+<h2 id="Looper类"><a href="#Looper类" class="headerlink" title="Looper类"></a>Looper类</h2><p>Looper类用于封装消息循环，并且有一个消息队列</p>
+<p>Looper类的创建最关键的就是两行代码，Looper.prepare()和Looper.loop()</p>
+<h3 id="Looper-prepare"><a href="#Looper-prepare" class="headerlink" title="Looper.prepare()"></a>Looper.prepare()</h3><p>这个函数所做的其实就是构造一个Looper对象，然后设置到ThreadLocal中，在Looper的构造函数中构造了一个消息队列（MessageQueue）</p>
+<h3 id="Looper-loop"><a href="#Looper-loop" class="headerlink" title="Looper.loop()"></a>Looper.loop()</h3><p>这个函数所做的就是取出Looper与相应的消息队列，从消息队列（MessageQueue）中取出消息，并调用该消息的Handler，交给Handler的dispatchMessage函数处理（dispatchMessage定义了一套消息处理的优先级机制，可见下文）。</p>
+<h2 id="Handler类"><a href="#Handler类" class="headerlink" title="Handler类"></a>Handler类</h2><p>Handler类有点像辅助类，它封装了消息投递、消息处理等接口。</p>
+<p>Handler在构造函数中其实就应用了当前线程的Looper，如果没有Looper没有将会报错，Handler的MessageQueue实际上也是Looper所创建的MessageQueue。Handler对于消息的处理大概分为这三种优先级：</p>
+<ol>
+<li><p>Message如果自带了callback处理，则交给callback处理，最常见的就是Handler.post(Runnable r)函数,r就是在callback</p>
+</li>
+<li><p>Handler如果设置了全局的mCallback,则交给mCallback处理,这个mCallback需要返回true表示消息已经被处理</p>
+</li>
+<li><p>如果上述都没有(1中消息没有自带的callback切2返回false),则交给Handler子类实现的handleMessage来处理,这里要求重写handleMessage函数</p>
+</li>
+</ol>
+<h2 id="Looper和Handler的结合：HandlerThread"><a href="#Looper和Handler的结合：HandlerThread" class="headerlink" title="Looper和Handler的结合：HandlerThread"></a>Looper和Handler的结合：HandlerThread</h2><p>Looper和Handler会有什么同步关系呢？它们之间确实有同步关系，同步关系肯定与多线程有关，这种错误一般发生在Looper在初始化在不同的线程，可能发生Looper为空的情况，所以Android为我们提供了HandlerThread来避免类似的问题。</p>
+<p>HandlerThread中使用了一个getLooper函数，当Looper还没被创建时，如果需要调用Looper则需要等待（wait()），创建后则notifyAll()，那么调用Looper的线程就会被唤醒。</p>
+<h1 id="心系两界的MessageQueue"><a href="#心系两界的MessageQueue" class="headerlink" title="心系两界的MessageQueue"></a>心系两界的MessageQueue</h1><p>MessageQueue类封装了与消息队列有关的操作，在一个以消息驱动的系统中，最重要的两部分就是消息队列和消息处理循环。在Android2.3以前，只有Java层有资格向MessageQueue添加消息，但从Android2.3开始，MessageQueue的核心部分下移至Native层，让Native层也能通过消息循环处理任务。</p>
+<h2 id="MessageQueue的创建"><a href="#MessageQueue的创建" class="headerlink" title="MessageQueue的创建"></a>MessageQueue的创建</h2><p>在Java中，MessageQueue的构造函数是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MessageQueue() &#123;</span><br><span class="line">nativeInit();<span class="comment">//构造函数调用nativeInit,该函数由Native层实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>nativeInit()方法真正实现为android_os_message_nativeInit()函数，其代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">android_os_MessageQueue_nativeInit</span><span class="params">(JNIEnv * env,jobject obj)</span> </span>&#123;</span><br><span class="line"><span class="comment">//NativeMessageQueue是MessageQueue在Native层的代表</span></span><br><span class="line">NativeMessageQueue * nativeMessageQueue = <span class="keyword">new</span> NativeMessageQueue();</span><br><span class="line">......</span><br><span class="line"><span class="comment">//将这个NativeMessageQueue对象设置到Java层保存</span></span><br><span class="line">android_os_MessageQueue_setNativeMessageQueue(env,obj,nativeMessageQueue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>nativeInit函数在Native层创建了一个与MessageQueue对应的NativeMessageQueue对象，其构造函数如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">NativeMessageQueue::NativeMessageQueue() &#123;</span><br><span class="line"><span class="comment">/* 代表消息循环的Looper也在Native层中呈现了，根据消息驱动的知识，一个线程会有一个Looper来处理消息队列中的消息。下面一行的调用就是取得保存在线程本地存储空间</span></span><br><span class="line"><span class="comment">(Thread Local Storage)中的Looper对象*/</span></span><br><span class="line">mLooper = Looper::getForThread();</span><br><span class="line"><span class="keyword">if</span> (mLooper == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="comment">/*如果是第一次进来，则该线程没有设置本地存储，需要新创建一个Looper，然后再将其保存到TLS中，这是很常见的一种以线程为单位的单例模式*/</span></span><br><span class="line">mLooper = <span class="keyword">new</span> Looper(<span class="literal">false</span>);</span><br><span class="line">Looper::setForThread(mLooper);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Native的Looper是Native世界中参会消息循坏的一位重要角色。虽然它的类名和Java层的Looper类一样，但此二者其实并无任何关系。</p>
+<h2 id="提取消息"><a href="#提取消息" class="headerlink" title="提取消息"></a>提取消息</h2><p>当一切准备就绪后，Java层的消息循环处理，也就是Looper会在一个循环中提取并处理消息。消息的提取就是调用MessageQueue的next()方法。当消息队列为空时，next就会阻塞。MessageQueue同时支持Java层和Native层的事件，那么其next()方法该如何实现呢？具体代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">final Message <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">int</span> pendingIdleHandlerCount = <span class="number">-1</span>;</span><br><span class="line"><span class="keyword">int</span> nextPoollTImeoutMills = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (;;) &#123;</span><br><span class="line">......</span><br><span class="line"><span class="comment">//mPtr保存了NativeMessageQueue的指针，调用nativePoolOnce进行等待</span></span><br><span class="line">nativePoollOnce(mPtr, nextPollTimeoutMills);</span><br><span class="line">sychronized(<span class="keyword">this</span>) &#123;</span><br><span class="line">final <span class="keyword">long</span> now = SystemClock.uptimeMills();</span><br><span class="line"><span class="comment">//mMessages用来存储消息，这里从其中取一个消息进行处理</span></span><br><span class="line">final Message msg = mMessages;</span><br><span class="line"><span class="keyword">if</span> (msg != null) &#123;</span><br><span class="line">final <span class="keyword">long</span> when = msg.when;</span><br><span class="line"><span class="keyword">if</span> (now &gt;= when) &#123;</span><br><span class="line">mBlocked = <span class="literal">false</span>;</span><br><span class="line">mMessages = msg.next;</span><br><span class="line">msg.next = null;</span><br><span class="line">msg.markInUse();</span><br><span class="line"><span class="keyword">return</span> msg;</span><br><span class="line"><span class="comment">//返回一个Message用于给Looper进行派发和处理</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">nextPoolTimeoutMillis = (<span class="keyword">int</span>) Math.min(when - now, Integer.MAX_VALUE);</span><br><span class="line">&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">nextPoolTimeoutMillis = <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line"><span class="comment">/*处理注册的IdleHandler，当MessageQueue中没有Message时，Looper会调用IdleHandler做一些工作，例如垃圾回收等*/</span></span><br><span class="line">......</span><br><span class="line">pendingIdleHandlerCount = <span class="number">0</span>;</span><br><span class="line">nextPollTimeoutMills = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码我们可以得到，进行消息处理的流程是从nativePollOnce开始的，那么这个nativePollOnce什么时候才会返回呢？我们可以从投递Message入手</p>
+<p>MessageQueue的enqueueMessage函数完成将一个Message投递到MessageQueue的工作，大概是如下过程：</p>
+<ol>
+<li><p>将Message按执行时间排序，并加入消息队列</p>
+</li>
+<li><p>根据情况调用nativeWake函数，以触发nativePollOnce函数，结束等待</p>
+</li>
+</ol>
+<p>nativeWake函数则会调用native Looper的wake函数，向通道（Pipe）的写端写入一个字符“W”，这样管道的读端就会因为有数据可读而从等待状态中醒来。</p>
+<p>当写端被唤醒之后，nativePollOnce就会返回，从而Message就会被处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在Windows上，线程间通知无外乎就是使用Event，在Linux上，使用POSIX的condition+mutex，也能完成同样的操作，但是这种方式在linux中用得相对较少，而是大量使用pipe，创建两个fd。当线程1想唤醒线程2的时候，就可以往writeFD中写数据，这样线程2阻塞在readFD中就能返回。我之前及其没搞明白为何要使用pipe，后来突然想明白了。因为Linux上阻塞的方法就是用select,poll和epoll，其中等待的都是FD，那么采用FD这种方式，能够统一调用方法。</span><br></pre></td></tr></table></figure>
+<h1 id="MessageQueue总结"><a href="#MessageQueue总结" class="headerlink" title="MessageQueue总结"></a>MessageQueue总结</h1><p>MessageQueue核心逻辑下移到Native层后，极大地扩展了消息处理的范围，总结后有以下几点：</p>
+<ul>
+<li><p>MessageQueue继续支持来自Java层的Message消息，也就是早期的Message加Handler的处理方式</p>
+</li>
+<li><p>MessageQueue在Native层的代表NativeMessageQueue支持来自Native层的Message，是通过Native层的Message和MessageHandler来处理的。</p>
+</li>
+<li><p>NativeMessageQueue还处理通过addFd添加的Request。这种方式在输入系统里面大量用到了，这也是Android为什么使用pipe来唤醒MessageQueue的原因之一。</p>
+</li>
+<li><p>从处理逻辑上来，先是Native的Message，然后是Native的Request，最后才是Java的Message。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2019/08/27/深入理解Android：Binder/">深入理解Android：Binder</a></li><li><a href="/2019/09/12/深入理解Android：Surface/">深入理解Android：Surface</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/深入理解Android：Surface/" rel="next" title="深入理解Android：Surface">
+                <i class="fa fa-chevron-left"></i> 深入理解Android：Surface
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/03/deep-understanding-of-Android-ActivityManagerService/" rel="prev" title="deep understand of Android ActivityManagerService">
+                deep understand of Android ActivityManagerService <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Looper与Handler"><span class="nav-number">1.</span> <span class="nav-text">Looper与Handler</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Looper类"><span class="nav-number">1.1.</span> <span class="nav-text">Looper类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Looper-prepare"><span class="nav-number">1.1.1.</span> <span class="nav-text">Looper.prepare()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Looper-loop"><span class="nav-number">1.1.2.</span> <span class="nav-text">Looper.loop()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Handler类"><span class="nav-number">1.2.</span> <span class="nav-text">Handler类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Looper和Handler的结合：HandlerThread"><span class="nav-number">1.3.</span> <span class="nav-text">Looper和Handler的结合：HandlerThread</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#心系两界的MessageQueue"><span class="nav-number">2.</span> <span class="nav-text">心系两界的MessageQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MessageQueue的创建"><span class="nav-number">2.1.</span> <span class="nav-text">MessageQueue的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提取消息"><span class="nav-number">2.2.</span> <span class="nav-text">提取消息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MessageQueue总结"><span class="nav-number">3.</span> <span class="nav-text">MessageQueue总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

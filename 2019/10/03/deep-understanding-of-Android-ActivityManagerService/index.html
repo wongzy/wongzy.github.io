@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="overviewAndroidManagerService(abbreviation as AMS) is the most vital service of Android, it mainly in charge of four component’s launching, switching、dispatching and manage the process of application,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="deep understand of Android ActivityManagerService">
+<meta property="og:url" content="https://wongzhenyu.cn/2019/10/03/deep-understanding-of-Android-ActivityManagerService/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="overviewAndroidManagerService(abbreviation as AMS) is the most vital service of Android, it mainly in charge of four component’s launching, switching、dispatching and manage the process of application,">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/10/03/BMTE1SrhL2zetbc.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/13/SKUbmkCwZPGQ35I.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/17/QavJiGgsxnAP83l.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/21/6FKdcyGLweQmRlM.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/8gyVjeQOxUoNK5C.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/BMsAYCJQFLfSpbh.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/05/OZJi4cqz8DSTGrW.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/06/NYxtLlcM65HBfGF.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.359Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="deep understand of Android ActivityManagerService">
+<meta name="twitter:description" content="overviewAndroidManagerService(abbreviation as AMS) is the most vital service of Android, it mainly in charge of four component’s launching, switching、dispatching and manage the process of application,">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/03/BMTE1SrhL2zetbc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2019/10/03/deep-understanding-of-Android-ActivityManagerService/">
+
+
+
+
+
+  <title>deep understand of Android ActivityManagerService | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2019/10/03/deep-understanding-of-Android-ActivityManagerService/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">deep understand of Android ActivityManagerService</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-03T14:51:11+08:00">
+                2019-10-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Books-of-Deep-UnderStand-Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Books of Deep UnderStand Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  6,367 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  40 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="overview"><a href="#overview" class="headerlink" title="overview"></a>overview</h1><p>AndroidManagerService(abbreviation as AMS) is the most vital service of Android, it mainly in charge of four component’s launching, switching、dispatching and manage the process of application, it plays a role as the manager process and dispatching module to the operating system. For this reason, it is very import to Android.</p>
+<p>we will analyze AMS from these aspects as follow:</p>
+<ul>
+<li><p>as other service, we will analyze how ActivityManagerService start and trace it’s invoking track.</p>
+</li>
+<li><p>launch a Activity by a am command, analyze how the application build, start, and how they interact with AMS.</p>
+</li>
+<li><p>use Broadcast and Service as samples, analyze the transaction track of Broadcast and Service in AMS. among this, we will give a flow chart for the transaction of Service .</p>
+</li>
+<li><p>by starting with a Crash application process, analyze how AMS transact the “testament”.</p>
+</li>
+</ul>
+<blockquote>
+<p>except this four point, we will do a unified analysis to the dispatching of process and the managing of memory.</p>
+</blockquote>
+<p>this is a class diagram about AMS’s family, see the picture followed:</p>
+<p><img src="https://i.loli.net/2019/10/03/BMTE1SrhL2zetbc.png" alt="AMSFamily.PNG"></p>
+<p>from the chart,we can know:</p>
+<ul>
+<li><p>AMS was derived by ActivityManagerNative, and it realize Watchdog.Monitor and BatteryStatsImpl.BatterCallback interface， and AMN was derived by  Binder, it realized IActivityManager interface.</p>
+</li>
+<li><p>client use ActivityManager class, because of AMS is System’s core service, lots of API can not be opened to use, so the designer did not add ActivityManager to AMS family directly. ActivityManager can obtain a ActivityManagerProxy object by invoking AMN’s getDefault method, Activity Manager can interact with AMS by ActivityManagerProxy.</p>
+</li>
+</ul>
+<h1 id="be-familiar-with-ActivityManagerService"><a href="#be-familiar-with-ActivityManagerService" class="headerlink" title="be familiar with ActivityManagerService"></a>be familiar with ActivityManagerService</h1><p>AMS was built by system_server’s ServerThread thread, extract its invoke track, codes as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//1.invoke main method,obtain a Context object</span><br><span class="line">context = ActivityManagerService.main(factoryTest);</span><br><span class="line">//2.setSystemProcess: so system_server process can add to AMS and be managed by it</span><br><span class="line">ActivityManagerService.setProecss();</span><br><span class="line">//3.installSystem: put SettingProvider to work in system_server process</span><br><span class="line">ActivityManagerService.installSystemProviders();</span><br><span class="line">//4.save WindowManagerService in inside (call it WMS later)</span><br><span class="line">ActivityManagerService.self().setWindowManager(wm);</span><br><span class="line">//5. interact with WMS, display &quot;start progrress&quot; dialog</span><br><span class="line">ActivityManagerNative.getDefault().showBootMessage(</span><br><span class="line">context.getResources().getText(</span><br><span class="line">//this string means: launching application program</span><br><span class="line">com.android.internal.R.string.android_upgrading_starting_apps), false);</span><br><span class="line">//6. AMS is the core in system, other service&apos;s systemReady can only be invoked by AMS after AMS ready</span><br><span class="line">//attention! there are a little Service be ready before AMS systemReady, it did not influence analysis in here</span><br><span class="line">ActivityManagerService.self().systemReady(new Runnable() &#123;</span><br><span class="line">public void run() &#123;</span><br><span class="line">startSystemUI(contextF); //launch systemUI, so, status bar was ready</span><br><span class="line">if (batteryF != null ) batteryF.systemReady();</span><br><span class="line">if (networkManagementF != null ) networkManagementF.systemReady();</span><br><span class="line">......</span><br><span class="line">Watchdog.getInstance().start(); // launch Watchdog </span><br><span class="line">...... //invoke other service&apos;s systemReady method</span><br></pre></td></tr></table></figure>
+<p>in the codes above, listed six significant point and sample explain about these invoke, in this session we all analyze interaction with WindowManagerService(AMS) except 4,5 point.</p>
+<h2 id="analysis-to-ActivityManagerService’s-main-method"><a href="#analysis-to-ActivityManagerService’s-main-method" class="headerlink" title="analysis to ActivityManagerService’s main method"></a>analysis to ActivityManagerService’s main method</h2><p>AMS’s Main method would return a Context object, what can be slather used by other services. With this context, we can do many things(for example, obtain the resources in environment and java class message). but what a context does AMS’s main method returned?see the code followed:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public static final Context main(int factoryTest) &#123;</span><br><span class="line">AThread thr = new AThread(); //1.build a AThread Object</span><br><span class="line">thr.start();</span><br><span class="line">......//wait until build thr success</span><br><span class="line">ActivityManagerService m = thr.mService;</span><br><span class="line">mSelf = m;</span><br><span class="line">//2.invoke ActivityThread&apos;s systemMain Method</span><br><span class="line">ActivityThread at = ActivityThread.systemMain();</span><br><span class="line">mSystemThread = at;</span><br><span class="line">//3.obtain a Context Object, attenation, the method be invoked named getSystemContext, what is SystemContext?</span><br><span class="line">Context context = at.getSystemContext();</span><br><span class="line">context.setTheme(android.R.style.Theme_Holo);</span><br><span class="line">m.mContext = context;</span><br><span class="line">m.mfactoryTest = factoryTest;</span><br><span class="line">//ActivityStack is the vital class for AMS to manage Activity&apos;s launch and dispatch, we will analyze it in the future</span><br><span class="line">m.mMainStack = new ActivityStack(m, context, true);</span><br><span class="line">//invoke BSS&apos;s publish method, this knowledge point we are introduced before.</span><br><span class="line">m.mBatteryStatsService.publish(context);</span><br><span class="line">// another service: UsageStatsService.</span><br><span class="line">m.mUsageStatsService.publish(context);</span><br><span class="line">synchronized(thr) &#123;</span><br><span class="line">thr.mReady = true;</span><br><span class="line">thr.notifyAll();//inform thr thread that this thread&apos;s mission finished</span><br><span class="line">&#125;</span><br><span class="line">//4.invoke AMS&apos;s startRunning method</span><br><span class="line">m.startRunning(null, null, null, null);</span><br><span class="line">return context;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>in Main method, we enumerated four viral method, they are:</p>
+<ul>
+<li><p>build AThread thread. Although AMS’s main method was invoked by ServerThread, but AMS’s own job did not put to ServerThread to finish, it create a new thread - AThread thread.</p>
+</li>
+<li><p>ActivityThread.systemMain method. init ActivityThread object.</p>
+</li>
+<li><p>ActivityThread.getSystemContext method. to acquire a Context object, from this method name we can see, this Context represent System’s context environment.</p>
+</li>
+<li><p>AMS’s startRunning method.</p>
+</li>
+</ul>
+<p>attention! in main method, there is a “wait” and a “notifyAll”, because:</p>
+<ol>
+<li><p>main method need wait for AThread’s thread launch and finish a part of mission.</p>
+</li>
+<li><p>after AThread finishing a part of job, it will wait for the finish of main method.</p>
+</li>
+</ol>
+<blockquote>
+<p>this situation of two thread waiting for each other, is rare in Android code </p>
+</blockquote>
+<h3 id="analysis-to-AThread"><a href="#analysis-to-AThread" class="headerlink" title="analysis to AThread"></a>analysis to AThread</h3><p>in essence, AThread is a thread which supports message loop and transact, its main job is to build AMS object, then notify AMS’s main method. so, this AMS object is what the main method waited.</p>
+<h4 id="the-construct-method-of-AMS"><a href="#the-construct-method-of-AMS" class="headerlink" title="the construct method of AMS"></a>the construct method of AMS</h4><p>there are several mission which AMS has done:</p>
+<ul>
+<li><p>build BSS, USS, mProcessStat(type of ProcessState), mProcessStatsThread thread, those are all related to system’s running status statistics.</p>
+</li>
+<li><p>build /data/system catalog,  assign to mCompatModePackage (type of CompatModePackage) and mConfiguration (type of Configuration)’s fields.</p>
+</li>
+</ul>
+<h4 id="analysis-to-ActivityThread-systemMain"><a href="#analysis-to-ActivityThread-systemMain" class="headerlink" title="analysis to ActivityThread.systemMain"></a>analysis to ActivityThread.systemMain</h4><p>ActivityThread is a vital class in Android framework, it represent the main thread in a application’s process(for application process, Activity Thread’s main method was certainly invoked by process’s main thread). its responsibility is dispatch and transact the four component which runs in this thread.</p>
+<p>attention! Application process are indicate those process which runs APK, they are derived(fork) by Zyote, relatively, there are system process(include Zygote and system_server).</p>
+<p>the code of ActivityThread.systemMain</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static final ActivityThread systemMain()&#123;</span><br><span class="line">HardwareRender.disable(true);//forbid hardware render accelerate</span><br><span class="line">// build a ActivityThread object, its construct method is very simple</span><br><span class="line">ActivityThread thread = new ActivityThread();</span><br><span class="line">thread.attach(true); //invoke its attach method, its params is true</span><br><span class="line">return thrad;</span><br></pre></td></tr></table></figure>
+<p>as see above, ActivityThread represent its application process(which runs APK) main thread,but system_server was not a application process. so why here need ActivityThread?</p>
+<p>remember framework-res.apk? which mentioned in the analysis of PackageManagerService. this APK does not only includes resource file, but also includes some Activity(for example, power-off dialog), these Activity are actually runs at system_server process. From ths perspective, can regard system_server as a special application process.</p>
+<p>the code of ActivityThread’s attach method</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">private void attach(boolean system) &#123;</span><br><span class="line">sThreadLocal.set(this);</span><br><span class="line">mSystemThread = system; //judge whether it is system process</span><br><span class="line">if (!system) &#123;</span><br><span class="line">......//application process&apos;s transact flow</span><br><span class="line">&#125; else &#123; //system process&apos;s transact flow, this situation can only be transactted in system_server </span><br><span class="line">//when set DDMS, we can see that system_server process named system_process</span><br><span class="line">android.ddm.DdmHandleAppName.setAppName(&quot;system_process&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">//there are serveral vital role appear, see the analysis followed</span><br><span class="line">mInstrumentation = new Instrumentation();</span><br><span class="line">ContextImpl context = new ContextImpl();</span><br><span class="line">//init context, notice  the first parameter is getSystemContext</span><br><span class="line">context.init(getSystemContext(),mPackageInfo, null, this);</span><br><span class="line">//use Instrumentation to construct a Application object</span><br><span class="line">Application app = Instrumentation.newApplication(Application.class, context);</span><br><span class="line">//a process support several Application, mAllApplication are saved in its process&apos;s Application object</span><br><span class="line">mAllApplications.add(app);</span><br><span class="line">mInitialApplication = app; //set mInitialApplication</span><br><span class="line">app.onCreate(); //invoke Application&apos;s onCreate method</span><br><span class="line">&#125; ......// try/catch end</span><br><span class="line">&#125; //if (!system) to judge if end</span><br><span class="line">//register Configuration change&apos;s callback notification </span><br><span class="line">ViewRootImpl.addConfigCallback(new ComponentCallbacks2()&#123;</span><br><span class="line">public void onConfiguarationChanged(Configuaration newConfig)&#123;</span><br><span class="line">.......//when system configuaration change(for example, language change), need invoke this callback</span><br><span class="line">&#125;</span><br><span class="line">public void onLowMemory()&#123;&#125;</span><br><span class="line">public void onTrimMemory(int level)&#123;&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>there are several vital number, respectively are type of Instrumentation class, Application class and Context class, there is their affects:</p>
+<ul>
+<li><p>Instrumentation: Instrumentation is a tool class.When it be used, system will build it first, then build other component via it.Otherwise, the interaction between system and components will be transmitted by Instrumentation, as thus, Instrumentation can monitor the interaction between system and those components.<br>In actually use,we can build Instrumentation’s derived class to process transact.</p>
+<ul>
+<li><p>Application: Application class saved a overall application status.Application are declared by <application> label of AndroidManifest.xml.We need to define Application’s derived class in actual use.</application></p>
+</li>
+<li><p>Context: Context is a interface that we can obtain and operate Application’s corresponding resources, classes, even the four components via it.</p>
+</li>
+</ul>
+<blockquote>
+<p>Application  in here is a Android concept, we can realize it as a container which the four components included. otherwise, a process can run several Applications(a apk can include other apks)</p>
+</blockquote>
+</li>
+</ul>
+<p>Context is a abstract class, but what built by AMS was its subclass, ContextImpl.As above, Context supplied Application’s contextual message, and how does those message transmitted to Context? This problem include two aspects:</p>
+<ol>
+<li>What Context actually is ?</li>
+<li>What are the contextual message in Context?</li>
+</ol>
+<p>next step, we will analyze getSystemContext method, which be invoked above.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public ContextImpl getSystemContext()</span><br><span class="line">&#123;</span><br><span class="line">synchronized(this) &#123;</span><br><span class="line">if(mSystemContext == null)&#123; //singleton mode</span><br><span class="line">ContextImpl context = ContextImpl.createSystemContext(this);</span><br><span class="line">//LoadApk is a new class imported by android2.3, which represent a APK loaded to system</span><br><span class="line">LoadApk info = new LoadedApk(this, &quot;android&quot;, context, null,</span><br><span class="line">CompatibiltyInfo.DEFAULT_COMPATIBILITY_INFO);</span><br><span class="line">//init this ContextImpl object</span><br><span class="line">context.init(info, null,this);</span><br><span class="line">//init resource message</span><br><span class="line">context.getResources().updateConfiguration(</span><br><span class="line">getConfiguaration(),getDisplayMetrcsLocked(</span><br><span class="line">Compatibility.DEFAULT_COMPATIBILITY_INFO,false));</span><br><span class="line">mSystemContext = context;//save this special ContextImpl object</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">return mSystemContext;</span><br></pre></td></tr></table></figure>
+<p>why method’s name is getSystemContext? because it use a LoadedApk object in the init flow path of ContextImpl. As the annotation, LoadedApk is a class imported by Android2.3，this class is used to save messages about APK(for example, resource file location, JNI library location, etc).The package which represented by LoadedApk that has the method getSystemContext to init ContextImpl, named “android”, actually is framework-res.apk, because this APK was solely used by system_server process, so call it getSystemContext.</p>
+<p>We can display those classes’s relationship by this picture:</p>
+<p><img src="https://i.loli.net/2019/10/13/SKUbmkCwZPGQ35I.png" alt="image002.png"></p>
+<p>form the chapter we can see:</p>
+<ul>
+<li><p>from the derive relationship, ApplicationContentResolver was derived by ContentResolver, it mainly used to interact with ContentProvider. ContextImpl and ContextWrapper are both derived by Context, but Application was derived by ContextWrapper.</p>
+</li>
+<li><p>form involved aspect, the involved area of ContextImpl is most extensive. it refers Resources via mResources, refers LoadedApk via mPackageInfo, refers ActivityThread via mMainThread, and refers ApplicationContentResolver via mContentResolver.</p>
+</li>
+<li><p>ActivityThread represent main thread, it refers Instrumentation via mInstrumentation. Otherwise, it also saved several Application object.</p>
+</li>
+</ul>
+<blockquote>
+<p>be attention, some field number’s type is its base type in the method, but we directly refers to its real object in the picture.</p>
+</blockquote>
+<p>the summary of systemMain</p>
+<p>after the invoke of systemMain method, we get those:</p>
+<ol>
+<li><p>obtain a ActivityThread, it represent application process’s main thread</p>
+</li>
+<li><p>obtain a Context object, the Application environment it slinkingly referred is related with framework-res.apk</p>
+</li>
+</ol>
+<p>In summary, systemMain Method will build a Android runtime environment which is same as application process for system_server process.This sentence include two concepts:</p>
+<ol>
+<li><p>process: derived by operate system, is a running body in os, the code we coding must be running at a process</p>
+</li>
+<li><p>Android Runtime environment: Android build a runtime environment for itself. in this environment, the concept of process is blurred, component’s running status and their interaction are all in this environment.</p>
+</li>
+</ol>
+<p>Android Runtime environment was built above process. Applications are only interact with android environment in a general way.As the same, system_server expect its inter services interact with Android environment, thus, it request to build a run environment for system_server.Because of the specialization of system_server, it invoke systemMain method, but general application invoke ActivityThread’s main method to build android environment.</p>
+<p>Otherwise, although ActivityThread was defined to represent process’s main thread, but as a java class, which thread derive its instance ? In system_server we can see, Activity object was built by other thread, but in application process, ActivityThread was build by main thread.</p>
+<h4 id="the-analysis-to-ActivityThread-getSystemContext"><a href="#the-analysis-to-ActivityThread-getSystemContext" class="headerlink" title="the analysis to ActivityThread.getSystemContext"></a>the analysis to ActivityThread.getSystemContext</h4><p>We have seen ActivityThread.getSystemContext Method in the previous session. After the invoke of this method, we will obtain a Context object which can represent System process.But what actually the Context is? We can see its family picture follows:</p>
+<p><img src="https://i.loli.net/2019/10/17/QavJiGgsxnAP83l.png" alt="context_family"></p>
+<p>From this picture we can see:</p>
+<ul>
+<li><p>ContextWrapper is very interesting, ContextWrapper is a proxy class actually is ContextImpl, which indicated by number mBase.Its inter function’s detail realization are totally achieved by mBase.The goal of this design is to hide ContextImpl.</p>
+</li>
+<li><p>Application is derived by ContextWrapper, and realized ComponentCallBacks2 interface. There is a LoadedApk type number mLoadedApk in Application.LoadedApk represent a Apk file. Because a AndroidManifest.xml file can only declared a Application label, so a Application must be bound with a LoadedApk.</p>
+</li>
+<li><p>Service are derived by ContextWrapper,  therein inter number mApplication indicate Application(in AndroidManifest.xml, Service can only as Application’s sub label, so Service must be bound with a Application)</p>
+</li>
+<li><p>ContextThemeWrapper override two methods which are related with Theme.This is related with interface, so Activity as UI container in Android system, must be derived by ContextThemeWrapper too.As same as Service, Activity indicated Application via number mApplication internally.</p>
+</li>
+</ul>
+<h4 id="analysis-to-AMS’s-startRunning-method"><a href="#analysis-to-AMS’s-startRunning-method" class="headerlink" title="analysis to AMS’s startRunning method"></a>analysis to AMS’s startRunning method</h4><p>the code as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public final void startRunning(String pkg, String cls, String action,String data) &#123;</span><br><span class="line">synchronized(this) &#123;</span><br><span class="line">if(mStartRunning)</span><br><span class="line">return; //if has invoked this method, return</span><br><span class="line">mStartRunning = true;</span><br><span class="line">//mTopComponent eventually be signed to null</span><br><span class="line">mTopComponent = pkg != pkg != null &amp;&amp; cls != null ?</span><br><span class="line">new ComponentName(pkg, cls):null;</span><br><span class="line">mTopAction = action != null? action:Intent.ACTION_MAIN;</span><br><span class="line">mTopData = data; //mTopData enentually be signed to null</span><br><span class="line">if (!mSystemReady) return; //mSystemReady is false, so return directlly</span><br><span class="line">&#125;</span><br><span class="line">systemReady(null); //this method is very important, but it&apos;s a pity it not be invoked in startRunning method</span><br></pre></td></tr></table></figure>
+<p>startRunning method is sample,so we do not write a lot to analyze it.</p>
+<p>In here, we had analyzed all four acknowledge points, we can review what did AMS’s main method do.</p>
+<h4 id="the-summary-of-ActivityManagerService’s-main-method"><a href="#the-summary-of-ActivityManagerService’s-main-method" class="headerlink" title="the summary of ActivityManagerService’s main method"></a>the summary of ActivityManagerService’s main method</h4><p>two goal of AMS’s main method:</p>
+<ol>
+<li><p>the first goal is easy to think out, build AMS object</p>
+</li>
+<li><p>the other goal is obscure but vital, is to apply a android environment to be used by system_server process.</p>
+</li>
+</ol>
+<p>On the basis of the code analyze before, Android run environment will include two class number: Activity Thread and ContextImpl(usually its base class Context).</p>
+<p>Picture follows shows some number variables in those two class, we can see ActivityThread and ContextImpl’s function via those.</p>
+<p><img src="https://i.loli.net/2019/10/21/6FKdcyGLweQmRlM.png" alt="ActivityandContextImpl.PNG"></p>
+<p>from the picture we can see:</p>
+<ul>
+<li><p>there is a mLooper number in ActivityThread, it represent a message loop. It afraid is a direct evidence for ActivityThread be called “Thread”.Otherwise, mServices is used to save Service, Activities is used to save ActivityClientRecord, and mAllApplications is used to save Application.We will introduce those variable’s function when met it.</p>
+</li>
+<li><p>for ContextImpl, its number variable represent thar it are related with resources and APK file.</p>
+</li>
+</ul>
+<p>now we will analyze the third method - setSystemProcess.</p>
+<blockquote>
+<p>actually, SettingsProvider.apk is run in system_server process too.</p>
+</blockquote>
+<h3 id="the-analysis-to-AMS’s-setSystemProcess"><a href="#the-analysis-to-AMS’s-setSystemProcess" class="headerlink" title="the analysis to AMS’s setSystemProcess"></a>the analysis to AMS’s setSystemProcess</h3><p>The code of AMS’s setSystemProcess as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public static void setSystemProcess() &#123;</span><br><span class="line">try&#123;</span><br><span class="line">ActivityManagerService m = mSelf;</span><br><span class="line">//register several services to ServiceManager</span><br><span class="line">ServiceManager.addService(&quot;activity&quot;, m);</span><br><span class="line">//used to print memory message</span><br><span class="line">ServiceManager.addService(&quot;meminfo&quot;, new MemBinder(m));</span><br><span class="line">/*</span><br><span class="line">the new service that android 4.0 added, used to output Applications Graphics Acceleration info. Reader can check details via command adb shell dumpsys gfxinfo.</span><br><span class="line">*/</span><br><span class="line">Servicemanager.addService(&quot;gfxinfo&quot;, new GraphicsBinder(m));</span><br><span class="line">if (MONITOR_CPU_USAGE) //this value is default true, add cpuinfo service</span><br><span class="line">ServiceManager.addService(&quot;couinfo&quot;, new CpuBinder(m));</span><br><span class="line">//regist permission manager service PermissionController</span><br><span class="line">ServiceManager.addService(&quot;permission&quot;, new PermissionController(m));</span><br><span class="line">/* important explaination:</span><br><span class="line">query ApplicationInfo whose package named android to PackagemanagerService.</span><br><span class="line">attation this invoke, althought PKMS and AMS belong to same process, but the interaction between those still need Context.</span><br><span class="line">actually, here they can invoke PKMS&apos;s function directly, why it takes a lot effort? we will explain it clearly.</span><br><span class="line">*/</span><br><span class="line">//use AMS&apos;s mContext object</span><br><span class="line">Application info = mSelf.mContext.getPackageManager().getApplicationInfo(&quot;android&quot;, STOCK_PM_FLAFS);</span><br><span class="line">//1. invoke ActivityThread&apos;s installSYstemApplication method</span><br><span class="line">mSystemThread.installSystemApplicationInfo(info);</span><br><span class="line">synchronized(mSelf)&#123;</span><br><span class="line">//2. here refers to the processes&apos;s management of AMS, see the analysis as follows</span><br><span class="line">ProcessRecord app = mSelf.newProcessRecordLocked(mSYstemThread.getApplicationThread(),info,info.processName);</span><br><span class="line">//attation, the last parameter is a char sequence, its value is system</span><br><span class="line">app.persistent = true;</span><br><span class="line">app.pid = MY_PID;</span><br><span class="line">app.maxAdj = ProcessList.SYSTEM_ADJ;</span><br><span class="line">//3. save ProcessRecord object</span><br><span class="line">mSelf.mProcessNames.put(app.processName, app.info.uid, app);</span><br><span class="line">synchronized(mSelf.mPidsSelfLocked) &#123;</span><br><span class="line">mSelf.mPidsSelfLocked.put(app.pid, app);</span><br><span class="line">&#125;</span><br><span class="line">//in the basis of system&apos;s current status, adjust process&apos;s dispatch priority  and OOM_Adj, we will analyze it after</span><br><span class="line">mSelf.updateLruProcessLocked(app, true, true);</span><br><span class="line">&#125;</span><br><span class="line">&#125;...... //throw exception</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>we enumerate one important explanation and two important points:</p>
+<ul>
+<li><p>important explanation: AMS query ApplicationInfo named android to PKMS. In here, the interaction between AMS and PKMS was finished by Context, check the code invoked by a services of functions, we will find that AMS will request PKMS’s query function via Binder.AMS and PKMS are belong to one process, they can totally interact without Context. Why here spend a lot ? the reason is sample, Android expect the services in system_server are also interacting by android environment, for example, the unify between components’s interact interfaces and system’s future expandability.</p>
+</li>
+<li><p>important point one: ActivityThread’s installSystemApplicationInfo method.</p>
+</li>
+<li><p>important point two: ProcessRecord class, it is related with the management to process of AMS.</p>
+</li>
+</ul>
+<h4 id="ActivityThread’s-installSystemApplication-function"><a href="#ActivityThread’s-installSystemApplication-function" class="headerlink" title="ActivityThread’s installSystemApplication function"></a>ActivityThread’s installSystemApplication function</h4><p>installSystemApplicationInfo function’s parameter is a ApplicationInfo object, this object was derived by querying the package named android of PKMS via Context(based on the knowledge above, there is only framework-res.apk is declared its package name android at current).</p>
+<p>see installSystemApplicationInfo’s code, as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public void installSystemApplicationInfo(Application info) &#123;</span><br><span class="line">synchronized(this)&#123;</span><br><span class="line">//the ContextImpl object returned is the object which built in AMS&apos;s main method</span><br><span class="line">ContextImpl context = getSystemContext();</span><br><span class="line">//invoke init method again, is this a repetitive invoke?</span><br><span class="line">context.init(new pk(this, &quot;android&quot;, context, info, CompatibilityInfo.DEFAULT_COMPATIBILITY_INFO), null, this);</span><br><span class="line">//create a Profiler object, used to performance statistics</span><br><span class="line">mProfiler = new Profiler();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We can see the code which invoke context.init() method, reader may doubt that getSystemContext method would return mSystemContext, but there mSystemContext was initialized, why it initialized again?</p>
+<p>check the code we can see:</p>
+<ul>
+<li><p>when first performed init, the fourth parameter in LoadedApk struct function represent ApplicationInfo is null.</p>
+</li>
+<li><p>when second performed init, the fourth parameter in LoadedApk struct function is not null, means that this parameter was real referred to a actual ApplicationInfo, this ApplicationInfo was derived from framework-res.apk.</p>
+</li>
+</ul>
+<p>On the basis of the message above, readers may think: the goal for Context to perform init is only to create a Android environment, but this Context was not bound with actual ApplicationInfo.Before the second perform of init, obtain a real ApplicationInfo via the interaction between Context and PKMS,then bind this context with ApplicationInfo via init function.</p>
+<p>But although we resolve the question that why init function performs twice, but a more difficult problem occurs: the Context obtained by the first time perform init was not bind with ApplicationInfo, but it is also useful, why it is necessary to bind with a ApplicationInfo ? The result is sample, because framework-res.apk(include SettingsProvider.apk we will introduced after) run in system_server. As same as all other Apk, its running need a Android environment which correctly init.</p>
+<p>because framework-res.apk is a APK file, and as same as APK file, it should run in a process. AMS was used to the management and dispatch to process, so the process which run the APK should have a refer manage struct, so the next step of AMS is to match run environment and process manage struct to a unity, and manage it unified by AMS.</p>
+<p>The process management struct of AMS is ProcessRecord.</p>
+<h4 id="ProcessRecord-and-IApplicationThread"><a href="#ProcessRecord-and-IApplicationThread" class="headerlink" title="ProcessRecord and IApplicationThread"></a>ProcessRecord and IApplicationThread</h4><p>before the analysis to ProcessRecord, we think a problem first: how AMS interact with application process ? For example, when AMS launch a activity in other process, because this activity is running in other process, so it is necessary to AMS to interact with this process. The answer is interacting via Binder. For this, Android apply a IApplicationThread interface, this interface defined the interact function between AMS and application process. Chart follows is the interface’s family chart.</p>
+<p><img src="https://i.loli.net/2019/10/27/8gyVjeQOxUoNK5C.png" alt="接口的家族图谱.PNG"></p>
+<p>From the chart we can see:</p>
+<ul>
+<li><p>ApplicationThreadNative realized IApplicationThread interface. From the method name the interface defined we can see, AMS interact with application via it. For example, when launch a Activity it invoke its interface’s scheduleLaunchActivity method.</p>
+</li>
+<li><p>ApplicationThread refers its intern class ApplicationThread via number variable mAppThread, and Application derived from ApplicationThreadNative.</p>
+<p>now there is IApplicationThread interface, with it, AMS can interact with application process via it. For example, for a sample method follows:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public final void scheduleStopActivity(IBinder token, boolean showWindow, int configChanges) &#123;</span><br><span class="line">queueOrSendMessage(// this method will send message to a Handle intern</span><br><span class="line">showWindow? H.STOP_ACTIVITY_SHOW:H.STOP_ACTIVITY_HIDE, token, 0, configChanges);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>When AMS want to stop a Activity, it will invoke corresponding process IApplicationThread Binder client’s scheduleStopActivity method. What the function realized is send a message to the process which ActivityThread is in.In application process, ActivityThread runs in main thread, os this message will be transacted in main thread.</p>
+<blockquote>
+<p>tips：Activity’s onStop function will be invoked in main thread.</p>
+</blockquote>
+<p>IApplication is rarely a interface for interacting between AMS and another process, except this, AMS need more message about this process.In AMS, process’s massage saved in ProcessRecord data struct.So, what is ProcessRecord? We need see newProcessRecordLocked function before answer the method, its codes as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">final ProcessRecord newProcessReoordLocked(IApplicationThread thread, ApplicationInfo info, String customProcess) &#123;</span><br><span class="line">String proc = customProcess != null ? customProcess:info.processName;</span><br><span class="line">BatteryStatsImpl.Uid.Proc ps = null;</span><br><span class="line">BatteryStatsImpl stats = mBatteryStatsService.getActiveStatistics();</span><br><span class="line">synchronized(stats) &#123;</span><br><span class="line">//BSImpl will build a battery statics item for this process</span><br><span class="line">ps = stats.getProcessStatsLocked(info.uid, proc);</span><br><span class="line">&#125;</span><br><span class="line">//build a ProcessRecord object represent corresponding process. AMS and its process&apos;s object is the second parameter thread.</span><br><span class="line">return new ProcessRecord(ps, thread, info, proc);</span><br></pre></td></tr></table></figure>
+<p>There are a lot of number variable in ProcessRecord, we see which number variable init in its construct function:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ProcessRecord(BatteryStatsImpl.Uid.Proc_BatteryStats, IApplicationThread_thread.ApplicationInfo_info, String_processName) &#123;</span><br><span class="line">batteryStats = _batteryStats; //used to statics for battery</span><br><span class="line">info = _info; //save ApplicationInfo</span><br><span class="line">processName = _processName; //save process name</span><br><span class="line">//a process can run several package, pkgList used to store package name</span><br><span class="line">pkgList.add(_info.packageName);</span><br><span class="line">thread = _thread; //save IApplicationThread, can interact with application process via it</span><br><span class="line">//variables below here are related with process priority, OOM_adj. We will analyze their function later.</span><br><span class="line">maxAdj = ProcessList.EMPTY_APP_ADJ;</span><br><span class="line">hiddenAdj = ProcessList.HIDDEN_APP_MIN_ADJ;</span><br><span class="line">curRawAdj = setRawAdj = -100;</span><br><span class="line">curAdj = setAdj = -100;</span><br><span class="line">//used to controll whether this process process is always standed in memory(it will be rebotted by system even be killed), only vital process have this priority.</span><br><span class="line">persistent = false;</span><br><span class="line">removed = false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Except saving IApplicationThread which interacted with application process, ProcessRecord also saved process name, different state corresponding Oom_adj value and a ApplicationInfo. Although a process can run several Application, but ProcessRecord usually saved the ApplicationInfo whose Application run in advance.</p>
+<p>For now, a ProcessRecord object was built, different from other application processes, the process it corresponded is system_server.To represent it specialization, AMS signed specific value for some number variable:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.persistent = true; //sign value to true</span><br><span class="line">app.pid = MY_PID; //sign pid to system_server&apos;s process number</span><br><span class="line">app.maxAdj = ProcessList.SYSTEM_ADJ; //set max OOM_Adj, system process&apos;s default value is -16</span><br><span class="line">//In addition, app&apos;s processName was signed to &quot;system&quot;</span><br></pre></td></tr></table></figure>
+<p>Now, a ProcessRecord object which indicate system_server was built.After that AMS put it in its sphere of influence.</p>
+<p>There are two number variables used to save ProcessRecord, one is mProcessNames, the other is mPidsSelfLocked.Chapter follows is the struct of two number variables.</p>
+<p><img src="https://i.loli.net/2019/10/29/BMsAYCJQFLfSpbh.png" alt="数据结构示意图.PNG"></p>
+<h4 id="summary-of-AMS’s-setSystemProcess"><a href="#summary-of-AMS’s-setSystemProcess" class="headerlink" title="summary of AMS’s setSystemProcess"></a>summary of AMS’s setSystemProcess</h4><p>Now we review what job setSystemProcess do:</p>
+<ul>
+<li><p>Register AMS, meminfo, gfxinfo and other services to ServiceManager.</p>
+</li>
+<li><p>On the basis of ApplicationInfo which from PKMS init Android running environment, and build a ProcessRecord which represents system_server process, from now, system_server was included in AMS’s sphere of manage.</p>
+</li>
+</ul>
+<h1 id="the-summary-of-ActivityManagerService"><a href="#the-summary-of-ActivityManagerService" class="headerlink" title="the summary of ActivityManagerService"></a>the summary of ActivityManagerService</h1><p>there are four vital and complicated method in ActivityManagerService, the knowledge point summary as follows:</p>
+<ul>
+<li><p>AMS’s main function : build a instance of AMS, the most important work is to build Android runtime environment, obtain a ActivityThread and a Context object.</p>
+</li>
+<li><p>AMS’s setSystemProcess function: this function register AMS and meminfo services to ServiceManager, otherwise, it build a ProcessRecord object for system_server object.Because AMS is the process manage and dispatch center in java world, to treat equally without discrimination to java processes, although system_server is a system process, it will be included in AMS’s manage scope.</p>
+</li>
+<li><p>AMS’s installSystemProviders function: load SettingProvider for system_server</p>
+</li>
+<li><p>AMS’s systemReady function: do ending task before finishing launch. After invoking function, Home Activity will display in user.</p>
+</li>
+</ul>
+<p>the analysis to AMS invoke trace is the first line we  crack AMS.</p>
+<h1 id="the-analysis-of-startActivity"><a href="#the-analysis-of-startActivity" class="headerlink" title="the analysis of startActivity"></a>the analysis of startActivity</h1><p>We will spend a lot on the launch flow of Activity in this section, it is the most difficult way of five ways, believe read can realize it if work hard.</p>
+<h2 id="start-with-am"><a href="#start-with-am" class="headerlink" title="start with am"></a>start with am</h2><p>am is the same as pm, it is a script, it used to interact with AMS, for example, launch Activity, launch Service, send Broadcast.When we use am script to launch a activity, it eventually will invoke AMS’s startActivityAnd Wait function to deal with this launch request, it is a sample way to analyze Activity’s launch via am.</p>
+<h2 id="analysis-to-AMS’s-startActivityAndWait"><a href="#analysis-to-AMS’s-startActivityAndWait" class="headerlink" title="analysis to AMS’s startActivityAndWait"></a>analysis to AMS’s startActivityAndWait</h2><p>startActivityAndWait method has lots of parameters, we acquaint with them first.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public final WaitResult startActivityAndWait&#123;</span><br><span class="line">/*</span><br><span class="line">in most situaction, a launch of Activity is called by a application process, IApplicationThread is a channel which application interact with application process, it is a mark to invoke process, in this example, am is not a application process, so the caller transfer is null</span><br><span class="line">*/</span><br><span class="line">IApplicationThread caller,</span><br><span class="line">//Intent and resolvedType, in this example,resolvedType is null</span><br><span class="line">Intent intent,String resolvedType,</span><br><span class="line">//grantedUriPermissions and granteMode are relatived with perimission</span><br><span class="line">Uri[] grantedUriPermissions, //in this example, is null</span><br><span class="line">int grantedMode, //in this example, is null, used to received startActivityForResult&apos;s result</span><br><span class="line">String resultWho, //in this example, is null</span><br><span class="line">//requestCode, in this example, is 0,its value&apos;s  significance was defined by its invoker,if its value equal or bigger than zero, AMS will save it by itself,and return it by onActivityResult method.</span><br><span class="line">int requestCode,</span><br><span class="line">boolean onlyIfNeeded, // in this example, is false</span><br><span class="line">boolean debug, //is a debug process</span><br><span class="line">//those three parameters are relatvied with performance statistics</span><br><span class="line">String profileFile,</span><br><span class="line">ParceIFileDescriptor profileFd, boolean autoStopProfiler)</span><br></pre></td></tr></table></figure>
+<p>the code of startActivityAndWait as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public final WaitResult startActivityAndWait(IApplicationThread caller, Intent intent,String resolvedType, Uri[] grantedUriPermissions,int grantedMode, IBinder resultTo, String resultWho, int requestCode, boolean onlyifNeeded, boolean debug, String profileFile, ParcelFileDescriptor profileFd, boolean autoStopProfiler) &#123;</span><br><span class="line">// create a WaitResult object to save transact result</span><br><span class="line">WaitResult res = new WaitResult();</span><br><span class="line">//mMainStack is ActivityStack type, invoke its startActivityMayWait function</span><br><span class="line">mMainStack.startActivityMayWait(caller, -1, intent, resolvedType, grantedUriPermissions, grantedMode, resultTo, resultWho,requestCode, onlyIfNeeded, debug, profileFile, profileFd, autoStopProfiler, res, null);//last parameter is Configuration,in this example ,is null</span><br><span class="line">return res;</span><br></pre></td></tr></table></figure>
+<p>mMainStack is AMS’s member variable, type is ActivityStack, this class is Activity dispatch’s core role,we will introduce base knowledge first.</p>
+<h3 id="Task-Back-Stack-ActivityStack-and-Launch-mode"><a href="#Task-Back-Stack-ActivityStack-and-Launch-mode" class="headerlink" title="Task, Back Stack, ActivityStack and Launch mode"></a>Task, Back Stack, ActivityStack and Launch mode</h3><h4 id="introduce-for-Task-and-Back-Stack"><a href="#introduce-for-Task-and-Back-Stack" class="headerlink" title="introduce for Task and Back Stack"></a>introduce for Task and Back Stack</h4><p>Task is a gather of activities. Why call it Activity? Activity is an organizational unit for performing a specific function.</p>
+<p>We can see a picture to distinguish task and activity, as follows:</p>
+<p><img src="https://i.loli.net/2019/12/05/OZJi4cqz8DSTGrW.png" alt="stack3.PNG"></p>
+<p>from this picture,A、B those two task uses different Activity to accomplish mission.Take a attention, there is no reuse in A and B task.</p>
+<p>see C task again, it can subdivide to four Activities, in C task there are two activities, one use task A’s A1, task B’s B2, why task C do not create its own Activity, but use other task’s activity? Because although the thing user want to do is different, when subdivide task, it is possible to appear situation that functions of Activity is similar with other.As A1, B2 are meet requirements, it is not necessary to create activity. </p>
+<p>When there are several tasks in the system, system only support task in foreground, so the activity user see is foreground, other tasks are in background, the order in background tasks is not changed.User can move the whole task to background or foreground.</p>
+<blockquote>
+<p>tips: readers who had used android system should know, when you long pressed Home key, system would show recent task list, users can switch in several task.</p>
+</blockquote>
+<p>Content above introduce what is Task and how Android divide Task and manage Activity in a abstract way, but in real code, how it designed?</p>
+<h4 id="introduce-to-ActivityStack"><a href="#introduce-to-ActivityStack" class="headerlink" title="introduce to ActivityStack"></a>introduce to ActivityStack</h4><p>There are two point we should consider:</p>
+<ol>
+<li><p>The way to organize Activity in Task.We know that Android organize Activity by first in, last out way, as same as Stack in data struct.</p>
+</li>
+<li><p>The way to organize and manage several Task.</p>
+</li>
+</ol>
+<p>Android designed a ActivityStack class to take responsibility to those mission, the struct as picture follows:</p>
+<p><img src="https://i.loli.net/2019/12/06/NYxtLlcM65HBfGF.png" alt="ActivityStack.PNG"></p>
+<p>From this picture we can see:</p>
+<ul>
+<li><p>Activity is shown by ActivityRecord, Task is shown by TaskRecord. ActivityRecord’s task member refers to the Task which its Activity in. state variable used to represent the state the Activity stand(including INITIALIZING, RESUMED, PAUSED).</p>
+</li>
+<li><p>ActivityStack use ArrayList mHistory to save ActivityRecord, to our surprise, this mHistory saved all Task’s ActivityRecord in System, not just for a certain Task.</p>
+</li>
+<li><p>ActivityStack’s mMainStack member is interesting, it represent whether this ActivityStack is main ActivityStack. Where there is a Lord, there is a servant, but current System only has a ActivityStack, and its mMainStack is true.From the name of ActivityStack we can guess, in the initialize process Android developer want to use ActivityStack to manage single Task’s ActivityRecord(this class is “State and management of a single stack of activities”), but do not know why in current code it put all Task’s ActivityRecord to mHistory, and remained mMainStack.</p>
+</li>
+<li><p>There are no member in ActivityStack to save TaskRecord.</p>
+</li>
+</ul>
+<p>from content above, ActivityStack use array way to save all Task’s ActivityRecord, and no member used to save TaskRecord. But this way has its advantage and disadvantage.</p>
+<ul>
+<li><p>the advantage is cut the manage of TaskRecord level, directly use ActivityRecord as manage unit, this method can reduce the spend of manage.</p>
+</li>
+<li><p>the disadvantage is weak the concept of Task, its struct is not clearly enough.</p>
+</li>
+</ul>
+<p>We will see several useful method which search ActivityRecord, code as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/* topRunningActivityLocked:</span><br><span class="line">find first ActivityRecord which is different from notTop and not in finishing state.When notTop is null, this method would return the first ActvitiyRecord which need to display. The enter of Stack can only be Stack peek. Although mHistory is a array, but find order is from end to start, so its behavir is same as Stack.</span><br><span class="line">*/</span><br><span class="line">final ActivityRecord topRunningActivityLocked(ActivityRecord notTop) &#123;</span><br><span class="line">int i = mHistory.size() - 1;</span><br><span class="line">while(i &gt;= 0) &#123;</span><br><span class="line">ActivityRecord r = mHistory.get(i);</span><br><span class="line">if (!r.finishing&amp;&amp;r!=notTop) return r;</span><br><span class="line">i --;</span><br><span class="line">&#125;</span><br><span class="line">return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>there are several similar method:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/*topRunningNonDelayedActivityLocked are similar with topRunningActivityLocked, but ActivityRecord request add a item: delayeResume set false*/</span><br><span class="line">final ActivityRecord topRunningNonDelayedActivityLocked(ActivityRecord notTop) &#123;</span><br><span class="line">int i = mHistory.size() - 1;</span><br><span class="line">while(i &gt;= 0)&#123;</span><br><span class="line">ActivityRecord r = mHistory.get(i);</span><br><span class="line">//delayedResume variable control whether delay resume Activity</span><br><span class="line">if (!r.finishing &amp;&amp; !r.delayedResume &amp;&amp; r != notTop) return r;</span><br><span class="line">i --;</span><br><span class="line">&#125;</span><br><span class="line">return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Activity also apply findActivityLocked method and find matched ActivityRecord based on Intent and ActivityInfo, as same, finding is start from end of mHistory, and another method findTaskLocked’s return value is ActivityRecord, findTaskLocked do corresponding find mission based on Task which mHistory’s ActivityRecord belong to.</p>
+<p>Above is four methods are useful method in ActivityStack.</p>
+<h4 id="Introduce-about-Launch-Mode"><a href="#Introduce-about-Launch-Mode" class="headerlink" title="Introduce about Launch Mode"></a>Introduce about Launch Mode</h4><p>Launch Mode used to describe Activity’s launch mode, there are four mode at current, they are “standard”, “singleTop”, “singleTask” and “singleInstance”. First see it, it was difficult to understand, but actually, it is only a “jugglery” android played.Launch Mode is designed to control relation between Activity and Task.</p>
+<ul>
+<li><p>standard: a Task could have several same type’s Activity, attention, it is same type, not same object.For example, there are four activities A, B, C, D in Task, if start A type’s Activity again, Task will include A, B, C, D, A. The first A and the last A is the same type, but not same object. Otherwise, there can be same type Activity in several Task.</p>
+</li>
+<li><p>singleTop: When a certain Task includes A, B, C, D activities, if D want to start a D type Activity, what would task be ? In singleTop mode,Task is still include A, B, C, D, but D’s onNewIntent method will be invoked, but in standard mode, Task will be included A, B, C, D, D, the last D is new created.In singleTop mode, only target Activity is at peek of the Task, it can work, For example, only when start D, it worked,if it start A, B, C, it is useless.</p>
+</li>
+<li><p>singleTask: in this launch mode, this Activity can only exist one instance, and it will bind with a Task.When need start this Activity, system will invoke onNewIntent method to launch it, but not create new Task and Activity. Attention, although this Activity only has a instance, but except it in Task, it can have other Activity.</p>
+</li>
+<li><p>singleInstance:it is a reinforced singleTask mode, a Task can only has a Activity which set singleInstance, there would be other Activity in this task. But in singleTask mode, Task can have other Activity.</p>
+</li>
+</ul>
+<p>Attention, Android suggest normal application developer do not use the last two launch mode easily. Because those mode although those modes are named Launch Mode, but them will influence the order Activity poll, cause user acquire different experience when pressed back key.</p>
+<p>Except launch mode, there are other flags to control relationship between Activity and Task, we just enumerate a little part, detail message please see Intent introduction about Intent in SDK document.</p>
+<ul>
+<li><p>FLAG_ACTIVITY_NEW_TASK: put target Activity to a new Task</p>
+</li>
+<li><p>FLAG_ACTIVITY_CLEAR_TASK: when launch a Activity, kill tasks which are related with target Activity, and launch a new Task, and start a new Task, and put target Activity to this new task, this flag must be used with FLAG_ACTIVITY_NEW_TASK.</p>
+</li>
+<li><p>FLAG_ACTIVITY_CLEAR_TOP: when launch a Activity which was not in the peek of stack, remove Activity which above it.For example, there are A, B, C, D in the task, when want to start B, it should remove C, D from the task, but not create a new B.</p>
+</li>
+</ul>
+<h4 id="the-analysis-of-startActivityMayWait-of-ActivityStack"><a href="#the-analysis-of-startActivityMayWait-of-ActivityStack" class="headerlink" title="the analysis of startActivityMayWait of ActivityStack"></a>the analysis of startActivityMayWait of ActivityStack</h4><p>the target of startActivityMayWait is to start com.dfp.test.TestActivity, if system do not started this Activity before, the result of this example is:</p>
+<ul>
+<li><p>because set FLAG_ACTIVITY_NEW_TASK flag in am, so except build a new Activity, it will also build a TaskRecord.</p>
+</li>
+<li><p>also need start a new application to load and run com.dfp.test.TestActivity’s instance.</p>
+</li>
+<li><p>if TestActivity is not Home, it need to stop Activity which is displaying.</p>
+</li>
+</ul>
+<p>startActivityMayWait can be mainly divide into three stage.</p>
+<p>the first stage include those parts:</p>
+<ul>
+<li><p>search ActivityInfo which responding this Intent</p>
+</li>
+<li><p>transact the situation that FLAG_CANT_SAVE_STATE exist, not system do not support this situation</p>
+</li>
+<li><p>otherwise, acquire invoker’s pid and uid, because in this example caller is null, so obtained pid and uid are owned by process which am in.</p>
+</li>
+</ul>
+<p>the second stage is sample, it mainly about startActivityLocked function, this function is very complicated, we will introduce it in next session.</p>
+<p>the third stage’s job is do some transact after value returned, but why it need wait even the result is IActivityManager.START_SUCCESS? Because target Activity need to run in a new application process, it must wait until that application process started normally and transact related request.Attention! only if am set -W option, it can be into wait status.</p>
+<h5 id="analysis-to-startActivityLocked"><a href="#analysis-to-startActivityLocked" class="headerlink" title="analysis to startActivityLocked"></a>analysis to startActivityLocked</h5><p>startActivityLocked is the important job in the second stage of startActivityMayWait, this function is quite long.</p>
+<p>The main job startActivityLocked dose include that:</p>
+<ul>
+<li><p>transact sourceRecord and resultRecord. sourceRecord represent Activity which send this request, resultRecord represent Activity which will receive transact result(when target Activity finish things, it need to inform requester the result), in normal situation, sourceRecord and resultRecord refers to same Activity.</p>
+</li>
+<li><p>transact app switch.If AMS forbid app switch, it will save this launch request, wait for the time app switch is permitted.Before transact this request, it will invoke doPendingActivityLaunchesLocked method,it will first start the Pending request saved because app switch is forbidden before.</p>
+</li>
+<li><p>invoke startActivityUncheckedLocked to transact this pending request.</p>
+</li>
+</ul>
+<h1 id="the-summary-of-startActivity"><a href="#the-summary-of-startActivity" class="headerlink" title="the summary of startActivity"></a>the summary of startActivity</h1><ul>
+<li><p>the start of this journey is am, am is important program in Android, we use am start command to start target Activity’s launch request.</p>
+</li>
+<li><p>then into ActivityManagerService and ActivityStack those two core class, to launching Activity, the first stage is to find or create ActivityRecord and corresponding TaskRecord. The second is to transact Activity launch or switch related job.</p>
+</li>
+</ul>
+<p>:</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/16/深入理解Android：MessageQueue/" rel="next" title="深入理解Android：Looper、Handler及MessageQueue">
+                <i class="fa fa-chevron-left"></i> 深入理解Android：Looper、Handler及MessageQueue
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/01/aigorithm-of-「The-sword-refers-to-offer」/" rel="prev" title="aigorithm of 「The sword refers to offer」">
+                aigorithm of 「The sword refers to offer」 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#be-familiar-with-ActivityManagerService"><span class="nav-number">2.</span> <span class="nav-text">be familiar with ActivityManagerService</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#analysis-to-ActivityManagerService’s-main-method"><span class="nav-number">2.1.</span> <span class="nav-text">analysis to ActivityManagerService’s main method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#analysis-to-AThread"><span class="nav-number">2.1.1.</span> <span class="nav-text">analysis to AThread</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#the-construct-method-of-AMS"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">the construct method of AMS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#analysis-to-ActivityThread-systemMain"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">analysis to ActivityThread.systemMain</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#the-analysis-to-ActivityThread-getSystemContext"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">the analysis to ActivityThread.getSystemContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#analysis-to-AMS’s-startRunning-method"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">analysis to AMS’s startRunning method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#the-summary-of-ActivityManagerService’s-main-method"><span class="nav-number">2.1.1.5.</span> <span class="nav-text">the summary of ActivityManagerService’s main method</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#the-analysis-to-AMS’s-setSystemProcess"><span class="nav-number">2.1.2.</span> <span class="nav-text">the analysis to AMS’s setSystemProcess</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ActivityThread’s-installSystemApplication-function"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">ActivityThread’s installSystemApplication function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ProcessRecord-and-IApplicationThread"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">ProcessRecord and IApplicationThread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#summary-of-AMS’s-setSystemProcess"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">summary of AMS’s setSystemProcess</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-summary-of-ActivityManagerService"><span class="nav-number">3.</span> <span class="nav-text">the summary of ActivityManagerService</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-analysis-of-startActivity"><span class="nav-number">4.</span> <span class="nav-text">the analysis of startActivity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#start-with-am"><span class="nav-number">4.1.</span> <span class="nav-text">start with am</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#analysis-to-AMS’s-startActivityAndWait"><span class="nav-number">4.2.</span> <span class="nav-text">analysis to AMS’s startActivityAndWait</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Task-Back-Stack-ActivityStack-and-Launch-mode"><span class="nav-number">4.2.1.</span> <span class="nav-text">Task, Back Stack, ActivityStack and Launch mode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#introduce-for-Task-and-Back-Stack"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">introduce for Task and Back Stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#introduce-to-ActivityStack"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">introduce to ActivityStack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Introduce-about-Launch-Mode"><span class="nav-number">4.2.1.3.</span> <span class="nav-text">Introduce about Launch Mode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#the-analysis-of-startActivityMayWait-of-ActivityStack"><span class="nav-number">4.2.1.4.</span> <span class="nav-text">the analysis of startActivityMayWait of ActivityStack</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#analysis-to-startActivityLocked"><span class="nav-number">4.2.1.4.1.</span> <span class="nav-text">analysis to startActivityLocked</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#the-summary-of-startActivity"><span class="nav-number">5.</span> <span class="nav-text">the summary of startActivity</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

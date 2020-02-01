@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在Internet上，数据按有限大小的包传输，这些包称为数据报(datagram)。每个数据报包含一个首部（header)和一个有效载荷（payload）。首部包含包发送到的地址和端口、包来自的地址和端口、检测数据是否被破坏的校验和，以及用于保证可靠传输的各种其他管理信息。有效荷载包含数据本身。不过，由于数据报长度有限，通常必须将数据分解为多个包，再在目的地重新组合。也有可能一个包或多个包在传输中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Socket(TCP)">
+<meta property="og:url" content="https://wongzhenyu.cn/2018/11/28/客户端Socket/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="在Internet上，数据按有限大小的包传输，这些包称为数据报(datagram)。每个数据报包含一个首部（header)和一个有效载荷（payload）。首部包含包发送到的地址和端口、包来自的地址和端口、检测数据是否被破坏的校验和，以及用于保证可靠传输的各种其他管理信息。有效荷载包含数据本身。不过，由于数据报长度有限，通常必须将数据分解为多个包，再在目的地重新组合。也有可能一个包或多个包在传输中">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.362Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Socket(TCP)">
+<meta name="twitter:description" content="在Internet上，数据按有限大小的包传输，这些包称为数据报(datagram)。每个数据报包含一个首部（header)和一个有效载荷（payload）。首部包含包发送到的地址和端口、包来自的地址和端口、检测数据是否被破坏的校验和，以及用于保证可靠传输的各种其他管理信息。有效荷载包含数据本身。不过，由于数据报长度有限，通常必须将数据分解为多个包，再在目的地重新组合。也有可能一个包或多个包在传输中">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2018/11/28/客户端Socket/">
+
+
+
+
+
+  <title>Java Socket(TCP) | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/11/28/客户端Socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Socket(TCP)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-28T15:33:58+08:00">
+                2018-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Android网络开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2,826 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Internet上，数据按有限大小的包传输，这些包称为数据报(datagram)。每个数据报包含一个首部（header)和一个有效载荷（payload）。首部包含包发送到的地址和端口、包来自的地址和端口、检测数据是否被破坏的校验和，以及用于保证可靠传输的各种其他管理信息。有效荷载包含数据本身。不过，由于数据报长度有限，通常必须将数据分解为多个包，再在目的地重新组合。也有可能一个包或多个包在传输中丢失或遭到破坏，需要重传。或者包乱序到达，需要重新排序。所有这些是很繁重的工作，需要大量复杂的代码。</p>
+<p>Socket允许程序员将网络连接看作是另外一个可以读/写的字节流。Socket对程序员掩盖了网络的底层细节，如错误检测、包大小、包分解、包重传、网络地址等。</p>
+<h4 id="使用Socket"><a href="#使用Socket" class="headerlink" title="使用Socket"></a>使用Socket</h4><p>Socket是两台主机之间的一个连接。它可以完成7个基本操作：</p>
+<ul>
+<li>连接远程机器</li>
+<li>发送数据</li>
+<li>接收数据</li>
+<li><p>关闭连接</p>
+<blockquote>
+<p>客户端Socket</p>
+</blockquote>
+</li>
+<li><p>绑定端口</p>
+</li>
+<li>监听入站数据</li>
+<li>在绑定端口上接受来自远程机器的连接<blockquote>
+<p>服务端ServerSocket</p>
+</blockquote>
+</li>
+</ul>
+<p>Java程序通常采用以下方式使用客户端Socket：</p>
+<ol>
+<li><p>程序用构造函数创建一个新的Socket</p>
+</li>
+<li><p>Socket尝试连接远程主机</p>
+</li>
+</ol>
+<p>一旦建立了连接，本地和远程主机就从这个Socket得到输入流和输出流，使用这两个流相互发送数据。连接是全双工的，两台主机都可以同时发送和接收数据。数据的含义取决于协议，发送给FTP服务器的命令与发送给HTTP服务器的命令就有所不同。一般会先完成某种协商握手，然后再具体传输数据。</p>
+<p>当数据传输结束后，一端或两端将关闭连接。有些协议，如HTTP 1.0，要求每次请求得到服务后都要关闭连接。其他协议，如FTP和HTTP 1.1，则允许在一个连接上处理多个请求。</p>
+<h5 id="构造和连接Socket"><a href="#构造和连接Socket" class="headerlink" title="构造和连接Socket"></a>构造和连接Socket</h5><p>java.net.Socket类是Java完成客户端TCP操作的基础类。其他建立TCP网络连接的面向客户端的类（如URL、URLConnection、Applet和JEditorPane）最终都会调用这个类的方法。这个类本身使用原生代码与主机操作系统的本地TCP栈进行通信。</p>
+<p>Socket的构造函数如下：</p>
+<ul>
+<li>public Socket()：无参构造函数，支持不同类型的socket</li>
+<li>public Socket(Proxy proxy)：可以使用某个特定的代理服务器</li>
+<li>public Socket(String host, int port) throws UnknownHostException, IOException</li>
+<li>public Socket(InetAddress address, int port) throws IOException</li>
+<li>public Socket(String host, int port, InetAddress localAddr, int localPort) throws IOException</li>
+<li>public Socket(InetAddress address, int port, InetAddress localAddr, int localPort) throws IOException</li>
+</ul>
+<p>已不建议使用：</p>
+<ul>
+<li>public Socket(String host, int port, boolean stream) throws IOException</li>
+<li>public Socket(InetAddress host, int port, boolean stream) throws IOException</li>
+</ul>
+<h5 id="设置Socket选项"><a href="#设置Socket选项" class="headerlink" title="设置Socket选项"></a>设置Socket选项</h5><p>Socket选项指定了Java Socket类所依赖的原生socket如何发送和接收数据。对于客户端Socket，Java支持9个选项：</p>
+<ol>
+<li>TCP_NODELAY</li>
+</ol>
+<p>设置TCP_NODELAY为true可确保包会尽可能快地发送，而无论包的大小。正常情况下，本地主机会有一个缓冲，而设置TCP_NODELAY为true可以打破这种缓冲模式，这样所有包一旦就绪就会发送</p>
+<ol>
+<li>SO_LINGER</li>
+</ol>
+<p>SO_LINGER选项指定了Socket关闭时如何处理尚未发送的数据报，将这个选项打开而且延迟时间设置为任意正数，close（）方法会阻塞，等待发送数据和接收确认。当过去相应秒数后，Socket关闭，所有剩余的数据都不会发送，也不会收到确认。</p>
+<ol>
+<li>SO_TIMEOUT</li>
+</ol>
+<p>正常情况下，尝试从Socket读取数据时，read（）调用会阻塞尽可能长的时间来得到足够的字节。设置SO_TIMEOUT可以确保这个调用阻塞的时间不会超过某个固定的毫秒数。</p>
+<ol>
+<li>SO_REVBUF和SO_SNDBUF</li>
+</ol>
+<p>SO_REVBUF选项用于控制用于网络输入的 <em>建议的</em> 接收缓冲区大小。SO_SNDBUF选项控制用于网络输入的 <em>建议的</em> 发送缓冲区的大小。</p>
+<p>尽管看起来应该能独立地设置发送和接收缓冲区，但实际上缓冲区通常会设置为二者中较小的一个。例如，如果将发送缓冲区设置为64KB，而接收缓冲区设置为128KB，那么发送和接收缓冲区的大小都将是64KB。Java会报告接收缓冲区为128KB，但底层TCP栈实际上会使用64KB。</p>
+<blockquote>
+<p>TCP的滑动窗口大小实际上就是socket的接收缓冲区（SO_RCVBUF）大小的字节数，拥塞窗口大小实际上就是socket的接收缓冲区（SO_SNDBUF）大小的字节数。</p>
+</blockquote>
+<ol>
+<li>SO_KEEPALIVE</li>
+</ol>
+<p>如果打开了SO_KEEPALIVE，客户端偶尔会通过一个空闲连接发送一个数据包，以确保服务器未崩溃。如果服务器没能响应这个包，客户端会持续尝试11分钟多的时间，直到接收到响应为止。如果在12分钟内未收到响应，客户端就关闭socket。</p>
+<ol>
+<li>OOBINLNE</li>
+</ol>
+<p>使用这个选项可以发送紧急数据。</p>
+<ol>
+<li>SO_REUSEADDR</li>
+</ol>
+<p>开启这个选项可以允许另一个SOcket绑定到这个之前Socket绑定的端口，即使此时仍有可能存在前一个SOcket未接收的数据。</p>
+<ol>
+<li>IP_TOS</li>
+</ol>
+<p>服务类型</p>
+<h4 id="使用ServerSocket"><a href="#使用ServerSocket" class="headerlink" title="使用ServerSocket"></a>使用ServerSocket</h4><p>ServerSocket类包含了使用Java编写服务器所需的全部内容。其中包括创建新ServerSocket对象的构造函数、在指定端口监听连接的方法、配置各个服务器Socket选项的方法，以及其他一些常见的方法。</p>
+<p>在Java中，服务器程序的基本生命周期如下：</p>
+<ol>
+<li>使用一个ServerSocket构造函数在一个特定端口创建一个新的ServerSocket</li>
+<li>ServerSocket使用其accept（）方法监听这个端口的入站连接。accept（）会一直阻塞，直到一个客户端尝试建立连接，此时accept（）将返回一个连接客户端和服务器的Socket对象。</li>
+<li>根据服务器的类型，会调用Socket的getInputStream（）方法或getOutputSteam（）方法，或者这两个方法都调用，以获得与客户端通信的输入和输出流</li>
+<li>服务器和客户端根据已协商的协议交互，直到要关闭连接</li>
+<li>服务器或客户端（或二者）关闭连接</li>
+<li>服务器返回步骤2，等待下一次连接</li>
+</ol>
+<h5 id="构造ServerSocket"><a href="#构造ServerSocket" class="headerlink" title="构造ServerSocket"></a>构造ServerSocket</h5><p>ServerSocket共有构造函数如下：</p>
+<ul>
+<li>public ServerSocket() throws IOException: 无参构造函数，会创建一个ServerSocket对象，但未将它绑定到某个端口，所以开始时它不能接收任何连接。以后可以使用bind（）来进行绑定。允许程序在绑定端口之前设置服务器socket选项。有些选项在服务器socket绑定后必须固定</li>
+<li>public ServerSocket(int port) throws IOException</li>
+<li>public ServerSocket(int port, int backlog) throws IOException</li>
+<li>public ServerSocket(int port, int backlog, InetAddress bindAddr) throws IOException</li>
+</ul>
+<h5 id="ServerSocket选项"><a href="#ServerSocket选项" class="headerlink" title="ServerSocket选项"></a>ServerSocket选项</h5><p>Socket选项指定了ServerSocket类所依赖的原生Socket如何发送和接收数据。对于服务器Socket，Java支持以下3个选项：</p>
+<ol>
+<li>SO_TIMEOUT</li>
+</ol>
+<p>SO_TIMEOUT是accept（）在抛出java.io.InterruptedIOExption异常前等待入站连接的时间，以毫秒计。如果SO_TIMEOUT为0，accept（）就永远不会超时。</p>
+<ol>
+<li>SO_REUSEADDR</li>
+</ol>
+<p>服务器Socket的SO_REUSEADDR选项与客户端Socket的SO_REUSEDADDR选项非常类似。它确定了是否允许一个Socket绑定到之前使用过的一个端口，而此时可能还有一些发送到原Socket的数据正在网络上传输。</p>
+<ol>
+<li>SO_REVBUF</li>
+</ol>
+<p>SO_REVBUF选项设置了服务器Socket接收的客户端Socket默认接收缓冲区大小。设置一个服务器的SO_REVBUF就像在accept（）返回的各个Socket上调用setReceivedBufferSize()，这个选项给出了一个 <em>建议值</em> 。</p>
+<h6 id="服务类型"><a href="#服务类型" class="headerlink" title="服务类型"></a>服务类型</h6><p>public void setPerformancePreferences(int connectionTime,int latency,int bandwidth)方法描述了其连接时间，延迟和带宽所给定的相对优先级。但很多实现（包括Android）会完全忽略这些值。</p>
+<h4 id="安全Socket"><a href="#安全Socket" class="headerlink" title="安全Socket"></a>安全Socket</h4><p>作为一个Internet用户，你确实有一些保护手段可以防范官方的监视。为了使Internet连接从根本上更加安全，可以对Socket加密。这可以保持事务的机密性、真实性和准确性。</p>
+<p>JSSE允许你创建Socket和服务器Socket，可以透明地处理安全通信中心必要的协商和加密。Java安全Socket扩展（JSSE）分为四个包：</p>
+<ul>
+<li>javax.net.ssl：定义Java安全网络通信API的抽象类</li>
+<li>javax.net: 替代构造函数创建安全Socket的抽象Socket工厂类</li>
+<li>java.security.cert: 处理SSL所需公开密钥证书的类</li>
+<li>com.sun.net.ssl: Sun的JSSE参考实现中实现加密算法和协议的具体类。从理论上讲，它们不属于JSSE标准的一部分。</li>
+</ul>
+<h5 id="创建安全客户端Socket"><a href="#创建安全客户端Socket" class="headerlink" title="创建安全客户端Socket"></a>创建安全客户端Socket</h5><p>创建安全客户端Socket并不是用构造函数来构造一个java.net.Socket对象，而是从javax.net.ssl.SSLSocketFactory使用其createSocket()方法得到一个Socket对象。SSLSocketFactory是一个遵循抽象工厂设计模式的抽象类。要通过调用静态SSLSocketFactory.getDefault()方法得到一个实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();</span><br><span class="line">Socket socket = sslSocketFactory.createSocket();</span><br></pre></td></tr></table></figure>
+<p>创建安全客户端Socket还有以下方法：</p>
+<ul>
+<li>public abstract Socket createSocket(String var1, int var2) throws IOException, UnknownHostException</li>
+<li>public abstract Socket createSocket(String var1, int var2, InetAddress var3, int var4) throws IOException, UnknownHostException</li>
+<li>public abstract Socket createSocket(InetAddress var1, int var2) throws IOException</li>
+<li>public abstract Socket createSocket(InetAddress var1, int var2, InetAddress var3, int var4) throws IOException</li>
+</ul>
+<h6 id="选择密码组"><a href="#选择密码组" class="headerlink" title="选择密码组"></a>选择密码组</h6><p>JSSE的不同实现支持认证和加密算法的不同组合。默认情况下，JDK 1.7实现启用了所有加密认证密码组。如果想要无认证的事务或认证但不加密的事务，必须用setEnalbledCipherSuites（）方法显式启用这些密码组。同时要避免名字中包含NULL、ANON或EXPORT的密码组。</p>
+<p>强制连接使用密码组可以使用这样的代码段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();</span><br><span class="line">SSLSocket socket = sslSocketFactory.createSocket();</span><br><span class="line">String[] suites = &#123;&quot;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256&quot;&#125;;</span><br><span class="line">socket.setEnabledCipherSuites(suites);</span><br></pre></td></tr></table></figure>
+<p>每个密码组中的算法都分为四个部分：协议、密钥交换算法、加密算法和校验和。</p>
+<blockquote>
+<p>除了选择密码组，还有管理会话和确立客户端是否需要自行认证的方法。</p>
+</blockquote>
+<h5 id="创建安全服务器Socket"><a href="#创建安全服务器Socket" class="headerlink" title="创建安全服务器Socket"></a>创建安全服务器Socket</h5><p>与安全客户端Socket相似，创建安全服务器Socket同样是工厂模式。但是需要注意的是，为了同时进行加密，服务端安全Socket需要更多的初始化和设置，如以下步骤所示：</p>
+<ol>
+<li>使用keytool生成公开密钥和证书</li>
+<li>花钱请可信任的第三方认证你的证书</li>
+<li>为你使用的算法创建一个SSLContext</li>
+<li>为你要使用的证书源创建一个TrustManagerFactory</li>
+<li>为你要使用的密钥类型创建一个KeyManagerFactory</li>
+<li>为密钥和证书数据库创建一个KeyStore对象</li>
+<li>用密钥和证书填充KeyStore对象</li>
+<li>用KeyStore及其口令短语初始化KeyManagerFactory</li>
+<li>用KeyManagerFactory中的密钥管理器（必要）、TrustManagerFactory中的信任管理器和一个随机源来初始化上下文</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/07/DNS/">DNS</a></li><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2018/09/10/OkHttp中拦截器流程解析/">OkHttp中拦截器流程解析</a></li><li><a href="/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">Rxjava2和Retrofit2实现解析bing每日一图JSON</a></li><li><a href="/2018/11/08/UDP-and-TCP/">传输层协议：UDP与TCP（一）</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/20/URL与URLconnection/" rel="next" title="URL、URI和代理">
+                <i class="fa fa-chevron-left"></i> URL、URI和代理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/30/Java-Socket-UDP/" rel="prev" title="Java Socket(UDP)">
+                Java Socket(UDP) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Socket"><span class="nav-number">1.</span> <span class="nav-text">使用Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造和连接Socket"><span class="nav-number">1.1.</span> <span class="nav-text">构造和连接Socket</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置Socket选项"><span class="nav-number">1.2.</span> <span class="nav-text">设置Socket选项</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ServerSocket"><span class="nav-number">2.</span> <span class="nav-text">使用ServerSocket</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造ServerSocket"><span class="nav-number">2.1.</span> <span class="nav-text">构造ServerSocket</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ServerSocket选项"><span class="nav-number">2.2.</span> <span class="nav-text">ServerSocket选项</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#服务类型"><span class="nav-number">2.2.1.</span> <span class="nav-text">服务类型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安全Socket"><span class="nav-number">3.</span> <span class="nav-text">安全Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建安全客户端Socket"><span class="nav-number">3.1.</span> <span class="nav-text">创建安全客户端Socket</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#选择密码组"><span class="nav-number">3.1.1.</span> <span class="nav-text">选择密码组</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建安全服务器Socket"><span class="nav-number">3.2.</span> <span class="nav-text">创建安全服务器Socket</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

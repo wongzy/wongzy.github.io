@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="协议 特点 应用     UDP 无连接，给应用提供发送数据包功能并允许它们在所需的层次之上架构自己的协议 客户-服务器交互和多媒体应用   TCP 面向连接，建立连接并通过重传机制增加了可靠性，同时还进行流量控制和拥塞控制，为使用它的应用程序做了所有的一切 为大多数Internet应用提供可靠的、按序递交的传输     TCP是为数据的可靠传输而设计的。如果数据在传输中丢失或损坏，TCP会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="传输层协议：UDP与TCP（一）">
+<meta property="og:url" content="https://wongzhenyu.cn/2018/11/08/UDP-and-TCP/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="协议 特点 应用     UDP 无连接，给应用提供发送数据包功能并允许它们在所需的层次之上架构自己的协议 客户-服务器交互和多媒体应用   TCP 面向连接，建立连接并通过重传机制增加了可靠性，同时还进行流量控制和拥塞控制，为使用它的应用程序做了所有的一切 为大多数Internet应用提供可靠的、按序递交的传输     TCP是为数据的可靠传输而设计的。如果数据在传输中丢失或损坏，TCP会">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2018/11/09/5be54f222d225.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="传输层协议：UDP与TCP（一）">
+<meta name="twitter:description" content="协议 特点 应用     UDP 无连接，给应用提供发送数据包功能并允许它们在所需的层次之上架构自己的协议 客户-服务器交互和多媒体应用   TCP 面向连接，建立连接并通过重传机制增加了可靠性，同时还进行流量控制和拥塞控制，为使用它的应用程序做了所有的一切 为大多数Internet应用提供可靠的、按序递交的传输     TCP是为数据的可靠传输而设计的。如果数据在传输中丢失或损坏，TCP会">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/09/5be54f222d225.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2018/11/08/UDP-and-TCP/">
+
+
+
+
+
+  <title>传输层协议：UDP与TCP（一） | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/11/08/UDP-and-TCP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">传输层协议：UDP与TCP（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T15:41:14+08:00">
+                2018-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Android网络开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2,882 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  10 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <table>
+<thead>
+<tr>
+<th>协议</th>
+<th>特点</th>
+<th>应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UDP</td>
+<td>无连接，给应用提供发送数据包功能并允许它们在所需的层次之上架构自己的协议</td>
+<td>客户-服务器交互和多媒体应用</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>面向连接，建立连接并通过重传机制增加了可靠性，同时还进行流量控制和拥塞控制，为使用它的应用程序做了所有的一切</td>
+<td>为大多数Internet应用提供可靠的、按序递交的传输</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>TCP是为数据的可靠传输而设计的。如果数据在传输中丢失或损坏，TCP会保证再次发送数据。如果数据包乱序到达，TCP会将其置回正确的顺序。对于连接来说，如果数据到来的速度太快，TCP会降低速度，以免数据报丢失。程序永远不需要担心接收到乱序或不正确的数据。不过，这种可靠性是有代价的。这个代价就是速度。建立和撤销TCP连接会花费相当长的时间。UDP是在IP之上发送数据的另一种传输层协议，速度很快，但不可靠。当发送UDP数据时，无法知道数据是否会到达，也不知道数据的各个部分是否会以发送时的顺序到达。不过，确实能到达的部分一般都会很快到达。可以用电话系统和邮局的关系来对照解释TCP与UDP的区别。</p>
+</blockquote>
+<h4 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h4><p>UDP（用户数据包协议）为应用程序提供了一种无需建立连接就可发送封装的IP数据包的方法。</p>
+<h5 id="UDP的段"><a href="#UDP的段" class="headerlink" title="UDP的段"></a>UDP的段</h5><p>UDP传输的段由8字节的头和有效载荷字段构成。头信息中包含的两个端口（port）分别用来标识源机器和目标机器内部的端点。当一个UDP数据包到来时，它的有效载荷被递交给与目标端口相关联的哪个进程。采用UDP而不是原始IP的最主要价值在于增加了源端口和目标端口。</p>
+<p>UDP段中还包含了一个可选的校验和来提供额外的可靠性，当不使用校验和时，则将该字段填为0。</p>
+<h5 id="功能总结"><a href="#功能总结" class="headerlink" title="功能总结"></a>功能总结</h5><p>UDP只是提供了一个与IP协议的接口，并在此接口上通过端口号复用多个进程的功能，以及可选的端到端错误检测功能。</p>
+<h5 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h5><h6 id="客户机-服务器开发"><a href="#客户机-服务器开发" class="headerlink" title="客户机-服务器开发"></a>客户机-服务器开发</h6><p>客户端向服务器发送一个简短的请求报文，并期待来自服务器的简短服务报文。如果请求或回复报文丢失，客户端就会超时，然后再试一次。</p>
+<blockquote>
+<p>同时，这也是RPC（远程过程调用）的基础</p>
+</blockquote>
+<h6 id="域名系统"><a href="#域名系统" class="headerlink" title="域名系统"></a>域名系统</h6><p>一个程序需要查询某个主机名的IP地址，那么它可以给DNS服务器发送一个包含该主机名的UDP数据包。服务器用一个包含了该主机IP地址的UDP数据包作为应答。实现不需要建立连接，事后也不需要释放连接。只有两条消息通过网络就够了。</p>
+<h6 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h6><p>RTP（实时传输协议）与RTCP（实时传输控制协议）都是位于UDP之上的协议，广泛应用于多媒体应用程序。</p>
+<h4 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h4><p>TCP（传输控制协议）是为了在不可靠的互联网上提供端到端字节流而专门设计的一个传输协议。</p>
+<h5 id="TCP段"><a href="#TCP段" class="headerlink" title="TCP段"></a>TCP段</h5><p>TCP段由一个固定大小的20字节的头以及随后0个或者多个数据字节构成。TCP软件决定了段的大小。它可以将多次写操作中的数据累计起来，放到一个段中发送。有两个因素限制了段的长度。首先，包括TCP头在内的每个段，必须适合IP的65515个字节有效载荷；其次，每个网络都有一个最大传输单元（MTU）。发送端和接收端的每个段必须适合MTU，才能以单个不分段的数据包发送和接收。然而，当IP数据包穿过一条网络路径，其上某条链路有更小的MTU时，还是有可能要对携带TCP段的该IP数据包实行分段操作。TCP实体使用的基本协议是具有动态窗口大小的滑动窗口协议。当发送端传送一段时，它启动一个计时器。当该端到达接收方时，接收端的TCP实体返回一个携带确认号和剩余窗口大小的段，并且确认号的指等于接收端期望接收的下一个序号。如果发送端的计时器在确认段到达之前超时，则发送端再次发送原来的段。</p>
+<h6 id="TCP段的头"><a href="#TCP段的头" class="headerlink" title="TCP段的头"></a>TCP段的头</h6><p>TCP段的结构如图所示。每个段的起始部分是一个固定格式的20字节头。固定的头部之后可能有头的选项。如果该数据段有数据部分的话，那么在选项之后是最多可达65535 - 20 -20 = 65495个字节的数据，这里的第一个20是指IP头，第二个20指TCP头。没有任何数据的TCP段也是合法的，通常被用作确认和控制消息。</p>
+<p><img src="https://i.loli.net/2018/11/09/5be54f222d225.png" alt="捕获.PNG"></p>
+<ul>
+<li><p>源端口（Source port）和目标端口（Destination port）字段标识了连接的本地端点。TCP端口加上所在主机的IP地址组成了48位的唯一端点。</p>
+</li>
+<li><p>序号（Sequence number）和确认号（Acknowledgement number）字段执行它们的常规功能。请注意，后者指定的是下一个期待的字节，而不是已经正确接收到的最后一个字节。它是累计确认（cumulative acknowledgement），因为它用一个数字概括了接收到的所有数据，它不会超过丢失的数据。这两个字段都是32位长，因为一个TCP流中的每一个数据字节都已经被编号了。</p>
+</li>
+<li><p>TCP头长度（TCP header length）字段指明了TCP头包含多少个32位的字。这个信息是必需的，因为选项（Options）字段是可变长的，因而整个头也是边长的，这个字段实际上指明了数据部分在段内的起始位置。</p>
+</li>
+</ul>
+<blockquote>
+<p>TCP头长度字段之后为4位没有被使用的字段，用来备用（可用这些位来修正原来设计中的错误），原先有6位</p>
+</blockquote>
+<ul>
+<li>8个1比特的标志位</li>
+</ul>
+<ol>
+<li><p>CWR和ECE：用作拥塞控制的信号。当TCP接收端收到了来自网络的拥塞指示后，就设置ECE以便给TCP发送端发ECN-Echo信号，告诉发送端发慢发送速率。TCP发送端设置CWR，给TCP接收端发CWR信号，这样接收端就知道发送端已经放慢速率，不必再给发送端发ECN-Echo信号。</p>
+</li>
+<li><p>ACK：ACK被设置为1表示确认号字段是有效的。几乎所有的数据包都会用到这个标志位。如果ACK为0，则该段不包含确认信息，所以，确认号字段可以被忽略。</p>
+</li>
+<li><p>PSH：指出这是被推送的数据。特此请求接收端一旦收到数据后立即将数据递交给应用程序，而不是将它缓冲起来直到缓冲区满为止。</p>
+</li>
+<li><p>RST：被用于突然重置一个已经变得混乱的连接，混乱有可能是由于主机崩溃，或者其他什么原因造成的。<em>该标志位也可以用来拒收一个无效的段，或者拒绝一个连接请求。</em></p>
+</li>
+<li><p>SYN：被用于建立连接过程。在连接请求中，SYN=1和ACK=0表示该段没有使用捎带确认字段。但是，连接应答捎带了一个确认，因此SYN=1和ACK=1.</p>
+</li>
+<li><p>FIN被用来释放一个连接。它表示发送端已经没有数据需要传输了。然而，在关闭一个连接之后，关闭进程可能会在一段不确定的时间内继续接收数据。SYN和FIN段都有序号，从而保证了这两种段以正确的顺序被处理。</p>
+</li>
+</ol>
+<ul>
+<li><p>窗口大小（Window size）：TCP中的流量控制是通过一个可变大小的滑动窗口来处理的。窗口大小字段指定了从被确认的字节算起可以发送多少个字节。窗口大小字段为0是合法的，说明到现在为止已经接收到了多达确认号-1个字节，但是接收端没有更多的机会来消耗数据，希望别再发数据。以后，接收端可以通过发送一个具有同样确认号但是非零窗口大小字段的段来通知发送端继续发送端。</p>
+</li>
+<li><p>校验和（Checksum）提供了额外的可靠性。它校验的范围包括头、数据，以及与UDP一样的概念性伪头。</p>
+</li>
+<li><p>紧急指针（Urgent pointer）：如果使用了紧急指针，则将URG设置为1。紧急指针指向从当前序号开始找到紧急数据的字节偏移量。这个设施是中断消息的另一种途径。该设施允许发送端以少得不能再少的方式给接收端发送信号。</p>
+</li>
+<li><p>选项（Options）：选项字段提供了一种添加额外设施的途径，主要针对常规头覆盖不到的方面。协议定义了许多选项，有几个已经被广泛使用。</p>
+</li>
+</ul>
+<blockquote>
+<p>1.用途最广的选项允许每台主机指定它愿意接收的最大段长（MSS，Maximum Segment Size）。2.窗口尺度选项允许发送端和接收端在连接建立阶段协商窗口尺度因子。3.时间戳选项携带由发送端发送的时间戳，并被接收端回应，一旦在连接建立阶段启用了它，那么每个数据包都要包含这个选项，主要用来计算来回时间样值，该样值被用在估算多久之后数据包可以被认为丢失。4.选择确认选项使得接收端可以告诉发送端已经接收到端的序号范围。</p>
+</blockquote>
+<h5 id="TCP连接管理模型"><a href="#TCP连接管理模型" class="headerlink" title="TCP连接管理模型"></a>TCP连接管理模型</h5><p>建立连接和释放连接所需要的步骤可以用一个有限状态机来表示，该状态机的11中状态如图所示。</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLOSED</td>
+<td>没有活跃的连接或者挂起</td>
+</tr>
+<tr>
+<td>LISTEN</td>
+<td>服务器等待入境呼叫</td>
+</tr>
+<tr>
+<td>SYN RCVD</td>
+<td>到达一个连接请求，等待ACK</td>
+</tr>
+<tr>
+<td>SYN SENT</td>
+<td>应用以及启动了打开一个链接</td>
+</tr>
+<tr>
+<td>ESTABLISHED</td>
+<td>正常的数据传送状态</td>
+</tr>
+<tr>
+<td>FIN WAIT1</td>
+<td>应用已经没有数据要发了</td>
+</tr>
+<tr>
+<td>FIN WAIT2</td>
+<td>另一端同意释放连接</td>
+</tr>
+<tr>
+<td>TIME WAIT</td>
+<td>等待所有数据包寿终正寝</td>
+</tr>
+<tr>
+<td>CLOSING</td>
+<td>两端同时试图关闭连接</td>
+</tr>
+<tr>
+<td>CLOSE WAIT</td>
+<td>另一端已经发起关闭连接</td>
+</tr>
+<tr>
+<td>LAST ACK</td>
+<td>等待所有数据包寿终正寝</td>
+</tr>
+</tbody>
+</table>
+<p>每个连接都从CLOSED状态开始。当它执行了一个被动打开操作（LISTEN），或者主动打开操作（CONNECT）后，它就离开CLOSED状态。如果另一端执行了相反的操作，则连接就建立起来，当前状态变成ESTABLISHED。连接的释放过程可以由任何一方发起。当释放完成时，状态又回到CLOSED。</p>
+<blockquote>
+<p>状态是针对每个连接的，并且每个连接的状态被记录在响应的连接记录中。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/07/DNS/">DNS</a></li><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2018/09/10/OkHttp中拦截器流程解析/">OkHttp中拦截器流程解析</a></li><li><a href="/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">Rxjava2和Retrofit2实现解析bing每日一图JSON</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li><li><a href="/2018/11/28/客户端Socket/">Java Socket(TCP)</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/07/DNS/" rel="next" title="DNS">
+                <i class="fa fa-chevron-left"></i> DNS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/13/UDP-and-TCP1/" rel="prev" title="传输层协议：UDP与TCP（二）">
+                传输层协议：UDP与TCP（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP"><span class="nav-number">1.</span> <span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UDP的段"><span class="nav-number">1.1.</span> <span class="nav-text">UDP的段</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#功能总结"><span class="nav-number">1.2.</span> <span class="nav-text">功能总结</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#应用领域"><span class="nav-number">1.3.</span> <span class="nav-text">应用领域</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#客户机-服务器开发"><span class="nav-number">1.3.1.</span> <span class="nav-text">客户机-服务器开发</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#域名系统"><span class="nav-number">1.3.2.</span> <span class="nav-text">域名系统</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#多媒体"><span class="nav-number">1.3.3.</span> <span class="nav-text">多媒体</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP"><span class="nav-number">2.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP段"><span class="nav-number">2.1.</span> <span class="nav-text">TCP段</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#TCP段的头"><span class="nav-number">2.1.1.</span> <span class="nav-text">TCP段的头</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TCP连接管理模型"><span class="nav-number">2.2.</span> <span class="nav-text">TCP连接管理模型</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

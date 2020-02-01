@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们在使用Android静态加载so库的时候，一般都需要这个so库是符合jni命名规范的，像这样：  Java全类名方法名  但是可能会遇到一些比较特殊的情况，同事只给了你一个so库，这个so库并不是用的jni命名，除此之外，他还给了你一个so库中函数的头文件，这时候我们就需要自己再次包装这个so库了。 建立java文件这里建立的java文件命名可以是自定义的，而不需要遵守某种规范，所在包名也没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android NDK调用不符合jni规范的so文件">
+<meta property="og:url" content="https://wongzhenyu.cn/2018/06/30/Android NDK调用不符合jni规范的so文件/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="我们在使用Android静态加载so库的时候，一般都需要这个so库是符合jni命名规范的，像这样：  Java全类名方法名  但是可能会遇到一些比较特殊的情况，同事只给了你一个so库，这个so库并不是用的jni命名，除此之外，他还给了你一个so库中函数的头文件，这时候我们就需要自己再次包装这个so库了。 建立java文件这里建立的java文件命名可以是自定义的，而不需要遵守某种规范，所在包名也没有">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2018/06/30/5b3728da0f680.png">
+<meta property="og:image" content="https://i.loli.net/2018/06/30/5b372f661d13a.png">
+<meta property="og:image" content="https://i.loli.net/2018/06/30/5b372f9ea4d1a.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.350Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android NDK调用不符合jni规范的so文件">
+<meta name="twitter:description" content="我们在使用Android静态加载so库的时候，一般都需要这个so库是符合jni命名规范的，像这样：  Java全类名方法名  但是可能会遇到一些比较特殊的情况，同事只给了你一个so库，这个so库并不是用的jni命名，除此之外，他还给了你一个so库中函数的头文件，这时候我们就需要自己再次包装这个so库了。 建立java文件这里建立的java文件命名可以是自定义的，而不需要遵守某种规范，所在包名也没有">
+<meta name="twitter:image" content="https://i.loli.net/2018/06/30/5b3728da0f680.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2018/06/30/Android NDK调用不符合jni规范的so文件/">
+
+
+
+
+
+  <title>Android NDK调用不符合jni规范的so文件 | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/06/30/Android NDK调用不符合jni规范的so文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android NDK调用不符合jni规范的so文件</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-30T15:02:04+08:00">
+                2018-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,793 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在使用Android静态加载so库的时候，一般都需要这个so库是符合jni命名规范的，像这样：</p>
+<blockquote>
+<p>Java<em>全类名</em>方法名</p>
+</blockquote>
+<p>但是可能会遇到一些比较特殊的情况，同事只给了你一个so库，这个so库并不是用的jni命名，除此之外，他还给了你一个so库中函数的头文件，这时候我们就需要自己再次包装这个so库了。</p>
+<h4 id="建立java文件"><a href="#建立java文件" class="headerlink" title="建立java文件"></a>建立java文件</h4><p>这里建立的java文件命名可以是自定义的，而不需要遵守某种规范，所在包名也没有讲究，因为这些都是我们需要自己包装的，所以可以随意些。</p>
+<p>但是，需要注意的是，虽然说函数名字可以随意，但是我们一定得先想好函数的返回值，例如要头文件中函数返回的类型可能是int，但是我们希望在java中收到的是不是int，而是经过“二次加工”的其他值，这时候就应该把返回值设为其他类型，例如，在头文件中参数类型是char<em>， 如果我们使用java直接封装的话，返回值应该为char[],若我们还要二次封装，如要判断头文件中函数返回的char </em>是不是我们想要的字符，把判断结果返回，则可以自己任意定义返回值。</p>
+<p>我们刚开始最需要关心的是头文件中定义的返回值并不是jni中已存在的类型，但是如果我们需要返回给java，则需要返回的是jni中定义的类型，这些类型有些是可以通过强制转换得到的，另一些则稍微麻烦，需要通过env提供的函数来进行转换。</p>
+<p>具体可以参考下面的链接：</p>
+<p><a href="https://blog.csdn.net/Chuekup/article/details/8030038" target="_blank" rel="noopener">Jni中本地类型和java类型对应表</a></p>
+<p>当然这之中也有可能会有特殊的情况，例如，若在cpp中返回的数据类型为void *，我们应该使用jlong返回给java。具体例子如下：</p>
+<p>我在 <em>com.example.jnitest.jnicontact</em> 文件夹下建立了.java文件，具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">package com.example.jnitest.jnicontact;</span><br><span class="line">public class JniDefine &#123;</span><br><span class="line">    public native int p2ptest(String localId);</span><br><span class="line">    public native long getp2psession(String remoteId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="根据编写的-java文件生成-h头文件"><a href="#根据编写的-java文件生成-h头文件" class="headerlink" title="根据编写的.java文件生成.h头文件"></a>根据编写的.java文件生成.h头文件</h4><p>因为我们需要使用命令行来生成，我们需要把打开终端，进入到com.example.jnitest的上层目录，在Android studio中目录名一般为java。</p>
+<blockquote>
+<p>使用Android studio的话别忘了把目录切换为Project</p>
+</blockquote>
+<p>进入到上层目录后执行以下语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javah -jni com.example.jnitest.jnicontact.JniDefine</span><br></pre></td></tr></table></figure>
+<p>这里的格式很简单，<em>javah -jni 全类名</em> 即可。</p>
+<p>之后我们会在执行javah命令的目录下找到头文件,比如我这里生成的头文件名就是 <em>com_example_jnitest_jnicontact_JniDefine.h</em>，这个文件名是可以修改的，比如我这里就修改成了<em>jni_typ2p.h</em>，在下文可以看到。</p>
+<h4 id="编写cpp文件，关联so库"><a href="#编写cpp文件，关联so库" class="headerlink" title="编写cpp文件，关联so库"></a>编写cpp文件，关联so库</h4><p>上一步我们已经得到了一个头文件，这时我们就需要关联so库，以及so库提供的头文件，还有刚刚我们得到的头文件了。</p>
+<p>首先，我们得在main目录下新建名为cpp的目录，并将so库，so库头文件，刚刚编译得到的头文件全都放入，我的目录是这样的</p>
+<p><img src="https://i.loli.net/2018/06/30/5b3728da0f680.png" alt="fadf.png"></p>
+<blockquote>
+<p>注意：我在cpp文件夹下新建了一个文件夹（文件夹命名与后面写的cpp文件名一致），这个文件夹又包含了两个自文件夹，include包含的是so库的头文件，lib里放的是so库，jni_typ2p.h是刚刚编译出来的头文件，Android.mk和jni_typ2p.cpp这两个文件则是我们需要新建的文件。</p>
+</blockquote>
+<ol>
+<li>编写cpp文件</li>
+</ol>
+<p>添加cpp文件位置与图中位置一致即可，添加完后在cpp文件首行加上包含头文件的名字，如例子中就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;jni_typ2p.h&quot;</span><br><span class="line">extern &quot;C&quot;</span><br><span class="line">&#123;</span><br><span class="line">#include &quot;typ2p/include/typ2p.h&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这两个头文件都是我们必须在cpp文件中包含进去的，我这里添加so库的头文件使用了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">extern &quot;C&quot;</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>是因为提供的so库是使用c语言写的，在此处可以和提供so库的同事确认下，如果是用cpp写的，则不需要这样写，直接包含即可。</p>
+<p>昨晚这一步因为代码还没有与so库关联，所以我们看到的代码是没有代码提示的，所以我们在这里先不对编译出的头文件中的函数进行实现，而是先编写Android.mk文件</p>
+<ol>
+<li>根据所在文件目录，编写Android.mk文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">LOCAL_PATH := $(call my-dir)</span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line">cmd-strip:=</span><br><span class="line">LOCAL_MODULE    := typ2p </span><br><span class="line">LOCAL_SRC_FILES := typ2p/lib/libtyp2p.so</span><br><span class="line">LOCAL_CFLAGS := -g -gdwarf-2</span><br><span class="line">LOCAL_CPPFLAGS := -g -gdwarf-2</span><br><span class="line">LOCAL_LDFLAGS := -Wl,--build-id</span><br><span class="line">LOCAL_LDLIBS += -landroid #动态链接库</span><br><span class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib</span><br><span class="line">LOCAL_EXPORT_C_INCLUDES:=$(LOCAL_PATH)/typ2p/include #so库头文件所在文件夹</span><br><span class="line">include $(PREBUILT_SHARED_LIBRARY) #预构建库</span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line">cmd-strip:=</span><br><span class="line">LOCAL_MODULE:=jni_typ2p #生成的库文件名，与文件夹名一致</span><br><span class="line">LOCAL_SRC_FILES:=jni_typ2p.cpp #我们编写的cpp文件</span><br><span class="line">LOCAL_SHARED_LIBRARIES := typ2p </span><br><span class="line">LOCAL_CFLAGS := -g</span><br><span class="line">LOCAL_LDLIBS := -llog</span><br><span class="line">LOCAL_LDLIBS += -landroid </span><br><span class="line">LOCAL_LDLIBS += -L$(SYSROOT)/usr/lib</span><br><span class="line">LOCAL_LDFLAGS := -Wl,--build-id</span><br><span class="line">include $(BUILD_SHARED_LIBRARY)</span><br></pre></td></tr></table></figure>
+<p>这里是本项目中的Android.mk文件，Android.mk文件的具体编写可查看官方文档</p>
+<p><a href="https://developer.android.com/ndk/guides/android_mk" target="_blank" rel="noopener">Android.mk官方文档</a></p>
+<p>编写完Android.mk文件之后，我们就可以把so库关联起来了。</p>
+<h4 id="关联so库"><a href="#关联so库" class="headerlink" title="关联so库"></a>关联so库</h4><p>关联so库的步骤比较奇怪，我们需要先把目录切换到Android,然后在项目上点击右键Link C++ Project with Gradle,操作图示如下：</p>
+<p><img src="https://i.loli.net/2018/06/30/5b372f661d13a.png" alt="屏幕快照 2018-06-30 下午3.18.22.png"></p>
+<p>之后添加刚刚编写的Android.mk文件即可</p>
+<p><img src="https://i.loli.net/2018/06/30/5b372f9ea4d1a.png" alt="屏幕快照 2018-06-30 下午3.18.34.png"></p>
+<blockquote>
+<p>当然是选择ndk-build了</p>
+</blockquote>
+<p>做完这步之后，我们就可以在编写的cpp代码中看到提示了。</p>
+<h4 id="gradle"><a href="#gradle" class="headerlink" title="gradle"></a>gradle</h4><p>我们还需要在本模块的gradle中增加一些配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> android &#123;</span><br><span class="line">    compileSdkVersion 27</span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId &quot;com.example.jackdow.testv1demo&quot;</span><br><span class="line">        minSdkVersion 15</span><br><span class="line">        targetSdkVersion 27</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line">        ndk &#123;</span><br><span class="line">            abiFilters &quot;armeabi-v7a&quot; //so库平台，一定要同事给的so库平台一致</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    buildTypes &#123; //这里包含的是调试cpp代码的选项</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">            debuggable true</span><br><span class="line">            jniDebuggable true</span><br><span class="line">        &#125;</span><br><span class="line">        debug &#123;</span><br><span class="line">            jniDebuggable true</span><br><span class="line">            debuggable true</span><br><span class="line">            packagingOptions &#123;</span><br><span class="line">                doNotStrip &quot;**/*/*.so&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    externalNativeBuild &#123;</span><br><span class="line">        ndkBuild &#123;</span><br><span class="line">            path &apos;src/main/cpp/Android.mk&apos; // 此处是刚刚关联so库生成的</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="实现cpp的小例子"><a href="#实现cpp的小例子" class="headerlink" title="实现cpp的小例子"></a>实现cpp的小例子</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jlong JNICALL Java_com_example_jackdow_testv1demo_jni_JniDefine_typ2popen</span><br><span class="line">  (JNIEnv *env, jobject obj, jstring arr) &#123;</span><br><span class="line">    const char * array = env-&gt;GetStringUTFChars(arr, JNI_FALSE); //上方的参考链接中有此方法</span><br><span class="line">  jint *sesson = (int *)typ2p_open((char *) array); //typ2p_open函数是so库中的函数</span><br><span class="line">  env-&gt;ReleaseStringChars(arr, (jchar *)array);</span><br><span class="line">    if (sesson == NULL) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    jlong result = (jlong)sesson; //void *与jlong之间可强制互转</span><br><span class="line">  return result;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="在java代码中加载库"><a href="#在java代码中加载库" class="headerlink" title="在java代码中加载库"></a>在java代码中加载库</h4><p>很简单，一行代码即可，注意加载库的.java文件和我们声明jni函数的文件是同一个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">        System.loadLibrary(&quot;jni_typ2p&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就能像java函数一样调用之前声明的native函数了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2019/08/18/Android-gradle插件基础/">Android gradle插件基础</a></li><li><a href="/2017/10/19/Android中设置界面PreferenceFragment的用法/">Android中设置界面PreferenceFragment的用法</a></li><li><a href="/2018/07/30/Android事件分发机制总结/">Android事件分发机制总结</a></li><li><a href="/2019/07/28/Android依赖的多种使用方法和依赖冲突处理/">Android依赖的多种关键字用法</a></li><li><a href="/2019/04/16/Android电视焦点问题总结/">Android电视焦点问题总结及按钮事件分发</a></li><li><a href="/2018/08/25/Android绘制流程总结/">Android绘制流程总结</a></li><li><a href="/2017/10/08/ButterKnife在RecyclerView adapter中的使用/">ButterKnife在RecyclerView adapter中的使用</a></li><li><a href="/2019/07/07/ConstraintLayout用法/">ConstraintLayout用法</a></li><li><a href="/2017/10/05/DialogFragment实现DatePicker/">DialogFragment实现DatePicker</a></li><li><a href="/2017/10/13/DialogFragment实现自定义布局的小技巧/">DialogFragment实现自定义布局的小技巧</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/git-flow/" rel="next" title="git flow">
+                <i class="fa fa-chevron-left"></i> git flow
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/08/同步器-倒计时门闩/" rel="prev" title="同步器-倒计时门闩">
+                同步器-倒计时门闩 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立java文件"><span class="nav-number">1.</span> <span class="nav-text">建立java文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根据编写的-java文件生成-h头文件"><span class="nav-number">2.</span> <span class="nav-text">根据编写的.java文件生成.h头文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编写cpp文件，关联so库"><span class="nav-number">3.</span> <span class="nav-text">编写cpp文件，关联so库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联so库"><span class="nav-number">4.</span> <span class="nav-text">关联so库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gradle"><span class="nav-number">5.</span> <span class="nav-text">gradle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现cpp的小例子"><span class="nav-number">6.</span> <span class="nav-text">实现cpp的小例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在java代码中加载库"><span class="nav-number">7.</span> <span class="nav-text">在java代码中加载库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下 网上找的带有每日一图链接的资源如下https://cn.bing.com/HPImageArchive.aspx?format=js&amp;amp;idx=0&amp;amp;n=1 打开之后会得到一长串JSON格式的数据1&amp;#123;&amp;quot;images&amp;quot;:[&amp;#123;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rxjava2和Retrofit2实现解析bing每日一图JSON">
+<meta property="og:url" content="https://wongzhenyu.cn/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下 网上找的带有每日一图链接的资源如下https://cn.bing.com/HPImageArchive.aspx?format=js&amp;amp;idx=0&amp;amp;n=1 打开之后会得到一长串JSON格式的数据1&amp;#123;&amp;quot;images&amp;quot;:[&amp;#123;&amp;">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.358Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rxjava2和Retrofit2实现解析bing每日一图JSON">
+<meta name="twitter:description" content="一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下 网上找的带有每日一图链接的资源如下https://cn.bing.com/HPImageArchive.aspx?format=js&amp;amp;idx=0&amp;amp;n=1 打开之后会得到一长串JSON格式的数据1&amp;#123;&amp;quot;images&amp;quot;:[&amp;#123;&amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">
+
+
+
+
+
+  <title>Rxjava2和Retrofit2实现解析bing每日一图JSON | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rxjava2和Retrofit2实现解析bing每日一图JSON</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-12T12:02:04+08:00">
+                2017-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Android网络开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,002 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下</p>
+<h5 id="网上找的带有每日一图链接的资源如下"><a href="#网上找的带有每日一图链接的资源如下" class="headerlink" title="网上找的带有每日一图链接的资源如下"></a>网上找的带有每日一图链接的资源如下</h5><p><a href="https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1" target="_blank" rel="noopener">https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1</a></p>
+<h5 id="打开之后会得到一长串JSON格式的数据"><a href="#打开之后会得到一长串JSON格式的数据" class="headerlink" title="打开之后会得到一长串JSON格式的数据"></a>打开之后会得到一长串JSON格式的数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;images&quot;:[&#123;&quot;startdate&quot;:&quot;20171006&quot;,&quot;fullstartdate&quot;:&quot;201710061600&quot;,&quot;enddate&quot;:&quot;20171007&quot;,&quot;url&quot;:&quot;/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085_1920x1080.jpg&quot;,&quot;urlbase&quot;:&quot;/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085&quot;,&quot;copyright&quot;:&quot;火星上的峡谷系统-水手号峡谷地区上的小行星 (© Detlev van Ravenswaay/Getty Images)&quot;,&quot;copyrightlink&quot;:&quot;http://www.bing.com/search?q=%E7%81%AB%E6%98%9F%E5%B3%A1%E8%B0%B7&amp;form=hpcapt&amp;mkt=zh-cn&quot;,&quot;quiz&quot;:&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20171006_VallesMarineris%22&amp;FORM=HPQUIZ&quot;,&quot;wp&quot;:true,&quot;hsh&quot;:&quot;5b69b96f1ea30eb5ec187173de25ef3c&quot;,&quot;drk&quot;:1,&quot;top&quot;:1,&quot;bot&quot;:1,&quot;hs&quot;:[]&#125;],&quot;tooltips&quot;:&#123;&quot;loading&quot;:&quot;正在加载...&quot;,&quot;previous&quot;:&quot;上一个图像&quot;,&quot;next&quot;:&quot;下一个图像&quot;,&quot;walle&quot;:&quot;此图片不能下载用作壁纸。&quot;,&quot;walls&quot;:&quot;下载今日美图。仅限用作桌面壁纸。&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="带有bing每日一图的链接显而易见了，就是"><a href="#带有bing每日一图的链接显而易见了，就是" class="headerlink" title="带有bing每日一图的链接显而易见了，就是"></a>带有bing每日一图的链接显而易见了，就是</h5><blockquote>
+<p>“urlbase”:”/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085”</p>
+<p>#####当然 这仅仅是我写这篇文章时候的链接，每天数据都会不同</p>
+<h3 id="接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下"><a href="#接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下" class="headerlink" title="接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下"></a>接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下</h3><p> compile ‘com.squareup.retrofit2:retrofit:2.3.0’<br>    compile ‘io.reactivex.rxjava2:rxandroid:2.0.1’<br>    compile ‘io.reactivex.rxjava2:rxjava:2.1.3’<br>    compile ‘com.squareup.retrofit2:converter-gson:2.3.0’<br>    compile ‘com.squareup.retrofit2:adapter-rxjava2:2.3.0’</p>
+<h5 id="因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖"><a href="#因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖" class="headerlink" title="因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖"></a>因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖</h5><h4 id="一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter-setter及内部类，还没有安装此插件的同学可以参考这一篇博文"><a href="#一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter-setter及内部类，还没有安装此插件的同学可以参考这一篇博文" class="headerlink" title="一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter setter及内部类，还没有安装此插件的同学可以参考这一篇博文"></a>一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter setter及内部类，还没有安装此插件的同学可以参考这一篇博文</h4><p><a href="http://blog.csdn.net/dakaring/article/details/46300963" target="_blank" rel="noopener">http://blog.csdn.net/dakaring/article/details/46300963</a></p>
+<h5 id="我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下"><a href="#我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下" class="headerlink" title="我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下"></a>我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String getURL() &#123;</span><br><span class="line">        return images.get(0).getUrl();</span><br><span class="line"> &#125;</span><br><span class="line">String getDate() &#123;</span><br><span class="line">        return images.get(0).getEnddate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="这里就是我自己添加的函数"><a href="#这里就是我自己添加的函数" class="headerlink" title="这里就是我自己添加的函数"></a>这里就是我自己添加的函数</h5><h4 id="完成实体类之后就可以来定义接口了"><a href="#完成实体类之后就可以来定义接口了" class="headerlink" title="完成实体类之后就可以来定义接口了"></a>完成实体类之后就可以来定义接口了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">interface ImageAPI &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 网络请求</span><br><span class="line">     * @return 实体类</span><br><span class="line">     */</span><br><span class="line">    @GET(&quot;HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1&quot;)</span><br><span class="line">    Flowable&lt;ImageBean&gt; getImage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="这里需要注意的是，在-GET后面添加的是上面的链接https-cn-bing-com-HPImageArchive-aspx-format-js-amp-idx-0-amp-n-1的后半部分，这也是retrofit-的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。"><a href="#这里需要注意的是，在-GET后面添加的是上面的链接https-cn-bing-com-HPImageArchive-aspx-format-js-amp-idx-0-amp-n-1的后半部分，这也是retrofit-的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。" class="headerlink" title="这里需要注意的是，在@GET后面添加的是上面的链接https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit 的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。"></a>这里需要注意的是，在@GET后面添加的是上面的链接<a href="https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit" target="_blank" rel="noopener">https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit</a> 的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。</h5><h4 id="最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了"><a href="#最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了" class="headerlink" title="最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了"></a>最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private static final String BASE_URL = &quot;https://cn.bing.com&quot;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Retrofit retrofit = new Retrofit.Builder()</span><br><span class="line">                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .baseUrl(&quot;https://cn.bing.com/&quot;)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure>
+<h5 id="在这里我们实现了Retrofit-的初始化，以及将JSON转化，其中addCallAdapterFactory-RxJava2CallAdapterFactory-create-表示添加Rxjava2与Retrofit2的适配器，addConverterFactory-GsonConverterFactory-create-则表示添加Json转化工具。"><a href="#在这里我们实现了Retrofit-的初始化，以及将JSON转化，其中addCallAdapterFactory-RxJava2CallAdapterFactory-create-表示添加Rxjava2与Retrofit2的适配器，addConverterFactory-GsonConverterFactory-create-则表示添加Json转化工具。" class="headerlink" title="在这里我们实现了Retrofit 的初始化，以及将JSON转化，其中addCallAdapterFactory(RxJava2CallAdapterFactory.create())表示添加Rxjava2与Retrofit2的适配器，addConverterFactory(GsonConverterFactory.create())则表示添加Json转化工具。"></a>在这里我们实现了Retrofit 的初始化，以及将JSON转化，其中addCallAdapterFactory(RxJava2CallAdapterFactory.create())表示添加Rxjava2与Retrofit2的适配器，addConverterFactory(GsonConverterFactory.create())则表示添加Json转化工具。</h5><h4 id="最后一步-实现接口"><a href="#最后一步-实现接口" class="headerlink" title="最后一步 实现接口"></a>最后一步 实现接口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">final ImageAPI imageAPI = retrofit.create(ImageAPI.class);</span><br><span class="line">        LogUtil.v(TAG, &quot;downloadUrl&quot;);</span><br><span class="line">        imageAPI.getImage()</span><br><span class="line">                .subscribeOn(Schedulers.io())</span><br><span class="line">                .observeOn(Schedulers.newThread())</span><br><span class="line">                .subscribe(new Subscriber&lt;ImageBean&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void onSubscribe(Subscription s) &#123;</span><br><span class="line">                        s.request(Long.MAX_VALUE);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onNext(ImageBean imageBean) &#123;</span><br><span class="line">                        LogUtil.v(TAG, &quot;next&quot;);</span><br><span class="line">                        LogUtil.d(TAG, BASE_URL + imageBean.getURL());</span><br><span class="line">                        LogUtil.d(TAG, imageBean.getDate());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onError(Throwable t) &#123;</span><br><span class="line">                        t.printStackTrace();</span><br><span class="line">                        LogUtil.v(TAG, &quot;error&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onComplete() &#123;</span><br><span class="line">                        LogUtil.v(TAG, &quot;complete&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！"><a href="#这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！" class="headerlink" title="这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！"></a>这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！</h5><h4 id="到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！"><a href="#到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！" class="headerlink" title="到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！"></a>到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/07/DNS/">DNS</a></li><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2018/09/10/OkHttp中拦截器流程解析/">OkHttp中拦截器流程解析</a></li><li><a href="/2018/11/08/UDP-and-TCP/">传输层协议：UDP与TCP（一）</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li><li><a href="/2018/11/28/客户端Socket/">Java Socket(TCP)</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/08/ButterKnife在RecyclerView adapter中的使用/" rel="next" title="ButterKnife在RecyclerView adapter中的使用">
+                <i class="fa fa-chevron-left"></i> ButterKnife在RecyclerView adapter中的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/13/DialogFragment实现自定义布局的小技巧/" rel="prev" title="DialogFragment实现自定义布局的小技巧">
+                DialogFragment实现自定义布局的小技巧 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#网上找的带有每日一图链接的资源如下"><span class="nav-number">1.</span> <span class="nav-text">网上找的带有每日一图链接的资源如下</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#打开之后会得到一长串JSON格式的数据"><span class="nav-number">2.</span> <span class="nav-text">打开之后会得到一长串JSON格式的数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#带有bing每日一图的链接显而易见了，就是"><span class="nav-number">3.</span> <span class="nav-text">带有bing每日一图的链接显而易见了，就是</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下"><span class="nav-number"></span> <span class="nav-text">接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖"><span class="nav-number">1.</span> <span class="nav-text">因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter-setter及内部类，还没有安装此插件的同学可以参考这一篇博文"><span class="nav-number"></span> <span class="nav-text">一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter setter及内部类，还没有安装此插件的同学可以参考这一篇博文</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下"><span class="nav-number">1.</span> <span class="nav-text">我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#这里就是我自己添加的函数"><span class="nav-number">2.</span> <span class="nav-text">这里就是我自己添加的函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完成实体类之后就可以来定义接口了"><span class="nav-number"></span> <span class="nav-text">完成实体类之后就可以来定义接口了</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#这里需要注意的是，在-GET后面添加的是上面的链接https-cn-bing-com-HPImageArchive-aspx-format-js-amp-idx-0-amp-n-1的后半部分，这也是retrofit-的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。"><span class="nav-number">1.</span> <span class="nav-text">这里需要注意的是，在@GET后面添加的是上面的链接https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit 的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了"><span class="nav-number"></span> <span class="nav-text">最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#在这里我们实现了Retrofit-的初始化，以及将JSON转化，其中addCallAdapterFactory-RxJava2CallAdapterFactory-create-表示添加Rxjava2与Retrofit2的适配器，addConverterFactory-GsonConverterFactory-create-则表示添加Json转化工具。"><span class="nav-number">1.</span> <span class="nav-text">在这里我们实现了Retrofit 的初始化，以及将JSON转化，其中addCallAdapterFactory(RxJava2CallAdapterFactory.create())表示添加Rxjava2与Retrofit2的适配器，addConverterFactory(GsonConverterFactory.create())则表示添加Json转化工具。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后一步-实现接口"><span class="nav-number"></span> <span class="nav-text">最后一步 实现接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！"><span class="nav-number">1.</span> <span class="nav-text">这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！"><span class="nav-number"></span> <span class="nav-text">到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

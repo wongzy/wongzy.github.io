@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Binder是Android提供给我们的一种跨进程通信方案，Android虽然说是基于Linux内核的，可以使用Linux的管道进行跨进程通信，也可以使用网络的方法（使用Socket）进行跨进程通信，但是这些方式都没有Binder方便和灵活。 从宏观的角度来看，Android可以看作是一个基于Binder通信的C/S架构。Binder在里面起到了一个网络的作用，它将Android系统的各个部分连接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Android：Binder">
+<meta property="og:url" content="https://wongzhenyu.cn/2019/08/27/深入理解Android：Binder/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="Binder是Android提供给我们的一种跨进程通信方案，Android虽然说是基于Linux内核的，可以使用Linux的管道进行跨进程通信，也可以使用网络的方法（使用Socket）进行跨进程通信，但是这些方式都没有Binder方便和灵活。 从宏观的角度来看，Android可以看作是一个基于Binder通信的C/S架构。Binder在里面起到了一个网络的作用，它将Android系统的各个部分连接">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/08/28/e95E8zTGXZrgm4i.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/01/Utr2SFfJudDsKZX.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/03/FRxbt4ywqJjSE3r.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/06/h2D7ucwqQFpXHti.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/14/w8AjvftVremi5BT.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/ng2K67ZuPajXBOd.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/15/VbfDFe5L8pTMUro.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.364Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Android：Binder">
+<meta name="twitter:description" content="Binder是Android提供给我们的一种跨进程通信方案，Android虽然说是基于Linux内核的，可以使用Linux的管道进行跨进程通信，也可以使用网络的方法（使用Socket）进行跨进程通信，但是这些方式都没有Binder方便和灵活。 从宏观的角度来看，Android可以看作是一个基于Binder通信的C/S架构。Binder在里面起到了一个网络的作用，它将Android系统的各个部分连接">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/28/e95E8zTGXZrgm4i.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2019/08/27/深入理解Android：Binder/">
+
+
+
+
+
+  <title>深入理解Android：Binder | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2019/08/27/深入理解Android：Binder/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解Android：Binder</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-27T21:43:25+08:00">
+                2019-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深入理解Android系列丛书学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深入理解Android系列丛书学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  8,640 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  36 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Binder是Android提供给我们的一种跨进程通信方案，Android虽然说是基于Linux内核的，可以使用Linux的管道进行跨进程通信，也可以使用网络的方法（使用Socket）进行跨进程通信，但是这些方式都没有Binder方便和灵活。</p>
+<p>从宏观的角度来看，Android可以看作是一个基于Binder通信的C/S架构。Binder在里面起到了一个网络的作用，它将Android系统的各个部分连接在了一起。</p>
+<h1 id="Native-Binder-总体架构"><a href="#Native-Binder-总体架构" class="headerlink" title="Native Binder 总体架构"></a>Native Binder 总体架构</h1><p>在基于Binder通信的C/S架构体系中，除了C/S架构所包括的Client端和Server端外，Android还有一个全局的ServiceManager端，它的作用是管理系统中的各种服务（Service）。这三者之间的关系如下图所示：</p>
+<p><img src="https://i.loli.net/2019/08/28/e95E8zTGXZrgm4i.png" alt="Client_SM_S.PNG"></p>
+<blockquote>
+<p>注意，一个Server进程可以注册多个Service</p>
+</blockquote>
+<p>上图中三者的先后关系是这样的：</p>
+<ol>
+<li>Server进程要先注册一些Service到ServiceManager中，所以Server是ServiceManager的客户端，两者之间的C/S关系为，Server对应客户端（Client），ServiceManager对应服务端（Server）</li>
+<li>如果某个Client进程要使用某个Service，必须先到ServiceManager中获取该Service的相关信息，所以Client是ServiceManager的客户端，两者之间的C/S关系为，Client对应客户端（Client），ServiceManager对应服务端（Server）</li>
+<li>Client根据得到的Service信息与Service所在的Server建立通信，然后就可以直接与Service交互了，所以Client也是Service的客户端，两者之间的C/S关系为，Client对应客户端（Client），Server对应服务端（Server）</li>
+</ol>
+<p>这三者之间交互全部都是基于Binder通信的。</p>
+<blockquote>
+<p>Binder只是为这种C/S架构提供了一种通信方式，我们也完全可以次啊用其他IPC方式进行通信，实际上，系统中有很多其他的程序就是采用Socket或者Pipe（管道）方法进行进程间通信。ServiceManager并没有使用BpXXX和BnXXX</p>
+</blockquote>
+<h2 id="MediaServer"><a href="#MediaServer" class="headerlink" title="MediaServer"></a>MediaServer</h2><blockquote>
+<p>MediaServer以下均称为MS。</p>
+</blockquote>
+<p>MS是一个可执行程序，虽然Android的SDK提供Java层的API，但Android系统本身还是一个完整的基于Linux内核的操作系统，所以并非所有的程序都是用Java编写的，MS就是一个使用C++编写的可执行程序。</p>
+<p>MS是系统诸多重要Service的栖息地，它们包括了：</p>
+<ul>
+<li>AudioFlinger：音频系统中的核心服务。</li>
+<li>AudioPolicyService：音频系统中关于音频策略的重要服务。</li>
+<li>MediaPlayerService：多媒体系统中的重要服务</li>
+<li>CameraService：有关摄像/拍照的重要服务</li>
+</ul>
+<p>可以看到，MS除了不涉及Surface系统外，其他重要的服务基本上都设涉及了。</p>
+<p>MS是一个可执行程序，入口函数为main，写在Main_MediaServer.cpp当中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//1.获得一个ProcessState实例。</span></span><br><span class="line">sp&lt;ProcessState&gt; proc(ProcessState::self());</span><br><span class="line"><span class="comment">//2.MS作为ServiceManager的客户端，需要向ServiceManager注册服务。</span></span><br><span class="line"><span class="comment">//调用defaultServiceManager，得到一个IServiceManager。</span></span><br><span class="line">sp&lt;IServiceManager&gt; sm = defaultServiceManager();</span><br><span class="line"><span class="comment">//初始化音频系统的AudioFlinger服务。</span></span><br><span class="line">AudioFlinger::instantiate();</span><br><span class="line"><span class="comment">//3.多媒体系统的MediaPlayer服务，我们将以它作为主切入点。</span></span><br><span class="line"> MediaPlayerService::Instantiate();</span><br><span class="line"><span class="comment">//CameraService服务。</span></span><br><span class="line"> CameraService::instantiate();</span><br><span class="line"><span class="comment">//音频系统的AudioPolicy服务。</span></span><br><span class="line"> AudioPolicyService::instantiate();</span><br><span class="line"><span class="comment">//4.根据名称来推断，难道是要创建一个线程池吗？</span></span><br><span class="line"> ProcessState::self()-&gt;startThreadPool();</span><br><span class="line"><span class="comment">//5.下面的操作是要将自己加入到刚才的线程池中吗？</span></span><br><span class="line"> IPCThreadState::self()-&gt;joinThreadPool();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，确定了个关键点，我们通过对这五个关键点的分析，来认识和理解Binder。</p>
+<h3 id="获得一个ProcessState实例：sp-proc-ProcessState-self"><a href="#获得一个ProcessState实例：sp-proc-ProcessState-self" class="headerlink" title="获得一个ProcessState实例：sp proc(ProcessState::self());"></a>获得一个ProcessState实例：sp<processstate> proc(ProcessState::self());</processstate></h3><ol>
+<li>单例的ProcessState</li>
+</ol>
+<p>ProcessState的代码在ProcessState.cpp中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;ProcessState&gt; PeocessState::self() &#123;</span><br><span class="line"><span class="comment">//gProcess是在Static.cpp中定义的一个全局变量。</span></span><br><span class="line"><span class="comment">//程序刚开始，gProcess一定为空</span></span><br><span class="line"><span class="keyword">if</span> (gPrecess!=<span class="literal">NULL</span>) Return gProcess;</span><br><span class="line">AutoMutex_I(gPeocessMutex);</span><br><span class="line"><span class="comment">//创建一个ProcessState对象，并赋给gProcess。</span></span><br><span class="line"><span class="keyword">if</span> (gProcess == <span class="literal">NULL</span>) gProcess = <span class="keyword">new</span> ProcessState;</span><br><span class="line"><span class="keyword">return</span> gProcess;</span><br></pre></td></tr></table></figure>
+<p>self函数采用了单例模式，根据这个以及ProcessState的名字很明确地告诉我们了一个信息：每个进程只有一个ProcessState对象，这一点，从它的命名中也可以看出端倪。</p>
+<ol>
+<li>ProcessState的构造</li>
+</ol>
+<p>再来看Process的构造很熟，这个函数非常重要，它悄悄地打开了Binder设备。代码如下所示，在ProcessState.cpp中可以找到：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ProcessState::ProcessState()</span><br><span class="line"><span class="comment">//Android中有很多代码都是这么写的，稍不留神这里就调用了一个很重要的函数。</span></span><br><span class="line">:mDriver(open_driver())</span><br><span class="line">.mVMState(MAP_FAILED)<span class="comment">//映射内存的起始地址</span></span><br><span class="line">.mManagesContexts(<span class="literal">false</span>)</span><br><span class="line">.mBinderContextCheckFunc(<span class="literal">NULL</span>)</span><br><span class="line">.mBinderContextUserData(<span class="literal">NULL</span>)</span><br><span class="line">.mThreadPoolStarted(<span class="literal">false</span>)</span><br><span class="line">.mThreadPoolSeq(<span class="number">1</span>) </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">if</span> (mDriverFD &gt;= <span class="number">0</span> ) &#123;</span><br><span class="line"><span class="comment">/*BINDER_VM_SIZE定义为（1*1024*1024）-（4096*2）=1M - 8k，mmap真正的实现和驱动有关系，而Binder驱动会分配一块内存来接收数据。*/</span></span><br><span class="line">mVMStart = mmap(<span class="number">0</span>,BINDER_VM_SIZE,PROT_READ.MAP_PRIVATE|MAP_NORESERVE,mDriverDF,<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>open_driver：打开binder设备</li>
+</ol>
+<p>open_driver的作用就是打开/dev/binder这个设备，它是Android在内核中为完成进程间通信而专门设置的一个虚拟设备，具体实现如下所示，在ProcessState.cpp中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">open_driver</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">int</span> fd = open(<span class="string">"/dev/binder"</span>,O_PDWR);</span><br><span class="line"><span class="comment">//打开/dev/binder设备。</span></span><br><span class="line"><span class="keyword">if</span> (fd &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">....</span><br><span class="line"><span class="keyword">size_t</span> maxThread = <span class="number">15</span>;</span><br><span class="line"><span class="comment">//通过ioctl方式告诉binder驱动，这个fd支持的最大线程数是15个。</span></span><br><span class="line">result = ioctl(fd, BINDER_SET_MAX_THREADS, &amp;maxThreads);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> fd;</span><br><span class="line">....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于Process::self函数的作用总结如下：</p>
+<ul>
+<li>打开dev/Binder设备，相当于与内核的Binder驱动有了交互的通道</li>
+<li>对返回的fd使用mmap，这样Binder驱动就会分配一块内存来接收数据。</li>
+<li>由于ProcessState具有唯一性，因此一个进程只打开设备一次</li>
+</ul>
+<h3 id="sp-sm-defaultServiceManager-调用defaultServiceManager，得到一个IServiceManager。"><a href="#sp-sm-defaultServiceManager-调用defaultServiceManager，得到一个IServiceManager。" class="headerlink" title="sp sm = defaultServiceManager();:调用defaultServiceManager，得到一个IServiceManager。"></a>sp<iservicemanager> sm = defaultServiceManager();:调用defaultServiceManager，得到一个IServiceManager。</iservicemanager></h3><p>defaultServiceManager函数的实现在IServiceManager.cpp中完成。它会返回一个IServiceManager对象，通过这个对象，我们可以神奇地与另一个进程ServiceManager进行交互。</p>
+<ol>
+<li>defaultServiceManager调用的函数</li>
+</ol>
+<p>defaultServiceManager的代码藏在IServiceManager中，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;IServiceManager&gt; defaultServiceManager() &#123;</span><br><span class="line"><span class="comment">//看样子又是一个单例，英文名字叫Singleton，Android是一个优秀的源码库，大量使用了设计模式</span></span><br><span class="line"><span class="keyword">if</span> (gDefaultServiceManager != <span class="literal">NULL</span>)</span><br><span class="line"><span class="keyword">return</span> gDefaultServiceManager;</span><br><span class="line">&#123;</span><br><span class="line">AutoMutex_I(gDefaultServiceManagerLock);</span><br><span class="line"><span class="keyword">if</span> (gDefaultServiceManger == <span class="literal">NULL</span>) &#123;</span><br><span class="line"><span class="comment">//真正的gDefaultServiceManger是在这里创建的。</span></span><br><span class="line">gDefaultServiceManager = interface_cast&lt;IServiceManager&gt; &#123;</span><br><span class="line">Process::self() -&gt; getContextObject(<span class="literal">NULL</span>));</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> gDefaultServiceManager;</span><br></pre></td></tr></table></figure>
+<p>这里可以看到，gDefaultServiceManager是调用了ProcessState的getContextObject函数来赋值的，getContextObject函数在ProcessState.cpp文件中，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;IBinder&gt; ProcessState::getContextObject(<span class="keyword">const</span> sp&lt;IBinder&gt; &amp;caller) &#123;</span><br><span class="line"><span class="comment">/* caller的只为0，因为它传入的参数为NULL。</span></span><br><span class="line"><span class="comment">support函数根据openDriver函数是否可成功打开设备来判断它是否支持process。</span></span><br><span class="line"><span class="comment">真实设备肯定支持process。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">if</span> (supportsProcesses()) &#123;</span><br><span class="line"><span class="comment">//真实设备上肯定是支持进程的，所以会调用下面这个函数。</span></span><br><span class="line"><span class="keyword">return</span> getStrongProxyForHandle(<span class="number">0</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">return</span> getContextObject(String16(<span class="string">"default"</span>), caller);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getStrongProxyForHandle的函数实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;IBinder&gt; ProcessState::getStrongProxyForHandle(<span class="keyword">int32_t</span> handle)</span><br><span class="line">&#123;</span><br><span class="line">sp&lt;IBinder&gt; result;</span><br><span class="line">AutoMutex_I(mLock);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">根据索引查找对应的资源。如果lookupHandleLocked发现没有对应的资源项，则会创建一个新的项并返沪。这个新项的内容需要填充。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">handle_entry *e = lookupHandleLocked(handle);</span><br><span class="line"><span class="keyword">if</span> (e != <span class="literal">NULL</span>) &#123;</span><br><span class="line">IBinder *b = e -&gt; binder;</span><br><span class="line"><span class="keyword">if</span> (b == <span class="literal">NULL</span> || !e -&gt; refs -&gt; attemptIncWeak(<span class="keyword">this</span>)) &#123;</span><br><span class="line"><span class="comment">//对于新创建的资源项，它的binder为空，所以走这个分支。注意，handle的值为0</span></span><br><span class="line">b = <span class="keyword">new</span> BpBinder(handle); <span class="comment">//创建一个bpBinder</span></span><br><span class="line">e -&gt; binder = b;<span class="comment">//填充entry的内容</span></span><br><span class="line"><span class="keyword">if</span> (b) e -&gt; refs = b -&gt; getWeakRefs();</span><br><span class="line">result = b; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">result.force_set(b);</span><br><span class="line">e -&gt; refs -&gt; decWeak(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result; <span class="comment">//返回BpBinder(handle),注意，handle的值为0</span></span><br></pre></td></tr></table></figure>
+<p>上述代码中出现的BpBinder和它的孪生兄弟BBinder都是Android中与Binder通信相关的代表，他们都是从IBinder类中派生而来。</p>
+<p>关于BpBinder和BBinder的关系可以这么理解：</p>
+<ul>
+<li>BpBinder是客户端用来与Server交互的代理类，p即Proxy的意思</li>
+<li>BBinder则是与proxy相对的一端，它是proxy交互的目的端，可以这么理解，BpBinder为客户端，那么BBinder则是对应的服务端，BpBinder和BBinder是一一对应的，某个BpBinder只能与对应的BBinder交互。</li>
+</ul>
+<p>BpBinder是由Binder系统通过handler来标识对应的BBinder。</p>
+<blockquote>
+<p>注意，我们给BpBinder构造函数传的参数handle的值是0，这个0在整个Binder系统中有重要含义–因为0代表的就是ServiceManager所对应的BBinder。</p>
+</blockquote>
+<p>下面是BpBinder的代码，卸载BpBinder.cpp中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">BpBinder::BpBinder(<span class="keyword">int32_t</span> handle)</span><br><span class="line">:mHandle(handle) <span class="comment">//handle是0</span></span><br><span class="line">,mAlive(<span class="number">1</span>)</span><br><span class="line">,mObitsSent(<span class="number">0</span>)</span><br><span class="line">,mObituaries(<span class="literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">extendObjectLifetime(OBJECT_LIFTTIME_WEAK);</span><br><span class="line"><span class="comment">//另一个重要对象是IPCThreadState，我们稍后会详细讲解。</span></span><br><span class="line">IPCThreadState::self() -&gt; incWeakHandle(handle);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，BpBinder和BBinder两个类没有任何地方操作ProcessState打开的那个/dev/binder设备</p>
+<p>所以这段代码中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gDefaultServiceManager = interface_cast&lt;IServiceManager&gt; &#123;</span><br><span class="line">Process::self() -&gt; getContextObject(<span class="literal">NULL</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的 <em>interface_cast</em>函数就显得十分重要</p>
+<p>interface_cast的具体实现如下</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">templaate&lt;<span class="keyword">typename</span> INTERFACE&gt;&gt;</span><br><span class="line">intline sp&lt;INTERFACE&gt; interface_cast(<span class="keyword">const</span> sp&lt;IBinder&gt; &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">return</span> INTERFACE::asInterface(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里仅仅是一个模板函数，真实的实现其实是下面这样的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">inline</span> sp&lt;IServiceManager&gt; interface_cast(<span class="keyword">const</span> sp&lt;IBinder&gt; &amp;obj)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">return</span> IServiceManager::asInterface(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以这个函数真正的实现还是在IServiceManager中的的，IServiceManager定义了ServiceManager中所提供的服务。</p>
+<p>那么interface_cast是如何把BpBinder指针转换成一个IServiceManager指针的呢？答案就是下面这段代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">intr = <span class="keyword">new</span> BpServiceManager(obj);</span><br></pre></td></tr></table></figure>
+<p>由代码当中可以看出，interface_cast不是指针的转换，而是利用BpBinder对象作为参数新建了一个BpServiceManager对象。到这里我们已经看到了IServiceManager和BpServiceManager的身影，所有的类关系图谱如下：</p>
+<p><img src="https://i.loli.net/2019/09/01/Utr2SFfJudDsKZX.png" alt="IServiceManager类图.PNG"></p>
+<p>从这张类图中我们可以看到BnServiceManager是同时继承了IServiceManager和BBinder，所以它可以直接地与Binder交互，但是BpServiceManager则没有直接继承关于Binder的类，它是通过BpRefBase与Binder进行交互的，因为BpRefBase中mRemote的值就是BpBinder。</p>
+<p>再回到最开始的这段代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;IServiceManager&gt; sm = defaultServiceManager();</span><br></pre></td></tr></table></figure>
+<p>通过defaultServiceManger函数，我们可以得到两个关键的对象：</p>
+<ul>
+<li>一个BpBinder对象，它的handle值是0</li>
+<li>有一个BpServiceManager对象，它的mRemote值是BpBinder</li>
+</ul>
+<p>defaultServiceManager()实际返回的对象是BpServiceManager</p>
+<h3 id="初始化多媒体系统的MediaPlayer服务：MediaPlayerService-Instantiate"><a href="#初始化多媒体系统的MediaPlayer服务：MediaPlayerService-Instantiate" class="headerlink" title="初始化多媒体系统的MediaPlayer服务：MediaPlayerService::Instantiate();"></a>初始化多媒体系统的MediaPlayer服务：MediaPlayerService::Instantiate();</h3><p>MediaPlayerService的代码如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> MediaPlayerService::instance() &#123;</span><br><span class="line">defaultServiceManager()-&gt; addService(</span><br><span class="line">String16(<span class="string">"media.player"</span>),<span class="keyword">new</span> MediaPlayerService());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为defaultServiceManager实际返回的对象是BpServiceManager，所以实际的代码是这样的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vitual status_t <span class="title">addService</span><span class="params">(<span class="keyword">const</span> String16 &amp; name, <span class="keyword">const</span> sp&lt;IBinder&gt; &amp; service)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//Parcel：就把她当作是一个数据包</span></span><br><span class="line">Parcel data，reply；</span><br><span class="line">data.writeInterfaceToken(IServiceManager::getInterfaceDescripter());</span><br><span class="line">data.writeString16(name);</span><br><span class="line">data.writeStrongBinder(service);</span><br><span class="line"><span class="comment">//remote返回的是mRemote,也就是BpBinder对象</span></span><br><span class="line">status_err err = remote()-&gt;transact(ADD_SERVICE_TRANSACTION,data, &amp;reply);</span><br><span class="line"><span class="keyword">return</span> err = NO_ERROR?reply.readInt32():err;</span><br></pre></td></tr></table></figure>
+<p>很明显，addService函数就做了一件事情：<em>就是把请求数据打包成data后，传给了BpBinder的transact函数，把通信的工作交给了BpBinder去完成。</em></p>
+<p>BpBinder 的transact函数实现如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> BpBinder::transact(<span class="keyword">uint32_t</span> code, <span class="keyword">const</span> Parcel &amp; data, Parcel *reply, <span class="keyword">uint32_t</span> flag)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">if</span> (mAlive) &#123;</span><br><span class="line"><span class="comment">//BpBinder果然是道具，它把transact工作交给了IPCThreadState。</span></span><br><span class="line"><span class="keyword">status_t</span> status = IPCThreadState::self()-&gt;transact(</span><br><span class="line">mHandle, code, data, reply, flag);<span class="comment">//mHandle也是参数</span></span><br><span class="line"><span class="keyword">if</span> (status == DEAD_OBJECT) mAlive = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">return</span> status;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> DEAD_OBJECT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里可以看出来，BpBinder把transact工作马上交给了IPCThreadState。现在我们来分析以下IPCThreadState与transact（）</p>
+<ol>
+<li>IPCThreadState</li>
+</ol>
+<p>IPCThreadState的实现代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">IPCThreadState *IPCThreadState::self() </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">if</span> (gHavaTLS) &#123;<span class="comment">//第一次进来为false</span></span><br><span class="line">restart:</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">pthread_key_t</span> k = gTLS;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">TLS是Thread Local Strage（线程本地存储空间）的简称。相当于Java的ThreadLocal</span></span><br><span class="line"><span class="comment">通过pThread——getspecific/pthread_setspececific函数可以获取/设置这些空间中的内容。从线程本地存储空间中获取保存在其中的IPCThreadState对象。</span></span><br><span class="line"><span class="comment">有调用pthread_getspecific的地方，肯定也有pthread_setspecific的地方</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">IPCThread State*st = （IPCThreadState*）pthread_getspectfic(k);</span><br><span class="line"><span class="keyword">if</span> (st) <span class="keyword">return</span> st;</span><br><span class="line"><span class="comment">//new一个对象，构造函数中会调用pthread_setspecific.</span></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> IPCThreadState;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(gShoutdown) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">pthread_mutex_lock(&amp;gTLSMutex);</span><br><span class="line"><span class="keyword">if</span> (!gHaveTLS) &#123;</span><br><span class="line"><span class="keyword">if</span> (pThread_key_create(&amp;gTLS, threadDestructor)!=<span class="number">0</span>) &#123;</span><br><span class="line">pthread_mutex_unlock(&amp;gTLSMutex);</span><br><span class="line"><span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line">gHavaTLS = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">pthread_mutex_unlock(&amp;gTLSMutex);</span><br><span class="line"><span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line">gHavaTLS = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line">pthread_mutex_unlock(&amp;gTLSMutex);</span><br><span class="line"><span class="keyword">goto</span> restart;</span><br></pre></td></tr></table></figure>
+<p>它的构造函数如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IPCThreadState::IPCthreadState()</span><br><span class="line">:mProcess(ProcessState::self()),mMyThreadId(androidGetTid())</span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//在构造函数中，把自己设置到线程本地存储当中去。</span></span><br><span class="line">pthread_setspectfic(gTLS,<span class="keyword">this</span>);</span><br><span class="line">clearCaller();</span><br><span class="line"><span class="comment">//mIn和mOut是两个Parcel。把它看成是发送和接收命令的两个缓冲区即可。</span></span><br><span class="line">mIn.setDataCapacity(<span class="number">256</span>);</span><br><span class="line">mOut.setDataCapacity(<span class="number">256</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个线程都有一个IPCThreadState，每个IPCThreadState中都有一个mIn，一个mOut，其中，mIn是用来接收来自Binder设备的数据的，而mOut则是用来存储发往Binder设备的数据的。</p>
+<ol>
+<li>transact（）</li>
+</ol>
+<p>这个函数实际完成了与Binder通信的工作，如下代码所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意，handle的值为0，代表通信的目的端</span></span><br><span class="line"><span class="keyword">status_t</span> IPCThreadState::transact(<span class="keyword">int32_t</span> handle,<span class="keyword">uint32_t</span> code,<span class="keyword">const</span> Parcel &amp; data, Parcel *reply,<span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">status_t</span> err = data.errorCheck();</span><br><span class="line">flag |= TF_ACCEPT_FPS;</span><br><span class="line">......</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">注意这里的第一个参数BC_TRANSACTION,它是应用程序向binder设备发送消息的消息码，而binder设备向应用程序回复消息的消息码以BR_开头。消息码的定义在binder_module.h中，请求消息码和回应消息码的对应关系，需要查看Binder驱动的实现才能将其理清楚，我们这里暂时用不上。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">err = writeTransactionData(BC_TRNASACTION,flags,handle,code, data, <span class="literal">NULL</span>);</span><br><span class="line">......</span><br><span class="line">err = waitForResponse(reply);</span><br><span class="line">......</span><br><span class="line"><span class="keyword">return</span> err;</span><br></pre></td></tr></table></figure>
+<p>这个流程很简单：先发数据，然后等结果。</p>
+<p>writeTransaction函数的作用是把请求命令写在mOut中了，handle的值为0，用来标识目的端，其中0是ServiceManager的标志。</p>
+<p>waitForResponse函数的作用是发送请求和接收回复。收到回复后，就会调用talkWithDriver函数，在talkWithDriver函数中就会调用ioctl方式与Binder交互。</p>
+<blockquote>
+<p> ioctl是设备驱动程序中对设备的I/O通道进行管理的函数。</p>
+</blockquote>
+<h3 id="ProcessState-self-gt-startThreadPool-创建线程池"><a href="#ProcessState-self-gt-startThreadPool-创建线程池" class="headerlink" title="ProcessState::self()-&gt;startThreadPool():创建线程池"></a>ProcessState::self()-&gt;startThreadPool():创建线程池</h3><p>startThread的实现如下面代码所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> PeocessState::startThreadPool()</span><br><span class="line">&#123;</span><br><span class="line">AutoMutex_I(mLock);</span><br><span class="line"><span class="comment">//如果已经startThreadPool的话，这个函数就没有什么实质作用了。</span></span><br><span class="line"><span class="keyword">if</span> (!mThreadPoolStarted)&#123;</span><br><span class="line">mThreadPoolStarted = <span class="literal">true</span>;</span><br><span class="line">spawnPooledThread(<span class="literal">true</span>);<span class="comment">//注意，传进去的参数是true。</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的spawnPooledThread函数的实现如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> PeocessState::spawnPooledThread(<span class="keyword">bool</span> isMain)</span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//注意，isMain参数是true</span></span><br><span class="line"><span class="keyword">if</span>(mThreadPoolStarted) &#123;</span><br><span class="line"><span class="keyword">int32_t</span> s = android_atomic_add(<span class="number">1</span>,&amp;mThreadPoolSeq);</span><br><span class="line"><span class="keyword">char</span> buf[<span class="number">32</span>];</span><br><span class="line">spritf(buf, <span class="string">"Binder Thread#%d"</span>,s);</span><br><span class="line">sp&lt;Thread&gt; t = <span class="keyword">new</span> PoolThread(isMain);</span><br><span class="line">t -&gt; run(buf);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这里又新建了一个线程并运行，而这个新创建的线程（PoolThread）也调用了joinThreadPool这个函数。</p>
+<h3 id="IPCThreadState-self-gt-joinThreadPool"><a href="#IPCThreadState-self-gt-joinThreadPool" class="headerlink" title="IPCThreadState::self()-&gt;joinThreadPool();"></a>IPCThreadState::self()-&gt;joinThreadPool();</h3><p>具体实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> IPCThreadState::joinThreadPool(<span class="keyword">bool</span> isMain) </span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//注意，如果isMain为true，我们则需要循环处理。把请求信息写到mOut中，待会儿则一起发出去</span></span><br><span class="line">mOut.writeInt32(isMain?BC_ENTER_LOOPER:BC_REGISTER_LOOPER);</span><br><span class="line">androidSetSchedulingGroup(mMyThreadId,ANDROID_TGROUP_DEFAULT);</span><br><span class="line"><span class="keyword">status_t</span> result:</span><br><span class="line"><span class="keyword">do</span>&#123;</span><br><span class="line"><span class="keyword">int32_t</span> cmd;</span><br><span class="line"><span class="keyword">if</span>(mIn.dataPosition()&gt;=mIn.dataSize())</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">size_t</span> numPending = mPendingWeakDerefs.size();</span><br><span class="line"><span class="keyword">if</span> (numPending &gt; <span class="number">0</span>) &#123;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; numPending;i ++) &#123;</span><br><span class="line">RefBase::weakref_type*refs = mPendingWeakDeref[i];</span><br><span class="line">refs-&gt;decWeak(mProcess.get());</span><br><span class="line">&#125;</span><br><span class="line">mPendingStrongDerefs.clear();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//发送命令，读取请求</span></span><br><span class="line">result = talkWithDriver();</span><br><span class="line"><span class="keyword">if</span> (result &gt;= NO_ERROR)&#123;</span><br><span class="line"><span class="keyword">size_t</span> IN = mIn.dataAvail();</span><br><span class="line"><span class="keyword">if</span> (IN &lt; <span class="keyword">sizeof</span>(<span class="keyword">int32_t</span>)) <span class="keyword">continue</span>;</span><br><span class="line">cmd = mIn.readInt32();</span><br><span class="line">result = executeCommand(cmd);<span class="comment">//处理消息</span></span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line">&#125; <span class="keyword">while</span>(result != -ECONNREFUSED &amp;&amp; result != -EBADF);</span><br><span class="line">mOut.writeInt32(BC_EXIT_LOOPER);</span><br><span class="line">talkWithDriver(<span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原来，这里也使用了talkWithDriver,两个调用了joinThreadPool的线程看看从Binder设备那里能不能找点可做的事情。</p>
+<h3 id="MediaPlayerService总结"><a href="#MediaPlayerService总结" class="headerlink" title="MediaPlayerService总结"></a>MediaPlayerService总结</h3><p>目前看来MediaPlayerService调用了两个线程为Service服务，分别是：</p>
+<ul>
+<li><p>startThreadPool中新启动的线程（即第四步：ProcessState::self()-&gt;startThreadPool()）通过joinThreadPool读取binder设备，查看是否有请求。</p>
+</li>
+<li><p>主线程也调用joinThreadPool读取binder设备，查看是否有请求。看来，binder设备是支持多线程操作的。</p>
+</li>
+</ul>
+<p>MediaPlayerService总共注册了四个服务。</p>
+<p>Binder体系中通信层和业务层的交互关系可以通过这个图来表示：</p>
+<p><img src="https://i.loli.net/2019/09/03/FRxbt4ywqJjSE3r.png" alt="Binder业务层通信层关系.PNG"></p>
+<h2 id="服务总管ServiceManager"><a href="#服务总管ServiceManager" class="headerlink" title="服务总管ServiceManager"></a>服务总管ServiceManager</h2><h3 id="ServiceManager的原理"><a href="#ServiceManager的原理" class="headerlink" title="ServiceManager的原理"></a>ServiceManager的原理</h3><p>defaultServiceManager返回的是一个BpServiceManager，通过它可以把命令请求发送给handle值为0的目的端。而这些请求都被ServiceManger处理了。</p>
+<h4 id="ServiceManger的入口函数"><a href="#ServiceManger的入口函数" class="headerlink" title="ServiceManger的入口函数"></a>ServiceManger的入口函数</h4><p>ServiceManager的入口函数如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//BINDER_SERVICE_MANAGER的值为NULL,是一个magic number</span></span><br><span class="line"><span class="keyword">void</span> *svcmgr = BINDER_SERVICE_MANAGER;</span><br><span class="line"><span class="comment">//1.应该是打开binder设备吧？</span></span><br><span class="line">bs = binder_open(<span class="number">128</span>*<span class="number">1024</span>);</span><br><span class="line"><span class="comment">//2.成为manager，是不是把自己的handle置为0？</span></span><br><span class="line">binder_become_context_manager(bs);</span><br><span class="line">svcmgr_handle = scvmgr;</span><br><span class="line"><span class="comment">//3.处理客户端发过来的请求</span></span><br><span class="line">binder_loop(bs,svcmgr_handler);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>打开binder设备:binder_open</li>
+</ol>
+<p>binder_open函数用于打开binder设备，它的实现如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">这里的binder_open应该与我们之前在ProcessState中看到的一样：</span></span><br><span class="line"><span class="comment">1）打开binder设备</span></span><br><span class="line"><span class="comment">2）内存映射</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function">struct binder_state*<span class="title">binder_open</span><span class="params">(<span class="keyword">unsigned</span> mapsize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_state</span> *<span class="title">bs</span>;</span></span><br><span class="line">bs = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(*bs));</span><br><span class="line">.......</span><br><span class="line">bs-&gt;fd=open(<span class="string">"/dev/binder"</span>,O_RDWR);</span><br><span class="line">......</span><br><span class="line">bs-&gt;mapsize = mapsize;</span><br><span class="line">bs-&gt;mapped = mmap(<span class="literal">NULL</span>, mapsize,PROT_READ,MAP+PRIVATE,bs-&gt;fd,<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>成为manager:binder_become_context_manager(bs)</li>
+</ol>
+<p>manager的实现如下面代码所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">binder_become_context_manager</span><span class="params">(struct binder_state *bs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">return</span> ioctl(bs-&gt;fd,BINDER_SET_CONTEXT_MGR,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>处理客户端发过来的请求:binder_loop</li>
+</ol>
+<p>binder_loop函数代码如下所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">注意binder_handler参数，它是一个函数指针，binder_loop读取请求后将解析这些请求，最后调用binder_handler完成最终的处理</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">binder_loop</span><span class="params">(struct binder_state *bs,binder_handler func)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> res;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">binder_write_read</span> <span class="title">bwr</span>;</span></span><br><span class="line">readbuf[<span class="number">0</span>]=BC_ENTER_LOOPER;</span><br><span class="line">binder_write(bs,readbuf,<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span>));</span><br><span class="line"><span class="keyword">for</span>(;;)&#123; <span class="comment">//死循环</span></span><br><span class="line">bwr.read_size=<span class="keyword">sizeof</span>(readbuf);</span><br><span class="line">bwr.read_consumed=<span class="number">0</span>;</span><br><span class="line">bwr=read_buffer = (<span class="keyword">unsigned</span>)readbuf;</span><br><span class="line">res = ioctl(bs-&gt;fd,BINDER_WRITE_READ,&amp;bwr);</span><br><span class="line"><span class="comment">//接收到请求，交给binder_parse,最终会调用func来处理这些请求。</span></span><br><span class="line">res=binder_parse(bs,<span class="number">0</span>,readbuf,bwr.read_consumed,func);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>binder_handler指针func实际上就是svcmgr_handler,svcmgr_handler会使用一个switch/case语句调用对应的IServiceManagerManager中定义的各个业务函数，其中有一个业务函数为addService，这个函数主要的作用是判断注册服务的进程是否有权限，如果进程的用户组是root用户或system用户才允许注册，如果达不到root或system权限的进程，则需要在allowed结构数据中添加相应的项目。它的定义大概像下面这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line"><span class="keyword">unsigned</span> uid;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>*name;</span><br><span class="line">&#125;allowed[]=&#123; <span class="comment">//如果达不到root或system权限的进程，则需要在allowed结构数据中添加相应的项目</span></span><br><span class="line">#ifdef LVMX</span><br><span class="line">&#123;AID_MEDIA,<span class="string">"com.lifevibes.mx.ipc"</span>&#125;,</span><br><span class="line">#endif</span><br><span class="line">&#123;AID_MEDIA,<span class="string">"media.audio_flinger"</span>&#125;,</span><br><span class="line">....</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>总结一下，ServiceManager不过就是保存了一些服务的信息。</p>
+<h3 id="ServiceManager存在的意义"><a href="#ServiceManager存在的意义" class="headerlink" title="ServiceManager存在的意义"></a>ServiceManager存在的意义</h3><ul>
+<li><p>ServiceManager能集中管理系统内的所有服务，它能施加权限控制，并不是任何进程都能注册服务的。</p>
+</li>
+<li><p>ServiceManager支持通过字符串名称来查找对应的Service。这个功能很像DNS。</p>
+</li>
+<li><p>由于各种原因的影响，Service进程可能生死无常，如果让每个Client都去检测，压力实在太大了。现在有了统一的管理机构，Client只需要查询ServiceManager，就能把我动向，得到最新信息。</p>
+</li>
+</ul>
+<h2 id="MediaPlayerService和它的Client"><a href="#MediaPlayerService和它的Client" class="headerlink" title="MediaPlayerService和它的Client"></a>MediaPlayerService和它的Client</h2><p>前面一直讨论ServiceManager和它的Client，现在我们以MediaPlayerService的Client来进行分析。由于ServiceManager不是从BnServiceManager中派生的，所以之前没有讲数据请求是如何从通信层传递到业务层并进行处理的。我们以MediaPlayerService和它的Client作为分析对象，试着解决这些遗留问题。</p>
+<h3 id="查询ServiceManager"><a href="#查询ServiceManager" class="headerlink" title="查询ServiceManager"></a>查询ServiceManager</h3><p>一个Client想要得到某个Service的信息，就必须先和ServiceManager打交道，通过调用getService函数来获取对应Service的信息。getService函数的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">这个函数通过与ServiceManager通信，获得一个能够与MediaPlayerService通信的BpBinder，然后再通过障眼法interface_cast，转换成一个BpMediaPlayerService。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">IMediaDeathNotifier::getMediaPlayerService() </span><br><span class="line">&#123;</span><br><span class="line">sp &lt;IServiceManager&gt; sm = defaultServiceManager();</span><br><span class="line">sp&lt;IBinder&gt;binder;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line"><span class="comment">//向ServiceManager查询对应服务的信息，返回BpBinder。</span></span><br><span class="line">binder = sm-&gt;getService(String16(<span class="string">"media.player"</span>));</span><br><span class="line"><span class="keyword">if</span>(binder!=<span class="number">0</span>)&#123;</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//如果ServiceManager上还没有注册对应的服务，则需要等待，直到对应服务注册</span></span><br><span class="line"><span class="comment">//到ServiceManager中为止。</span></span><br><span class="line">usleep(<span class="number">500000</span>);</span><br><span class="line">&#125;<span class="keyword">while</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">通过interface_casr,将这个binder转化成BpMediaPlayer，binder中handle标识的一定是目的端MediaPlayerService。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">sMediaPlayerService=interface_cast&lt;IMediaPlayerService&gt;(binder);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> sMediaPlayerService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了BpMediaPlayerService，就能够使用任何IMediaPlayerService提供的业务逻辑函数了。</p>
+<p>调用这些函数都能够把请求数据打包发送给Binder驱动，并由BpBinder的handle值找到对应端的处理者来处理，这中间的过程如下所示：</p>
+<ol>
+<li>通信层接收到请求。</li>
+<li>提交给业务层处理</li>
+</ol>
+<h3 id="MediaPlayerService细节"><a href="#MediaPlayerService细节" class="headerlink" title="MediaPlayerService细节"></a>MediaPlayerService细节</h3><p>在上文中我们可以看到，MediaPlayerService驻留在MediaPlayer进程中，这个进程有两个线程在talkWithDriver,假设其中有一个线程收到了请求消息，它最终通过executeCommand调用来处理这个请求，实现代码如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> IPCThreadState::executeCommand(<span class="keyword">int32_t</span> cmd)</span><br><span class="line">&#123;</span><br><span class="line">BBinder *obj;</span><br><span class="line">RefBase::weakref_type*refs;</span><br><span class="line"><span class="keyword">status_t</span> result = NO_ERROR;</span><br><span class="line"><span class="keyword">switch</span>(cmd) &#123;</span><br><span class="line"><span class="keyword">case</span> BR_ERROR:</span><br><span class="line">result = mIn.readInt32();</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">case</span> BR_TRANSACTION:</span><br><span class="line">&#123;</span><br><span class="line">binder_transaction_data tr;</span><br><span class="line">result = mIn.read(&amp;tr, <span class="keyword">sizeof</span>(tr));</span><br><span class="line"><span class="keyword">if</span>(result != NO_ERROR)<span class="keyword">break</span>;</span><br><span class="line">Parcel buffer;</span><br><span class="line">Parcel reply;</span><br><span class="line"><span class="keyword">if</span>(tr.target.ptr) &#123;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">看到BBinder想起图6-3了吗？BnServiceXXX从BBinder派生，这里的b实际就是实现BnServiceXXX的那个对象，这样就直接定位到了业务层的对象。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">sp&lt;BBinder&gt; b ((BBinder*)tr.cookie);</span><br><span class="line"><span class="keyword">const</span> status_T error = b -&gt; transact(tr.code,buffer,&amp;reply,<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (error &lt; NO_ERROR)reply.setError(error);</span><br><span class="line">&#125; <span class="keyword">else</span>&#123;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">the_context_object是IPCThreadState.cpp中定义的一个全局变量。可通过setTheContextObject函数设置。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">status_t</span> error = the_context_object-&gt;transact(tr.code,buffer,&amp;reply,<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (error &lt; NO_ERROR) reply.setError(error);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>BBinder与业务层的关系我们可以通过这张图来梳理一下：</p>
+<p><img src="https://i.loli.net/2019/09/06/h2D7ucwqQFpXHti.png" alt="BBinder_MediaPlayerService.PNG"></p>
+<p>BnMediaPlayerService实现了onTransact函数，它将根据消息码调用对应的业务逻辑函数，这些业务逻辑函数由MediaPlayerService来实现，这些过程写在了Binder.cpp和IMediaPlayerService.cpp中，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> BBinder::transact(</span><br><span class="line"><span class="keyword">uint32_t</span> code,<span class="keyword">const</span> Parcel &amp; data,Parcel*reply,<span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line">data.setDataPosition(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">status_t</span> err = NO_ERROR;</span><br><span class="line"><span class="keyword">switch</span>(code) &#123;</span><br><span class="line"><span class="keyword">case</span> PING_TRANSACTION:</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line"><span class="comment">//调用子类的onTransact,这是一个虚函数</span></span><br><span class="line">err = onTransact(code, data, reply, flags);</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(reply != <span class="literal">NULL</span>) &#123;</span><br><span class="line">reply-&gt;setDataPosision(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> err;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> BnMediaPlayerService::onTransact(<span class="keyword">uint32_t</span> code,<span class="keyword">const</span> Parcel &amp; data,Parcel *reply,<span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">switch</span>(code) &#123;</span><br><span class="line">......</span><br><span class="line"><span class="keyword">case</span> CREATE_MEDIA_RECORDED:&#123;</span><br><span class="line">CHECK_INTERFACE(IMediaPlayerService,data,reply);</span><br><span class="line"><span class="comment">//从请求数据中解析对应的参数</span></span><br><span class="line"><span class="keyword">pid_t</span> pid = data.readInt32();</span><br><span class="line"><span class="comment">//子类要实现createMediaRecorder函数</span></span><br><span class="line">sp&lt;IMediaRecorder&gt; recorder = createMediaRecorder(pid);</span><br><span class="line">reply -&gt; writeStrongBinder(recorder-&gt;asBinder());</span><br><span class="line"><span class="keyword">return</span> NO_ERROR;</span><br><span class="line">&#125;<span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> CREATE_METADATA_RETRIEVER:&#123;</span><br><span class="line">CHECK_INTERFACE(IMediaPlayerService,data,reply);</span><br><span class="line"><span class="keyword">pid_t</span> pid = data.readInt32();</span><br><span class="line"><span class="comment">//子类要实现createMetadataRetriever函数</span></span><br><span class="line">sp&lt;IMediaMetadataRetriever&gt; retriever = createMetadataRetriever(pid);</span><br><span class="line">reply -&gt; writeStrongBinder(retriever-&gt;asBinder());</span><br><span class="line"><span class="keyword">return</span> NO_ERROR;</span><br><span class="line">&#125;<span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line"><span class="keyword">return</span> BBinder::onTransact(code,data,reply,flags);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Binder的实现"><a href="#Binder的实现" class="headerlink" title="Binder的实现"></a>Binder的实现</h2><p>Binder的驱动代码在kernel/drivers/staing/android/binder.c中，另外该目录下还有一个binder.h头文件。/proc/binder目录下的内容可用来查看Binder设备的运行状态。</p>
+<h3 id="Binder和线程的关系"><a href="#Binder和线程的关系" class="headerlink" title="Binder和线程的关系"></a>Binder和线程的关系</h3><p>以MS（MediaPlayerService）为例，如果现在程序运行正常，那么MS在进行两个动作：</p>
+<ol>
+<li><p>通过startThreadPool启动一个线程，这个线程在talkWithDriver.</p>
+</li>
+<li><p>主线程通过joinThreadPool也在talkWithDriver.</p>
+</li>
+</ol>
+<p>如果在业务逻辑上需要与ServiceManager交互，比如说要调用listServices打印所有服务的名字，假设这是MS中的第三个线程，按照之前的分析，它最终会调用IPCThreadState的transact函数，这个函数会talkWithDriver并把请求发到ServiceManager进程，然后等待来自Binder设备的回复。现在有三个进程在talkWithDriver。</p>
+<p>ServiceManager处理完了listServices，把回复结果写回Binder驱动，调用listServices的那个线程就会得到这个结果，一一对应。</p>
+<h3 id="Binder消息通知"><a href="#Binder消息通知" class="headerlink" title="Binder消息通知"></a>Binder消息通知</h3><p>在Binder系统中，如果对应的BnXXX被终止了，那么我们可以通过一些方式收到这个通知</p>
+<p>注册对应的监听需要做以下两件事：</p>
+<ol>
+<li><p>从IBinder::DeathRecipient派生一个类，并实现其中的通知函数binderDied。这个函数会在BnXXX被终止时调用。</p>
+</li>
+<li><p>把这个类注册到系统中，告诉它你关系哪一个BnXXX的生死</p>
+</li>
+</ol>
+<p>这个消息是这么被收到的呢？其实也在executeCommand中，通过Proxy（对应着已经死亡的BBinder）发送消息</p>
+<p>如果注册监听的进程率先被终止了，那么可以通过调用unlinkToDeath取消对对应的BnXXX死亡的监听</p>
+<h3 id="匿名Service"><a href="#匿名Service" class="headerlink" title="匿名Service"></a>匿名Service</h3><p>匿名Service就是没有注册的Service，包含了以下两个意思：</p>
+<ol>
+<li>没有注册Service意味着这个Service没有在ServiceManager上注册</li>
+<li>它是一个Service又表示它确实是一个基于Binder通信的C/S结构</li>
+</ol>
+<p>可以通过下面这个例子来了解：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> BnMediaPlayerService::onTransact(<span class="keyword">uint32_t</span> code, <span class="keyword">const</span> Parcel &amp; data,Parcel *reply,<span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">switch</span>(code) &#123;</span><br><span class="line"><span class="keyword">case</span> CREATE_URL: &#123;</span><br><span class="line">CHECK_INTERFACE(IMediaPlayerService,data,reply);</span><br><span class="line">...</span><br><span class="line"><span class="comment">//player是一个IMediaPlayer类型的对象。</span></span><br><span class="line">sp&lt;IMediaPlayer&gt; player = create(pid,client,url,numHeaders&gt;<span class="number">0</span>?&amp;headers:<span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">//下面这句话也很重要</span></span><br><span class="line">reply-&gt;writeStrongBinder（player-&gt;asBinder());</span><br><span class="line"><span class="keyword">return</span> NO_ERROR;</span><br><span class="line">&#125; <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>当MediaPlayerClient调用create函数时，MediaPlayerService会返回一个IMediaPlayer对象，此后，MediaPlayerClient即可直接使用这个IMediaPlayer来进行跨进程的函数调用了。</p>
+<p>BpMediaPlayer实际上是通过这个方法来得到BnMediaPlayer的handle的值的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reply-&gt;writeStrongBinder（player-&gt;asBinder());</span><br></pre></td></tr></table></figure>
+<p>当这个reply写到Binder驱动中时，驱动可能会特殊处理这种IBinder类型的数据，例如为这个BBinder建立一个独一无二的handle，这其实相当于在Binder驱动中注册了一项服务。</p>
+<p>通过这种方式，MS输出了大量的Service，例如IMediaPlayer和IMediaRecorder等。</p>
+<h3 id="Service的实现实例（Native层）"><a href="#Service的实现实例（Native层）" class="headerlink" title="Service的实现实例（Native层）"></a>Service的实现实例（Native层）</h3><p>纯Native的Service表示代码都在Native层。Native层有有很多Service，前面的MediaPlayerService就是一个例子。</p>
+<p>如果我们要新建实现一个Service，也完全可以模仿MS，代码示例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">sp&lt;ProcessState&gt; proc(ProcessState::self());</span><br><span class="line">sp&lt;IServiceManager&gt; sm = defaultServiceManager();</span><br><span class="line"><span class="comment">//记住注册你的服务，否则谁也找不到你</span></span><br><span class="line">sm-&gt;addService(<span class="string">"service.name"</span>,<span class="keyword">new</span> Test());</span><br><span class="line"><span class="comment">//如果压力不大，可以不用单独搞一个线程</span></span><br><span class="line">ProcessState::self()-&gt;startThreadPool();</span><br><span class="line"><span class="comment">//这个是必须的，否则主线程退出了，你也完了</span></span><br><span class="line">IPCThreadState::self()-&gt;joinThread();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Test是这么定义的呢？我们是跨进程的C/S,所以本地需要一个BnTest，对端需要提供一个代理BpTest。为了不暴露Bp的身份，Bp的定义和实现都放在BnTest.cpp中了。</p>
+<p>ITest接口表明了它所能提供的服务，例如getTest和setTest等，这个与业务逻辑相关，代码如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//需要从IInterface派生</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ITest</span>:</span><span class="keyword">public</span> IInterface。</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">//神奇的宏 DECLEAR_MATA_INTERFACE。</span></span><br><span class="line">DECLEAR_META_INTERFACE(Test);</span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">getTest</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">setTest</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;<span class="comment">//ITest是一个接口类</span></span><br></pre></td></tr></table></figure>
+<p>为了把ITest融入到Binder系统，需要定义BnTest和对客户端透明的BpTest。BnTest定义既可以与上面的Test定义放在一块，也可以分开，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BnTest</span>:</span><span class="keyword">public</span> BnInterface&lt;ITest&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">//由于ITest是个纯虚类，而BnTest只实现了onTransact函数，所以BnTest依然是一个纯虚类</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> status_t <span class="title">onTransact</span><span class="params">(uint32_T code, <span class="keyword">const</span> Parcel &amp; data,Parcel *reply, <span class="keyword">uint32_t</span> flags = <span class="number">0</span>)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>另外，我们还要使用IMPLEMENT宏。参考BnMediaPlayerService的方法，把BnTest和BpTest的实现都放在ITest.cpp中，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">IMPLEMENT_META_INTERFACE(Test,<span class="string">"android.Test.ITest"</span>);<span class="comment">//IMPLEMENT宏</span></span><br><span class="line"><span class="keyword">status_t</span> BnTest::onTransact(</span><br><span class="line"><span class="keyword">uint32_t</span> code, <span class="keyword">const</span> Parcel &amp; data,Parcel *reply,<span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">switch</span>(code) &#123;</span><br><span class="line"><span class="keyword">case</span> GET_Test:&#123;</span><br><span class="line">CHECK_INTERFACE(ITest,data,reply);</span><br><span class="line">getTest();<span class="comment">//子承父业，由Test完成</span></span><br><span class="line"><span class="keyword">return</span> NO_ERROR;</span><br><span class="line">&#125;<span class="keyword">break</span>;<span class="comment">//SET_XXX类似</span></span><br></pre></td></tr></table></figure>
+<p>BpTest示例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BpTest</span>:</span><span class="keyword">public</span> BpInterface&lt;ITest&gt;</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">BpXXX(<span class="keyword">const</span> sp&lt;IBinder&gt; &amp; impl)</span><br><span class="line">:BpInterface&lt;ITest&gt;(Impl)</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">vitural <span class="title">getTest</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">Parcel data,reply;</span><br><span class="line">data.writeInterfaceToken(ITest::getInterfaceDescriptor());</span><br><span class="line">data.writeInt32(pid);</span><br><span class="line"><span class="comment">//打包请求数据，然后交给BpBinder通信层处理。</span></span><br><span class="line">remote()-&gt;transact(GET_Test,data, &amp;reply);</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">?</span><br><span class="line"><span class="comment">//setTest类似</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>这样C/S的框架就写好了。</p>
+<h3 id="Service的实现实例（Java层）"><a href="#Service的实现实例（Java层）" class="headerlink" title="Service的实现实例（Java层）"></a>Service的实现实例（Java层）</h3><p>在Java层中，如果想要利用Binder进行跨进程的通信，也得定义一个类似ITest的接口，不过，这是一个aidl文件，假设服务端程序都在com.test.service包中。</p>
+<p>ITest.aidl文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">package com.test.service;</span><br><span class="line">import com.test.complicatedDataStructure;</span><br><span class="line">interface ITest&#123;</span><br><span class="line">//complicatedDataStructure类是自己定义的复杂数据结构，in表示输入参数，out表示输出参数。</span><br><span class="line">//in和out的表示一定要准备却。切记！</span><br><span class="line">int getTest(out complicateddataStructure c);</span><br><span class="line">int setTest(in String name, in boolean reStartServer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译之后，会在gen目录下生成一个com.test.ITest.java文件，它实现了类似BnTest的一个东西，具体的业务实现还需要从ITest.Stub派生，实现代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">ITest.Stub是在aidl生成的那个Java文件中定义的，非常类似Native层的BnTest。</span></span><br><span class="line"><span class="comment">ITestImpl必须从ITest.Stub中派生，用来实现具体的业务函数。</span></span><br><span class="line"><span class="comment">package com.test.service;</span></span><br><span class="line"><span class="comment">class ITestImpl extends ITest.Stub&#123;</span></span><br><span class="line"><span class="comment">public void getTest(complicatedData Structure cds) throws RemoteException &#123;</span></span><br><span class="line"><span class="comment">//在这里实现具体的getTest</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">public void setTest(in String name, in boolean reStartServer) throws RemoteException &#123;</span></span><br><span class="line"><span class="comment">//在这里实现具体的setTest</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时根目录下有这两个目录：</p>
+<ul>
+<li><p>src下有一个com.test.service包结构目录</p>
+</li>
+<li><p>gen下也有一个com.test.service包结构目录</p>
+</li>
+</ul>
+<p>实现代理端：代理端往往在另一个程序中使用，假设是com.test.client包，把刚才com.test.service工程中gen下的com.test.service目录全部复制到com.test.client中，这样，client工程也就有两个包结构目录了：</p>
+<ul>
+<li><p>com.test.client</p>
+</li>
+<li><p>com.test.service。不过这个目录中仅有aidl生成的Java文件</p>
+</li>
+</ul>
+<p>服务端一般驻留于Service进程，所以可以在Client端的onServiceConnected函数中获得代理对象，实现代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//不一定是在onServiceConnected中，但它是比较合适的。</span><br><span class="line">private ServiceConnection serviceConnection = new ServiceConnection() &#123;</span><br><span class="line">@override</span><br><span class="line">public void onServiceConnected(ConponentName name, IBinder service) &#123;</span><br><span class="line">if (ITestProxy == null) &#123;</span><br><span class="line">ITestProxy = ITest.Stub.asInterface(service);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AIDL支持简单数据结构与Java中String类型的数据进行跨进程传递，如果想做到跨进程传递复杂的数据结构，还须另做一些工作。</p>
+<p>以ITest.aidl文件中使用的complicatedDataStructure为例：</p>
+<ul>
+<li><p>它必须实现implementsParcelable接口</p>
+</li>
+<li><p>内部必须有一个静态的CREATOR类</p>
+</li>
+<li><p>定义一个complicatedDataStructure文件。</p>
+</li>
+</ul>
+<p>在实现了Java文件后，我们还需要实现aidl类，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">package com.test.service;</span><br><span class="line">parcelable complicatedDataStructure;</span><br></pre></td></tr></table></figure>
+<p>然后在使用它的aidl文件中添加这行代码即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import com.test.complicatedDataStrucrure;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Android提供AIDL语言以及AIDL解释器自动生成一个服务器的Bn端，即Bp端用于处理Binder通信的代码，当我们写好ITest.aidl文件之后，我们使用aidl工具将其解析为一个实现了Bn端及Bp端通过Binder进行通信的Java代码，当完成aidl解析之后，开发者需要继承XXX.Stub类并实现其抽象方法。</p>
+</blockquote>
+<h1 id="Java-Binder整体架构"><a href="#Java-Binder整体架构" class="headerlink" title="Java Binder整体架构"></a>Java Binder整体架构</h1><p>Java层的Binder其实也是一个C/S架构，而且在类的命名上尽量保持与Native层一致，因此也可认为，Java层的Binder架构是Native层Binder架构的一个镜像。Java Binder中的成员如下图所示：</p>
+<p><img src="https://i.loli.net/2019/09/14/w8AjvftVremi5BT.png" alt="JavaBinder.PNG"></p>
+<p>其中：</p>
+<ul>
+<li><p>Binder和BinderProxy类分别实现了IBinder接口。其中Binder类作为服务端的Bn的代表，而BinderProxy作为客户端的Bp的代表（由linkToDeath（）函数也可见一斑，native层中Bp正是由这个函数来实现消息通知）</p>
+</li>
+<li><p>BinderInternal类是一个仅供Binder框架使用的类。它内部有一个GcWatcher类，该类专门用于处理和Binder相关的垃圾回收</p>
+</li>
+</ul>
+<blockquote>
+<p>IBinder接口类中定义了一个叫FLAG_ONEWAY的整型变量，在调用Binder函数时，在指明了FLAG_ONEWAY标志后，函数就变成了非阻塞式调用（类似于回调）</p>
+</blockquote>
+<p>Java层Binder需要借助Native层Binder系统来开展工作，即镜像和Native有着千丝万缕的关系，一定要在Java层Binder正式工作之前建立这种关系，Java层Binder框架的初始化顺序如下：</p>
+<p>Java初创初期，系统会提前注册一些JNI函数，其中有一个register_android_os_Binder函数来专门搭建Java Binder和Native交互关系，在register_android_os_Binder函数中，完成了JavaBinder架构中最重要的三个类的初始化工作，顺序如下：</p>
+<ol>
+<li><p>Binder类的初始化：使用gBinderOffsets对象保存了和Binder类相关的某些在JNI层使用的信息，用来在JNI层对Java层的Binder对象进行操作</p>
+</li>
+<li><p>BinderInternal类的初始化：获取一些有用的methodID和fieldID，表明JNI层一定会向上调用Java层的函数，以及注册相关类中native函数的实现。</p>
+</li>
+<li><p>BinderProxy类的初始化：获取WeakReference类和ERROR类的一些信息，BinderProxy对象的生命周期会委托WeakReference来管理，所以JNI层会获取该类get函数的MethodID</p>
+</li>
+</ol>
+<blockquote>
+<p>框架的初始化其实就是提前获取一些JNI层的使用信息，如类成员的MethodID、类成员变量的fieldID等。它能节省每次使用时获取这些信息的时间。当Binder调用频繁时，这些时间的积累也不容小觑。同时，这个过程中所创建的几个全局静态对象为JNI层访问Java层的对象提供了依据。每个初始化函数中所执行的registerNativeMethods（）方法则为Java层访问JNI层打通了道路。换句话说，Binder初始化的工作就是通过JNI建立起Native Binder与Java Binder之间互相通信的桥梁。</p>
+</blockquote>
+<h2 id="ActivityManagerService"><a href="#ActivityManagerService" class="headerlink" title="ActivityManagerService"></a>ActivityManagerService</h2><p>与native中MediaServer的例子一样，这里我们也使用一个具体的例子来解释Java层Binder的工作原理</p>
+<h3 id="AMS如何将自己注册到ServiceManager"><a href="#AMS如何将自己注册到ServiceManager" class="headerlink" title="AMS如何将自己注册到ServiceManager"></a>AMS如何将自己注册到ServiceManager</h3><p>AMS通过addService函数将一个叫做JavaBBinder的对象添加到Parcel中，而最终传递到Binder驱动的正是这个JavaBBinder对象。Java层中所有的Binder对应的都是这个JavaBBinder对象，不同的Binder对象对应不同的JavaBBinder对象。</p>
+<blockquote>
+<p>JavaBBinder是从BBinder（native）派生的</p>
+</blockquote>
+<h3 id="ActivityManagerService相应请求"><a href="#ActivityManagerService相应请求" class="headerlink" title="ActivityManagerService相应请求"></a>ActivityManagerService相应请求</h3><p>JavaBBinder仅仅是一个传声筒，它本身不实现任何业务函数，其工作是：</p>
+<ol>
+<li><p>当它收到请求时，只是简单地调用它所绑定的Java层的Binder对象的exeTransact</p>
+</li>
+<li><p>该Binder对象的exeTransact调用其子类实现的onTransact函数</p>
+</li>
+<li><p>子类的onTransact函数将业务又派给其子类来完成</p>
+</li>
+</ol>
+<p>通过这种方式，来自客户端的请求就能传递到正确的Java Binder对象了，下图展示了AMS相应请求的整个流程。</p>
+<p><img src="https://i.loli.net/2019/09/15/ng2K67ZuPajXBOd.png" alt="AMS响应过程.PNG"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在本章的学习中，我们学习了native中的Binder和Java中的Binder，总结分别如下：</p>
+<h2 id="native层Binder"><a href="#native层Binder" class="headerlink" title="native层Binder"></a>native层Binder</h2><ol>
+<li><p>Binder体系的总体架构，Client、Server和ServiceManager三者之间的关系（包括交互的先后关系）、</p>
+</li>
+<li><p>MediaPlayerService注册服务解析，通过handle=0找到ServiceManager注册，最后MediaPlayerService有两个线程处理请求</p>
+</li>
+<li><p>ServiceManager解析，ServiceManager成为manager需要将自己的handle置为0，它的作用是对需要注册的服务进行管理，包括权限控制等，同时帮助Client找到对应的Server</p>
+</li>
+<li><p>Client通过字符串（Service的名称）来得到对应的服务，这里以MediaPlayerService为例，展示了Client与MediaPlayerService交互的细节，哪个线程发起请求，答复就会送回到哪个请求</p>
+</li>
+<li><p>Binder对于匿名Service的管理，匿名Service可以通过在Binder驱动中的操作来注册自己（其实就是给自己一个独一无二的handle），以及对死亡进程的监听，native层与Java层Service的实现</p>
+</li>
+</ol>
+<h2 id="native层Binder-1"><a href="#native层Binder-1" class="headerlink" title="native层Binder"></a>native层Binder</h2><p>Java层的Binder可以用一张图来总结，因为Java层的Binder十分依赖native层的Binder。</p>
+<p><img src="https://i.loli.net/2019/09/15/VbfDFe5L8pTMUro.png" alt="Java层Binder架构.PNG"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2019/09/16/深入理解Android：MessageQueue/">深入理解Android：Looper、Handler及MessageQueue</a></li><li><a href="/2019/09/12/深入理解Android：Surface/">深入理解Android：Surface</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/21/Kotlin之码上开学课后习题/" rel="next" title="Kotlin之码上开学课后习题（不时更新）">
+                <i class="fa fa-chevron-left"></i> Kotlin之码上开学课后习题（不时更新）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/深入理解Android：Surface/" rel="prev" title="深入理解Android：Surface">
+                深入理解Android：Surface <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Native-Binder-总体架构"><span class="nav-number">1.</span> <span class="nav-text">Native Binder 总体架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MediaServer"><span class="nav-number">1.1.</span> <span class="nav-text">MediaServer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获得一个ProcessState实例：sp-proc-ProcessState-self"><span class="nav-number">1.1.1.</span> <span class="nav-text">获得一个ProcessState实例：sp proc(ProcessState::self());</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sp-sm-defaultServiceManager-调用defaultServiceManager，得到一个IServiceManager。"><span class="nav-number">1.1.2.</span> <span class="nav-text">sp sm = defaultServiceManager();:调用defaultServiceManager，得到一个IServiceManager。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化多媒体系统的MediaPlayer服务：MediaPlayerService-Instantiate"><span class="nav-number">1.1.3.</span> <span class="nav-text">初始化多媒体系统的MediaPlayer服务：MediaPlayerService::Instantiate();</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ProcessState-self-gt-startThreadPool-创建线程池"><span class="nav-number">1.1.4.</span> <span class="nav-text">ProcessState::self()-&gt;startThreadPool():创建线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPCThreadState-self-gt-joinThreadPool"><span class="nav-number">1.1.5.</span> <span class="nav-text">IPCThreadState::self()-&gt;joinThreadPool();</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MediaPlayerService总结"><span class="nav-number">1.1.6.</span> <span class="nav-text">MediaPlayerService总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务总管ServiceManager"><span class="nav-number">1.2.</span> <span class="nav-text">服务总管ServiceManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ServiceManager的原理"><span class="nav-number">1.2.1.</span> <span class="nav-text">ServiceManager的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ServiceManger的入口函数"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">ServiceManger的入口函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServiceManager存在的意义"><span class="nav-number">1.2.2.</span> <span class="nav-text">ServiceManager存在的意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MediaPlayerService和它的Client"><span class="nav-number">1.3.</span> <span class="nav-text">MediaPlayerService和它的Client</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询ServiceManager"><span class="nav-number">1.3.1.</span> <span class="nav-text">查询ServiceManager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MediaPlayerService细节"><span class="nav-number">1.3.2.</span> <span class="nav-text">MediaPlayerService细节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Binder的实现"><span class="nav-number">1.4.</span> <span class="nav-text">Binder的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder和线程的关系"><span class="nav-number">1.4.1.</span> <span class="nav-text">Binder和线程的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder消息通知"><span class="nav-number">1.4.2.</span> <span class="nav-text">Binder消息通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名Service"><span class="nav-number">1.4.3.</span> <span class="nav-text">匿名Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的实现实例（Native层）"><span class="nav-number">1.4.4.</span> <span class="nav-text">Service的实现实例（Native层）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service的实现实例（Java层）"><span class="nav-number">1.4.5.</span> <span class="nav-text">Service的实现实例（Java层）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Binder整体架构"><span class="nav-number">2.</span> <span class="nav-text">Java Binder整体架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ActivityManagerService"><span class="nav-number">2.1.</span> <span class="nav-text">ActivityManagerService</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AMS如何将自己注册到ServiceManager"><span class="nav-number">2.1.1.</span> <span class="nav-text">AMS如何将自己注册到ServiceManager</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ActivityManagerService相应请求"><span class="nav-number">2.1.2.</span> <span class="nav-text">ActivityManagerService相应请求</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#native层Binder"><span class="nav-number">3.1.</span> <span class="nav-text">native层Binder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#native层Binder-1"><span class="nav-number">3.2.</span> <span class="nav-text">native层Binder</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

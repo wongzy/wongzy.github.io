@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="总体关系Surface是Android中的图像系统，我们将通过以下两点来对它进行学习：  应用程序和Surface的关系  Surface和SurfaceFlinger之间的关系   两个图表明了这两点：  左图表示了应用程序和Surface之间的关系，可以发现，不论是使用Skia绘制二维图像，还是用OpenGL绘制三维图像，最终Application都要和Surface交互。Surface就像是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Android：Surface">
+<meta property="og:url" content="https://wongzhenyu.cn/2019/09/12/深入理解Android：Surface/index.html">
+<meta property="og:site_name" content="卖欠账包的王大麻">
+<meta property="og:description" content="总体关系Surface是Android中的图像系统，我们将通过以下两点来对它进行学习：  应用程序和Surface的关系  Surface和SurfaceFlinger之间的关系   两个图表明了这两点：  左图表示了应用程序和Surface之间的关系，可以发现，不论是使用Skia绘制二维图像，还是用OpenGL绘制三维图像，最终Application都要和Surface交互。Surface就像是">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://i.loli.net/2019/09/12/QvyimP9dO4Xw1NI.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/22/92akqKvLtngONM4.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/22/N5E4Rz2diKeL3Hq.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/23/WVzh1ujvUMKAYe4.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/24/n2OGipwtIYmga3A.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/27/VGY6esrb3QHuE8t.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/27/XGYKPN836lrQpTD.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/30/BvamZsL78q5KgYn.png">
+<meta property="og:updated_time" content="2020-02-01T05:51:52.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解Android：Surface">
+<meta name="twitter:description" content="总体关系Surface是Android中的图像系统，我们将通过以下两点来对它进行学习：  应用程序和Surface的关系  Surface和SurfaceFlinger之间的关系   两个图表明了这两点：  左图表示了应用程序和Surface之间的关系，可以发现，不论是使用Skia绘制二维图像，还是用OpenGL绘制三维图像，最终Application都要和Surface交互。Surface就像是">
+<meta name="twitter:image" content="https://i.loli.net/2019/09/12/QvyimP9dO4Xw1NI.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wongzhenyu.cn/2019/09/12/深入理解Android：Surface/">
+
+
+
+
+
+  <title>深入理解Android：Surface | 卖欠账包的王大麻</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卖欠账包的王大麻</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2019/09/12/深入理解Android：Surface/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wong Zhenyu">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卖欠账包的王大麻">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解Android：Surface</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-12T21:06:15+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/深入理解Android系列丛书学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深入理解Android系列丛书学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  3,936 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  16 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="总体关系"><a href="#总体关系" class="headerlink" title="总体关系"></a>总体关系</h1><p>Surface是Android中的图像系统，我们将通过以下两点来对它进行学习：</p>
+<ol>
+<li><p>应用程序和Surface的关系</p>
+</li>
+<li><p>Surface和SurfaceFlinger之间的关系</p>
+</li>
+</ol>
+<p>两个图表明了这两点：</p>
+<p><img src="https://i.loli.net/2019/09/12/QvyimP9dO4Xw1NI.png" alt="surface系统两个关系.PNG"></p>
+<p>左图表示了应用程序和Surface之间的关系，可以发现，不论是使用Skia绘制二维图像，还是用OpenGL绘制三维图像，最终Application都要和Surface交互。Surface就像是UI的画布。而App则像是在Surface上作画。</p>
+<p>右图表示了Surface和SurfaceFlinger的关系。Surface向SurfaceFlinger提供数据，而SurfaceFlinger则混合数据。</p>
+<h2 id="Activity的显示"><a href="#Activity的显示" class="headerlink" title="Activity的显示"></a>Activity的显示</h2><p>一般来说，应用程序的外表是通过Activity来展示的。那么，Activity是如何完成界面绘制工作的呢？根据前面所讲的知识可知，应用程序的显示和Surface有关，那么具体到Activity上，它和Surface又是什么关系？</p>
+<h3 id="Activity的创建"><a href="#Activity的创建" class="headerlink" title="Activity的创建"></a>Activity的创建</h3><p>在收到创建Activity请求后，zygote进程在响应请求后会for一个子进程，这个子进程是App对应的进程，它的入口函数是ActivityThread类的main函数。</p>
+<blockquote>
+<p>main函数中也包括了初始化主线程（UI线程）Looper的逻辑</p>
+</blockquote>
+<p>ActivityThread类中有一个handleLaunchActivity函数，它就是创建Activity的地方，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private final void handleLaunchActivity(ActivityRecord r, Intent customIntent) &#123;</span><br><span class="line">//1.performLaunchActivity返回一个Activity</span><br><span class="line">Activity a = perforLaunchActivity(r, customIntent);</span><br><span class="line">if (a != null) &#123;</span><br><span class="line">r.createdConfig = new Configuaration(mConfigration);</span><br><span class="line">Bundle oldState = r.state;</span><br><span class="line">//2.调用handleResumeActivity</span><br><span class="line">handleResumeActivity(r.token, false, r.isForward);</span><br><span class="line">&#125;</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>handleLaunchActivity函数中列出了两个关键点：</p>
+<ol>
+<li><p>perforLaunchActivity</p>
+</li>
+<li><p>handleResumeActivity</p>
+</li>
+</ol>
+<h4 id="创建Activity"><a href="#创建Activity" class="headerlink" title="创建Activity"></a>创建Activity</h4><p>第一个关键函数performLaunchActivity返回一个Activity，这个Activity就是App中的那个Activity（仅仅考虑App中只有一个Activity的情况），它的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">private final Activity performLaunchActivity(ActivityRecord r,Intent cusomIntent) &#123;</span><br><span class="line">Activity Info aInfo = r.activityInfo;</span><br><span class="line">......//完成一些准备工作。</span><br><span class="line">//Activity定义在Activity.java中</span><br><span class="line">Activity activity = null;</span><br><span class="line">try &#123;</span><br><span class="line">java.lang.ClassLoader cl = r.packageInfo.getClassLoader();</span><br><span class="line">/*mInstrumentation为Instrumentation类型，</span><br><span class="line">源文件为Instrumentation.java它在newActivity函数中根据Activity的类名通过Java反射机制来创建对应的Activity，</span><br><span class="line">这个函数比较复杂*/</span><br><span class="line">activity = mInstrumentation.newActivity(cl,component.getClassName(),r.intent);</span><br><span class="line">r.intent.setExtrasClassLoader(cl);</span><br><span class="line">if(r.state != null) &#123;</span><br><span class="line">r.state.setClassLoader(cl);</span><br><span class="line">&#125;</span><br><span class="line">&#125;catch(Exception e) &#123;</span><br><span class="line">......</span><br><span class="line">&#125;</span><br><span class="line">try &#123;</span><br><span class="line">Application app = r.packageInfo.makeApplication(false, mInstrumentation);</span><br><span class="line">if (activity != null) &#123;</span><br><span class="line">//在Activity中getContext函数返回的就是这个ContextImpl类型的对象</span><br><span class="line">ComtextImpl appContext = new ContextImpl();</span><br><span class="line">......</span><br><span class="line">//下面这个函数会调用Activity的onCreate函数。</span><br><span class="line">mInstrumentation.callActivityOnCreate(actvity, r.state);</span><br><span class="line">......</span><br><span class="line">return activity;</span><br></pre></td></tr></table></figure>
+<p>performLaunchActivity的作用有以下两点：</p>
+<ol>
+<li><p>根据类名以Java反射的方法创建一个Activity</p>
+</li>
+<li><p>调用Activity的onCreate函数</p>
+</li>
+</ol>
+<p>在onCreate函数中，我们一般会调用setContentView函数，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void setContentView(View view) &#123;</span><br><span class="line">getWindow().setContentView(view);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Window getWindow() &#123;</span><br><span class="line">return mWindow;//返回一个类型为Window的mWindow</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面来看一下window和view的两个概念：</p>
+<ul>
+<li><p>Window：Window是一个抽象基类，用于控制顶层窗口的外观和行为，它的作用是绘制背景和标题栏、默认的按键处理等。它将作为一个顶级的View加入到WindowManager中。</p>
+</li>
+<li><p>View：View是一个基本的UI单元，占据屏幕的一块矩形区域，可用于绘制，并能处理事件。</p>
+</li>
+</ul>
+<p>那么Window是一个抽象类，它实际的对象是什么类型的？Window Manager究竟是什么？</p>
+<p>Windows实际的创建在这段代码里面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//利用PolicyManager来创建Window对象</span><br><span class="line">mWindow = PolicyManager.makeNewWindow(this);</span><br></pre></td></tr></table></figure>
+<p>PolicyManager的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PolicyManger</span></span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String POLICY_IMPL_CLASS_NAME = <span class="string">"com.android.internal.policy.impl.Policy"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> IPolicy sPolicy;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    Class policyClass = Class.forName(POLICY_IMPL_CLASS_NAME);</span><br><span class="line">    <span class="comment">//创建Policy对象。</span></span><br><span class="line">    sPolicy = (IPolicy) policyClass.newInstace();</span><br><span class="line">&#125; <span class="keyword">catch</span> (ClassNotFoundException e)  &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">PolicyManger</span><span class="params">()</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//通过Policy对象的makeNewWindow创建一个Window。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Window <span class="title">makeNewWindow</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> sPolicy.makeNewWindw(context);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有一个单例的sPolicy对象，它是Policy类型的，定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Policy</span> <span class="keyword">implements</span>  <span class="title">IPolicy</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"PhonePolicy"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] preload_classes = <span class="keyword">new</span> String[] &#123;</span><br><span class="line"><span class="string">"com.android.internal.policy.impl.PhoneLayoutInflater"</span>,</span><br><span class="line"><span class="comment">//......</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//加载所有的类</span></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line"><span class="keyword">for</span> (String s:preload_classes) &#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        Class.forName(s);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException ex) &#123;</span><br><span class="line">        ......</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> PhoneWindow <span class="title">makeNewWindow</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line"><span class="comment">//makeNewWindow返回的是PhoneWindow对象</span></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> PhoneWindow(context);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里就能确定了，mWindow对象实际上是一个PhoneWindow，而WindowManger的实际创建代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wm = WindowManager.getDefault();</span><br><span class="line">mWindowManger = new LocalWindowManager(wm);</span><br></pre></td></tr></table></figure>
+<p>LocalWindowManager是在Window中定义的内部类，请看它的构造函数，定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">LocalWindowManager</span> <span class="keyword">implements</span> <span class="title">WindowManager</span> </span>&#123;</span><br><span class="line">LocalWindowManager(WindowManager wm) &#123;</span><br><span class="line">    mWindowManager = wm;</span><br><span class="line">    mDefaultDisplay = mContext.getResources().getDefaultDisplay(</span><br><span class="line">        mWindowManager.getDefaultDisplay());</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>wm的实际类型为WindowManagerImpl，他们的类关系如下：</p>
+<p><img src="https://i.loli.net/2019/09/22/92akqKvLtngONM4.png" alt="WindowManager.PNG"></p>
+<p>从这个图可以得出以下结论：</p>
+<ul>
+<li><p>Activity的mWindow成员变量其真实类型是PhoneWindow，而mWindowManager成员变量的真实类型是LocalWindowManager。</p>
+</li>
+<li><p>LocalWindowManager和WindowManagerImpl都实现了WindowManager接口。这里采用的是Proxy模式，表明LocalWindowManager将把它的工作委托给WindowManagerImpl来完成。</p>
+</li>
+</ul>
+<p>Activity的setContent函数实际上调用的是PhoneWindow的setContent函数，PhoneWindow的setContent函数如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public void setContentView(View view) &#123;</span><br><span class="line">//调用另一个setContentView</span><br><span class="line">setContentView(view, new ViewLayoutParams(MATCH_PARENT,MATCH_PAENT));</span><br><span class="line">&#125;</span><br><span class="line">public void setContentView(View view,ViewGroup.LayoutParams params) &#123;</span><br><span class="line">//mContentParaent为ViewGroup类型，它的初值为null</span><br><span class="line">if（mContentParent == null &#123;</span><br><span class="line">installDecor();</span><br><span class="line">&#125; else &#123;</span><br><span class="line">mContentParent.removeAllViews();</span><br><span class="line">&#125;</span><br><span class="line">//把view加入到ViewGroup中。</span><br><span class="line">mContentParent.addView(view, params);</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>installDecor函数如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private void installDecor() &#123;</span><br><span class="line">if (mDeocr == null) &#123;</span><br><span class="line">//创建mDecor,它为DecorView类型，从FrameLayout派生</span><br><span class="line">mDecor = generateDecor();</span><br><span class="line">......</span><br><span class="line">&#125;</span><br><span class="line">if (mContentParent == null) &#123;</span><br><span class="line">//得到这个mContentParent</span><br><span class="line">mContentParent = generateLayout(mDecor);</span><br><span class="line">//创建标题栏</span><br><span class="line">mTitleView (TextView)findViewById(com.android.internal.R.id.title);</span><br></pre></td></tr></table></figure>
+<p>而generateLayout的作用就是获取对应的标题栏，然后将它加入到ViewGroup中，最后将ViewGroup返回。</p>
+<p>PhoneWindow、WindowManager、DecorView的关系如下：</p>
+<p><img src="https://i.loli.net/2019/09/22/N5E4Rz2diKeL3Hq.png" alt="window、phonewindow关系.PNG"></p>
+<p>从上图可以看出，在Activity的onCreate函数中，通过setContentView设置的View，其实只是DecorView的子View。DecorView还处理了标题栏显示等一系列的工作。</p>
+<h4 id="handleResumeActivity分析"><a href="#handleResumeActivity分析" class="headerlink" title="handleResumeActivity分析"></a>handleResumeActivity分析</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">final void handleResumeActivity(IBinder token, boolean clearHide, boolean isForward) &#123;</span><br><span class="line">boolean willBeVisible = !a.mStartedActivity;</span><br><span class="line">if (r.window == null &amp;&amp; !a.mFinished &amp;&amp; willBeVisible) &#123;</span><br><span class="line">r.window = r.activity.getWindow();</span><br><span class="line">//1.获得一个View对象</span><br><span class="line">View decor = r.window.getDecorView();</span><br><span class="line">decor.setVisibility(View.INVISIBLE);</span><br><span class="line">//2.获得ViewManager对象。</span><br><span class="line">ViewManager wm = a.getWindowManager();</span><br><span class="line">......</span><br><span class="line">//3.把刚才的decor对象加入到ViewManager中。</span><br><span class="line">wm.addView(decor,I);</span><br><span class="line">&#125;</span><br><span class="line">......//其他处理</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上文中，我们分析了DecorView和ViewManager等对象，那么最后的wm.addView（decor， I）是什么呢？实际上，这里创建了一个ViewRoot对象，并把刚刚的View设置到这个ViewRoot对象中。</p>
+<ul>
+<li>ViewRoot是什么？</li>
+</ul>
+<p>ViewRoot实现了ViewParent接口，但是它不处理绘画，因为它没有onDraw函数。</p>
+<p>ViewRoot的定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewRoot</span> <span class="keyword">extends</span> <span class="title">Handler</span> <span class="keyword">implements</span> <span class="title">ViewParent</span>,<span class="title">View</span>.<span class="title">Attachinfo</span>.<span class="title">Callbacks</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Surface mSurface = <span class="keyword">new</span> Surface();<span class="comment">//这里创建了一个Surface对象</span></span><br><span class="line"><span class="keyword">final</span> W mWindow;<span class="comment">//这个是什么？</span></span><br><span class="line">View mView;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个定义表达了三点：</p>
+<ol>
+<li><p>ViewRoot继承了Handler类，看来它能处理消息。ViewRoot重写了handleMessage函数。</p>
+</li>
+<li><p>ViewRoot有一个成员变量叫mSurface，它是Surface类型</p>
+</li>
+<li><p>ViewRoot还有W类型的mWindow和一个View类型的mView变量</p>
+</li>
+</ol>
+<p>其中，W是ViewRoot定义的一个静态内部类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static class W extends IWindow.Stub</span><br></pre></td></tr></table></figure>
+<p>这个类将参与Binder的通信。</p>
+<p>其中，Surface是Android真正的画布，它包含了以下几点：</p>
+<ol>
+<li><p>有一块Raw buffer，至于是内存还是显存，不必管它。</p>
+</li>
+<li><p>Surface操作这块Raw buffer</p>
+</li>
+<li><p>Screen compositor（其实就是SurfaceFlinger）管理这块Raw buffer</p>
+</li>
+</ol>
+<p>Surface和SF、ViewRoot的关系图如下：</p>
+<p><img src="https://i.loli.net/2019/09/23/WVzh1ujvUMKAYe4.png" alt="画布工作原理.PNG"></p>
+<p>这张图表达了以下几点：</p>
+<ol>
+<li><p>ViewRoot有一个成员变量mSurface，它是Surface类型，它和一块RawBuffer有关联。</p>
+</li>
+<li><p>ViewRoot是一个ViewParent，它的子View的绘画操作，是在画布Surface上展开的。</p>
+</li>
+<li><p>Surface和SurfaceFlinger有交互</p>
+</li>
+</ol>
+<p>ViewRoot的构造如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public ViewRoot(Context context) &#123;</span><br><span class="line">super();</span><br><span class="line">....</span><br><span class="line">getWindowSession(context.getMainLooper());</span><br><span class="line">......//ViewRoot的mWindow是一个W类型，注意它不是Window类型，而是IWindow类型</span><br><span class="line">mWindow = new W(this, context);</span><br></pre></td></tr></table></figure>
+<p>getWindowsession函数，将建立Activity的ViewRoot和WindowManagerService的关系。代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ublic static IWindowSession getWindowSession(Looper mainLooper) &#123;</span><br><span class="line">synchronized(mStaticInit) &#123;</span><br><span class="line">if (!mInitialized) &#123;</span><br><span class="line">try &#123;</span><br><span class="line">InputMethodManager imm = InputMethodManager.getInstance(mainLooper);</span><br><span class="line">//下面这个函数先得到WindowManagerService的Binder代理，然后调用它的OpenSession。</span><br><span class="line">sWindowSession = IWindowManager.Stub.asInterface&#123;</span><br><span class="line">ServiceManager.getService(&quot;window&quot;)).openSession(imm.getClient(),imm.getInputContext());</span><br><span class="line">mInitalized = true;</span><br><span class="line">&#125; catch (RemoteException e) &#123;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">return sWindowSession;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>WindowManagerService由System_Server进程启动，SurfaceFligner也在这个进程中，Activity的显示还需要与WMS建立联系。我们先看setView的处理。</p>
+<p>ViewRoot的setView函数做了三件事：</p>
+<ol>
+<li><p>保存传入的view参数为mView，这个mView指向PhoneWindow的DecorView。</p>
+</li>
+<li><p>调用requestLayout</p>
+</li>
+<li><p>调用IWindowSession的add函数，这是一个跨进程的Binder通信，第一个参数是mWindow，它是W类型，从IWindow.stub派生。</p>
+</li>
+</ol>
+<p>可以看出，ViewRoot和远端进程SystemServer的WMS有交互，先来总结以下它和WMS的交互流程。</p>
+<ol>
+<li><p>ViewRoot调用openSession，得到一个IWindowSession对象</p>
+</li>
+<li><p>调用WindowSession对象的add函数，把一个W类型的mWindow对象作为参数传入</p>
+</li>
+</ol>
+<ul>
+<li>ViewRoot和WMS的关系</li>
+</ul>
+<p>上面总结了ViewRoot和WMS的交互流程，其中一共有两个跨进程的调用，ViewRoot和WMS之间的关系如下：</p>
+<p><img src="https://i.loli.net/2019/09/24/n2OGipwtIYmga3A.png" alt="View和WMS.PNG"></p>
+<p>这张图中的知识点如下：</p>
+<ol>
+<li><p>ViewRoot通过IWindowSession和WMS进程进行跨进程通信。IWindowSession定义在IWindowSession.aidl文件中。这个文件在编译由aidl工具处理，最后会生成类似于Native Binder中Bn端和Bp端的代码。每个App进程都会和WMS建立一个IWindowSession对话，这个会话会被App进程用于和WMS通信。</p>
+</li>
+<li><p>ViewRoot内部有一个W类型的对象，它也是一个基于Binder通信的类，W是IWindow的Bn端，用于响应请求。IWindow定义在另一个aidl文件IWindow.aidl中。IWindow主要用于Android案件事件的分发，当WMS所在的SystemServer进程接收到按键事件后，会把它交给这个IWindow对象。</p>
+</li>
+</ol>
+<h2 id="Activity的UI绘制"><a href="#Activity的UI绘制" class="headerlink" title="Activity的UI绘制"></a>Activity的UI绘制</h2><p>在ViewRoot的setView函数中有一个requestLayout函数，它会向ViewRoot发送一个DO_TRAVERSAL消息，handleMessage函数中，对这个消息的处理是调用performTraversal函数，在performTraversal函数中，它会调用relayoutWindow和draw，这两个函数的作用分别如下：</p>
+<ul>
+<li>relayWindow</li>
+</ul>
+<p>relayoutWindow中会调用IWindowSession的relayout函数。</p>
+<ul>
+<li>draw</li>
+</ul>
+<p>在mSurface中lock一块Canvas，调用DecorView的draw函数，canvas就是画布，最后unlock画布，屏幕上马上就会显示了。</p>
+<h2 id="Activity的总结"><a href="#Activity的总结" class="headerlink" title="Activity的总结"></a>Activity的总结</h2><p>Activity的创建和显示，可以提炼成如下几条：</p>
+<ul>
+<li><p>Activity的顶层View是DecorView，而我们在onCreate函数中通过setContentView设置的View只不过是这个DecorView中的一部分罢了。DecorView是一个FrameLayout类型的ViewGroup。</p>
+</li>
+<li><p>Activity和UI有关，它包括一个Window（真实类型是PhoneWindow）和一个WindowManager（真实类型是LocalWindowManager）对象。这两个对象将控制整个Activity的显示。</p>
+</li>
+<li><p>LocalWindowManager使用了WindowManagerImpl作为最终的处理对象（Proxy模式），这个WindowManagerImpl中有一个ViewRoot对象。</p>
+</li>
+<li><p>ViewRoot实现了ViewParent接口，它有两个重要的成员变量，一个是mView，它指向Activity顶层UI单元的DecorView，另外一个是mSurface，这个Surface包含了一个Canvas（画布）。除此之外，ViewRoot还通过Binder系统和WindowManagerService进行了跨进程通信。</p>
+</li>
+<li><p>ViewRoot能处理Handler的消息，Activity的显示就是由ViewRoot在它的performTraversals函数中完成的</p>
+</li>
+<li><p>整个Activity的绘图流程就是从mSurface中lock一块Canvas，然后交给mView去自由发挥画画的才能，最后unLockCanvasAndPost释放这块Canvas</p>
+</li>
+</ul>
+<p>初识Surface</p>
+<p>Surface对象是纵跨Java/JNI层的对象，与它相关的流程如下：</p>
+<ol>
+<li>在ViewRoot构造时，会创建一个Surface，它使用无参构造函数，代码如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private final Surface mSurface = new Surface();</span><br></pre></td></tr></table></figure>
+<ol>
+<li>ViewRoot通过IWindowSession和WMS交互，而WMS调用中调用的一个attach函数会构造一个SurfaceSession，代码如下：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void windowAddedLocked() &#123;</span><br><span class="line">if (mSurfaceSession == null) &#123;</span><br><span class="line">mSurfaceSession = new SurfaceSession();</span><br><span class="line">mNumWindow++;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>ViewRoot在performTransval的处理过程中会调用IWindowSession的relayout函数。</p>
+</li>
+<li><p>ViewRoot调用Surfaced lockCanvas，得到一块画布</p>
+</li>
+<li><p>ViewRoot调用Surface的unLockCanvasAndPost释放这块画布。</p>
+</li>
+</ol>
+<p>下面来看一下relayout函数的本质，relayout函数是一个跨进程的调用，由WMS完成实际处理。</p>
+<p>Surface的创建流程如下：</p>
+<p><img src="https://i.loli.net/2019/09/27/VGY6esrb3QHuE8t.png" alt="Surface创建流程.png"></p>
+<blockquote>
+<p>来自CSDN邓老师博客</p>
+</blockquote>
+<p>由此图可以看出：</p>
+<ul>
+<li><p>WMS中的Surface才是真正的Surface，它的构造使用了带SurfaceSession参数的构造函数</p>
+</li>
+<li><p>ViewRoot中的Surface是一个“伪”Surface，它的构造使用了无参构造函数。</p>
+</li>
+<li><p>copyFrom就是进行转移，它将真正的Surface信息拷贝到“伪”Surface即outSurface里</p>
+</li>
+</ul>
+<p>而这个过程则需要使用aidl帮助完成，这个过程发生在ViewRoot调用IWindowSession的relayout函数中，它在IWindowSession.aidl的定义如下：</p>
+<p><img src="https://i.loli.net/2019/09/27/XGYKPN836lrQpTD.png" alt="乾坤大挪移真相.png"></p>
+<h3 id="创建Surface的JNI层分析"><a href="#创建Surface的JNI层分析" class="headerlink" title="创建Surface的JNI层分析"></a>创建Surface的JNI层分析</h3><p>在JNI层，第一个被调用的是Surface的无参构造函数，其代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Surface() &#123;</span><br><span class="line">//CompatibleCanvas从Canvas类派生</span><br><span class="line">mCanvas = new CompatibleCanvas();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Canvas是画图所需要的四个类其中之一，这四个类分别是：</p>
+<ul>
+<li><p>Bitmap：用于存储像素，也就是画布。可把它当作一块数据存储区域。</p>
+</li>
+<li><p>Canvas：用于记载画图的动作，比如画一个圆，画一个矩形等。Canvas类提供了这些基本的绘图函数。</p>
+</li>
+<li><p>Drawing primitive：绘图基本元素，例如矩形、圆、弧线、文本、图片等。</p>
+</li>
+<li><p>Paint：它用来描述绘画时使用的颜色、风格（如实线、虚线等）</p>
+</li>
+</ul>
+<p>在一般情况下，Canvas会封装一块Bitmap，而作图就是基于这块Bitmap的。前面所说的画布，其实指的就是Canvas中的这块Bitmap。</p>
+<p>那么，真正的Surface怎么对它进行替换呢？可以分为以下几个流程：</p>
+<ol>
+<li><p>创建一个SurfaceComposerClient</p>
+</li>
+<li><p>调用SurfaceComposerClient的createSurface得到一个SurfaceControl对象</p>
+</li>
+<li><p>调用SurfaceControl的writeToParcel把一些信息写到Parcel包中</p>
+</li>
+<li><p>根据Parcel包的信息构造一个Surface对象。把这个Surface对象保存到Java层的mSurface对象中，这样，ViewRoot最终得到了一个Native的Surface对象。</p>
+</li>
+</ol>
+<h3 id="Surface和画图"><a href="#Surface和画图" class="headerlink" title="Surface和画图"></a>Surface和画图</h3><p>最后两个和Surface相关的函数调用是lockCanvas和unlockCanvasAndPost。</p>
+<ul>
+<li><p>lockCanvas： 先获得一块存储区域，然后将它和Canvas绑定到一起，这样，UI绘画的结果就记录在这块存储里了</p>
+</li>
+<li><p>unlockCanvasAndPost：调用Surface对象的unlockAndPost函数</p>
+</li>
+</ul>
+<h3 id="Surface流程"><a href="#Surface流程" class="headerlink" title="Surface流程"></a>Surface流程</h3><p>Surface精简流程可以由如下这个图概括</p>
+<p><img src="https://i.loli.net/2019/09/30/BvamZsL78q5KgYn.png" alt="Surface精简流程.PNG"></p>
+<h2 id="ViewRoot总结"><a href="#ViewRoot总结" class="headerlink" title="ViewRoot总结"></a>ViewRoot总结</h2><p>ViewRoot是Surface系统甚至UI系统中一个非常重要的类，VieRoot的总结如下：</p>
+<ul>
+<li>ViewRoot和View类的关系是上面？</li>
+</ul>
+<p>ViewRoot是View视图体系的根，每一个Window（注意是Window，比如PhoneWindow）有一个ViewRoot，它的作用是处理layout和View视图体系的绘制工作。视图体系包括Views和ViewGroupa，也就是SDK中能看到的View类都属于视图体系。根据前面的根系可知，这些View是需要通过draw画出来的。而ViewRoot就是用来draw他们的，ViewRoot本身没有draw/onDraw函数。</p>
+<ul>
+<li>ViewRoot和它所控制的View及其子View使用同一个Canvas吗？</li>
+</ul>
+<p>ViewRoot提供Canvas给它所控制的View，所以他们使用同一个Canvas。但Canvas使用的内存却不是固定的，而是通过Surface的lockCanvas得到的。</p>
+<ul>
+<li>View、Surface和Canvas之间的关系？</li>
+</ul>
+<p>一个Window将和一个Surface绑定在一起，绘制前ViewRoot会从Surface中lock除一个Canvas。</p>
+<ul>
+<li>Canvas有一个bitmap，那么绘制UI时，数据是画在Canvas的这个bitmap中吗？</li>
+</ul>
+<p>是的，bitmap实际上包括了一块内存，绘制的数据最终都在这块内存上。</p>
+<ul>
+<li>同一个ViewRoot下，不同类型的View使用同一个Surface吗？</li>
+</ul>
+<p>是的，但是SurfaceView要除外。因为SurfaceView的绘制一般在独立的线程上，并且由应用层主动调用lockCanvas，draw和unlockCanvasAndPost来完成绘制流程。应用层相当于抛开了ViewRoot的控制直接和屏幕打交道，这在camera、video方面用的最多。</p>
+<h1 id="Surface总结"><a href="#Surface总结" class="headerlink" title="Surface总结"></a>Surface总结</h1><p>主要是这两点：</p>
+<ul>
+<li><p>应用程序和Surface的关系</p>
+</li>
+<li><p>Surface和SurfaceFlinger的关系</p>
+</li>
+</ul>
+<p>应用程序与Surface的关系从应用程序的Activity开始，一路追踪到ViewRoot、WindowManagerService。</p>
+<p>SurfaceFlinger则主要负责视图的显示，App 端 copyFrom() 出来 NativeSurface 时会创建一个 SharedBufferClient 与 SharedClient 这块共享内存关联。当客户端 addView() 或者需要更新 View 时，会通过 SharedBufferClient 写入数据到 ShareClient 中，SurfaceFlinger 中的 SharedBufferServer 接收到通知会将 FrameBuffer 中的数据传输到屏幕上。HWComposer 是基于硬件来产生 VSync 信号的，来通知 SurfaceFlinger 重绘控制显示的帧率。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2019/09/16/深入理解Android：MessageQueue/">深入理解Android：Looper、Handler及MessageQueue</a></li><li><a href="/2019/08/27/深入理解Android：Binder/">深入理解Android：Binder</a></li></ul>
+      
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/27/深入理解Android：Binder/" rel="next" title="深入理解Android：Binder">
+                <i class="fa fa-chevron-left"></i> 深入理解Android：Binder
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/16/深入理解Android：MessageQueue/" rel="prev" title="深入理解Android：Looper、Handler及MessageQueue">
+                深入理解Android：Looper、Handler及MessageQueue <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Wong Zhenyu">
+            
+              <p class="site-author-name" itemprop="name">Wong Zhenyu</p>
+              <p class="site-description motion-element" itemprop="description">科班出身的野生程序猿</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wongzy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://m.weibo.cn/u/5730257253?sudaref=login.sina.com.cn&display=0&retcode=6102" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wongzhenyu96@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.linkedin.com/in/wong-zhenyu-57b262142/" target="_blank" title="LinkedIn">
+                      
+                        <i class="fa fa-fw fa-user-circle"></i>LinkedIn</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总体关系"><span class="nav-number">1.</span> <span class="nav-text">总体关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity的显示"><span class="nav-number">1.1.</span> <span class="nav-text">Activity的显示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity的创建"><span class="nav-number">1.1.1.</span> <span class="nav-text">Activity的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Activity"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">创建Activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#handleResumeActivity分析"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">handleResumeActivity分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity的UI绘制"><span class="nav-number">1.2.</span> <span class="nav-text">Activity的UI绘制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activity的总结"><span class="nav-number">1.3.</span> <span class="nav-text">Activity的总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Surface的JNI层分析"><span class="nav-number">1.3.1.</span> <span class="nav-text">创建Surface的JNI层分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Surface和画图"><span class="nav-number">1.3.2.</span> <span class="nav-text">Surface和画图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Surface流程"><span class="nav-number">1.3.3.</span> <span class="nav-text">Surface流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ViewRoot总结"><span class="nav-number">1.4.</span> <span class="nav-text">ViewRoot总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Surface总结"><span class="nav-number">2.</span> <span class="nav-text">Surface总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wong Zhenyu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
