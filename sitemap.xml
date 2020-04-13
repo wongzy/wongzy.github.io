@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wongzhenyu.cn/categories/index.html</loc>
+    <loc>https://wongzhenyu.cn/2020/04/13/Http-s-concept%E3%80%81working-mashanism-and-data-construction/</loc>
     
-    <lastmod>2020-02-01T05:51:52.368Z</lastmod>
+    <lastmod>2020-04-13T13:15:30.315Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/01/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%92%A4%E9%94%80-%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>https://wongzhenyu.cn/categories/index.html</loc>
     
-    <lastmod>2020-02-01T05:51:52.367Z</lastmod>
+    <lastmod>2020-02-01T05:51:52.368Z</lastmod>
     
   </url>
   
@@ -31,6 +31,13 @@
   
   <url>
     <loc>https://wongzhenyu.cn/2018/01/25/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%9A%84%E5%AF%B9%E8%B1%A1%E6%B1%A0-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.367Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wongzhenyu.cn/2018/01/22/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E6%92%A4%E9%94%80-%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2020-02-01T05:51:52.367Z</lastmod>
     
@@ -79,13 +86,6 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/01/20/%E7%89%B9%E6%AE%8A%E7%9A%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.365Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wongzhenyu.cn/2019/09/16/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Android%EF%BC%9AMessageQueue/</loc>
     
     <lastmod>2020-02-01T05:51:52.365Z</lastmod>
@@ -94,6 +94,13 @@
   
   <url>
     <loc>https://wongzhenyu.cn/2019/09/12/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Android%EF%BC%9ASurface/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.365Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wongzhenyu.cn/2018/01/20/%E7%89%B9%E6%AE%8A%E7%9A%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB-%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2020-02-01T05:51:52.365Z</lastmod>
     
@@ -121,13 +128,6 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/01/17/%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.363Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wongzhenyu.cn/2018/01/18/%E5%AF%B9%E8%B1%A1%E5%86%85%E9%83%A8%E7%9A%84%E6%94%B9%E5%8F%98-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2020-02-01T05:51:52.363Z</lastmod>
@@ -135,7 +135,14 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/01/13/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>https://wongzhenyu.cn/2018/01/17/%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.363Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wongzhenyu.cn/2018/01/26/%E6%8A%BD%E8%B1%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5%E6%A2%81-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2020-02-01T05:51:52.363Z</lastmod>
     
@@ -149,7 +156,7 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/01/26/%E6%8A%BD%E8%B1%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E6%A1%A5%E6%A2%81-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>https://wongzhenyu.cn/2018/01/13/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</loc>
     
     <lastmod>2020-02-01T05:51:52.363Z</lastmod>
     
@@ -261,14 +268,14 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/11/20/URL%E4%B8%8EURLconnection/</loc>
+    <loc>https://wongzhenyu.cn/2018/11/15/UDP-and-TCP2/</loc>
     
     <lastmod>2020-02-01T05:51:52.359Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/11/15/UDP-and-TCP2/</loc>
+    <loc>https://wongzhenyu.cn/2018/11/20/URL%E4%B8%8EURLconnection/</loc>
     
     <lastmod>2020-02-01T05:51:52.359Z</lastmod>
     
@@ -324,14 +331,14 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/11/08/UDP-and-TCP/</loc>
+    <loc>https://wongzhenyu.cn/2017/10/12/Rxjava2%E5%92%8CRetrofit2%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90bing%E6%AF%8F%E6%97%A5%E4%B8%80%E5%9B%BEJSON/</loc>
     
     <lastmod>2020-02-01T05:51:52.358Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2017/10/12/Rxjava2%E5%92%8CRetrofit2%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90bing%E6%AF%8F%E6%97%A5%E4%B8%80%E5%9B%BEJSON/</loc>
+    <loc>https://wongzhenyu.cn/2018/11/08/UDP-and-TCP/</loc>
     
     <lastmod>2020-02-01T05:51:52.358Z</lastmod>
     
@@ -352,13 +359,6 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/08/12/Lock%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%9E%E9%87%8D%E5%85%A5%E9%94%81%E5%92%8C%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.357Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wongzhenyu.cn/2017/11/06/MVP%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E8%BD%AF%E5%BC%95%E7%94%A8%E4%B8%8E%E5%BC%B1%E5%BC%95%E7%94%A8/</loc>
     
     <lastmod>2020-02-01T05:51:52.357Z</lastmod>
@@ -366,7 +366,7 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2017/10/07/NDK%E5%AE%9E%E7%8E%B0%E6%AF%9B%E7%8E%BB%E7%92%83%E6%95%88%E6%9E%9C%E5%AE%8C%E5%85%A8%E6%95%99%E7%A8%8B/</loc>
+    <loc>https://wongzhenyu.cn/2018/08/12/Lock%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%9E%E9%87%8D%E5%85%A5%E9%94%81%E5%92%8C%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/</loc>
     
     <lastmod>2020-02-01T05:51:52.357Z</lastmod>
     
@@ -374,6 +374,13 @@
   
   <url>
     <loc>https://wongzhenyu.cn/2017/12/26/OpeningStartAnimation%20-%20Android%E5%BC%80%E5%B1%8F%E5%8A%A8%E7%94%BBview/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.357Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wongzhenyu.cn/2017/10/07/NDK%E5%AE%9E%E7%8E%B0%E6%AF%9B%E7%8E%BB%E7%92%83%E6%95%88%E6%9E%9C%E5%AE%8C%E5%85%A8%E6%95%99%E7%A8%8B/</loc>
     
     <lastmod>2020-02-01T05:51:52.357Z</lastmod>
     
@@ -457,13 +464,6 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2017/10/13/DialogFragment%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.355Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://wongzhenyu.cn/2017/10/05/DialogFragment%E5%AE%9E%E7%8E%B0DatePicker/</loc>
     
     <lastmod>2020-02-01T05:51:52.355Z</lastmod>
@@ -471,9 +471,9 @@
   </url>
   
   <url>
-    <loc>https://wongzhenyu.cn/2018/08/25/Android%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://wongzhenyu.cn/2017/10/13/DialogFragment%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</loc>
     
-    <lastmod>2020-02-01T05:51:52.354Z</lastmod>
+    <lastmod>2020-02-01T05:51:52.355Z</lastmod>
     
   </url>
   
@@ -492,23 +492,16 @@
   </url>
   
   <url>
+    <loc>https://wongzhenyu.cn/2018/08/25/Android%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.354Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://wongzhenyu.cn/2019/04/16/Android%E7%94%B5%E8%A7%86%E7%84%A6%E7%82%B9%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2020-02-01T05:51:52.352Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wongzhenyu.cn/2017/10/19/Android%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%95%8C%E9%9D%A2PreferenceFragment%E7%9A%84%E7%94%A8%E6%B3%95/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.351Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://wongzhenyu.cn/2018/07/30/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2020-02-01T05:51:52.351Z</lastmod>
     
   </url>
   
@@ -520,7 +513,21 @@
   </url>
   
   <url>
+    <loc>https://wongzhenyu.cn/2017/10/19/Android%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%95%8C%E9%9D%A2PreferenceFragment%E7%9A%84%E7%94%A8%E6%B3%95/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.351Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://wongzhenyu.cn/2019/07/28/Android%E4%BE%9D%E8%B5%96%E7%9A%84%E5%A4%9A%E7%A7%8D%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E5%92%8C%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81%E5%A4%84%E7%90%86/</loc>
+    
+    <lastmod>2020-02-01T05:51:52.351Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://wongzhenyu.cn/2018/07/30/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/</loc>
     
     <lastmod>2020-02-01T05:51:52.351Z</lastmod>
     

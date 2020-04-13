@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Http&#39;s  concept、working mashanism  and data construction</title>
+    <url>/2020/04/13/Http-s-concept%E3%80%81working-mashanism-and-data-construction/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>deep understand of Android ActivityManagerService</title>
     <url>/2019/10/03/deep-understanding-of-Android-ActivityManagerService/</url>
     <content><![CDATA[<h1 id="overview"><a href="#overview" class="headerlink" title="overview"></a>overview</h1><p>AndroidManagerService(abbreviation as AMS) is the most vital service of Android, it mainly in charge of four component’s launching, switching、dispatching and manage the process of application, it plays a role as the manager process and dispatching module to the operating system. For this reason, it is very import to Android.</p>
