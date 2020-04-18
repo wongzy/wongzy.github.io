@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/Http-s-concept、working-mashanism-and-data-construction.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Http-s-concept、working-mashanism-and-data-construction.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/Https连接建立过程.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Https连接建立过程.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,15 +48,20 @@
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state x="296" y="143" width="1200" height="777" key="DiffContextDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1580537973732" />
-    <state x="573" y="376" key="com.intellij.ide.util.TipDialog" timestamp="1586783339962">
-      <screen x="0" y="0" width="1792" height="1120" />
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1586784295845">
+      <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="573" y="376" key="com.intellij.ide.util.TipDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1586783339962" />
     <state x="573" y="364" key="com.intellij.ide.util.TipDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1580542565165" />
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1586433460177" />
-    <state x="554" y="167" width="683" height="729" key="find.popup" timestamp="1580537605776">
-      <screen x="0" y="23" width="1792" height="1017" />
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1586784295845" />
+    <state x="554" y="178" width="683" height="787" key="find.popup" timestamp="1587196302158">
+      <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="554" y="167" width="683" height="729" key="find.popup/0.23.1792.1017@0.23.1792.1017" timestamp="1580537605776" />
+    <state x="554" y="178" width="683" height="787" key="find.popup/0.23.1792.1097@0.23.1792.1097" timestamp="1587196302158" />
+    <state x="561" y="268" width="670" height="676" key="search.everywhere.popup" timestamp="1587196254259">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="561" y="268" width="670" height="676" key="search.everywhere.popup/0.23.1792.1097@0.23.1792.1097" timestamp="1587196254259" />
   </component>
 </project>
