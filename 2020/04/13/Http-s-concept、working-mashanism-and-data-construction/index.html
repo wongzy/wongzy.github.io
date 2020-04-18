@@ -86,17 +86,20 @@
 
 
 
-<meta name="description" content="科班出身的野生程序猿">
+<meta name="description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Http&#39;s  concept、working mashanism  and data construction">
+<meta property="og:title" content="Http&#39;s  concept、working mechanism  and data construction">
 <meta property="og:url" content="https://wongzhenyu.cn/2020/04/13/Http-s-concept、working-mashanism-and-data-construction/index.html">
 <meta property="og:site_name" content="卖欠账包的王大麻">
-<meta property="og:description" content="科班出身的野生程序猿">
+<meta property="og:description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-13T13:15:30.315Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/18/URIoutxTmYfV9kl.png">
+<meta property="og:updated_time" content="2020-04-18T12:24:10.414Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Http&#39;s  concept、working mashanism  and data construction">
-<meta name="twitter:description" content="科班出身的野生程序猿">
+<meta name="twitter:title" content="Http&#39;s  concept、working mechanism  and data construction">
+<meta name="twitter:description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png">
 
 
 
@@ -132,7 +135,7 @@
 
 
 
-  <title>Http's  concept、working mashanism  and data construction | 卖欠账包的王大麻</title>
+  <title>Http's  concept、working mechanism  and data construction | 卖欠账包的王大麻</title>
   
 
 
@@ -319,7 +322,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Http's  concept、working mashanism  and data construction</h1>
+          <h1 class="post-title" itemprop="name headline">Http's  concept、working mechanism  and data construction</h1>
         
 
         <div class="post-meta">
@@ -342,6 +345,28 @@
           </span>
 
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network-related/" itemprop="url" rel="index">
+                    <span itemprop="name">Network related</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -363,7 +388,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  0 字
+                  845 字
                 </span>
               
 
@@ -379,7 +404,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  1 分钟
+                  5 分钟
                 </span>
               
             </div>
@@ -400,7 +425,85 @@
       
 
       
-        
+        <h1 id="Http’s-Concept"><a href="#Http’s-Concept" class="headerlink" title="Http’s Concept"></a>Http’s Concept</h1><p>Http is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network.</p>
+<p>Hypertext means expanded text, we can put html content in it, and html content can provide a link refer to other text content(hyperlink).</p>
+<h1 id="Http’s-Working-Mechanism"><a href="#Http’s-Working-Mechanism" class="headerlink" title="Http’s Working Mechanism"></a>Http’s Working Mechanism</h1><p>The most common scene to use http in our life is browsing website on our computer and use application on  mobile phone, the work mechanism is this:</p>
+<h2 id="computer-browser"><a href="#computer-browser" class="headerlink" title="computer browser"></a>computer browser</h2><ol>
+<li>input url in computer browser</li>
+<li>computer browser build http request message</li>
+<li>http message send to goal server via DNS server</li>
+<li>server return response message</li>
+<li>computer browser analyze response message and rending content of response message via render engine</li>
+</ol>
+<h2 id="mobile-phone-application"><a href="#mobile-phone-application" class="headerlink" title="mobile phone application"></a>mobile phone application</h2><ol>
+<li>click or open user interface </li>
+<li>application build request message in code</li>
+<li>send request message to server via DNS server</li>
+<li>server return response message</li>
+<li>application received response message and analyze it(in code) and do their own work.</li>
+</ol>
+<p>The general flow of those two scenes is similar.</p>
+<h2 id="the-relationship-between-url-and-http"><a href="#the-relationship-between-url-and-http" class="headerlink" title="the relationship between url and http"></a>the relationship between url and http</h2><p>For example, this url:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/wongzy</span><br></pre></td></tr></table></figure>
+<p>It can be divided to three parts, protocol type, host address and path</p>
+<p><em>https</em> is protocol type<br><em>github.com</em> is host address<br><em>/wongay</em> is path</p>
+<h1 id="Message-construction"><a href="#Message-construction" class="headerlink" title="Message construction"></a>Message construction</h1><h2 id="request-message-construction"><a href="#request-message-construction" class="headerlink" title="request message construction"></a>request message construction</h2><p><img src="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png" alt="http1.png"></p>
+<p>Request message can be divided into three parts: Request Line、Headers and Body.</p>
+<ul>
+<li>Request Line: it must contains request method [POST], path [/wongzy] and protocol version [http/1.1]</li>
+<li>Header: it must contains host [github.com], and other header is optional</li>
+<li>body: different from other two parts(Request Line and Header), it can be empty</li>
+</ul>
+<h3 id="request-method"><a href="#request-method" class="headerlink" title="request method"></a>request method</h3><p>Useful request methods includes several methods and their standard as follows:</p>
+<ol>
+<li>GET: 1. for request resource 2. do not amend service resource 3. request message <em>do not have body</em></li>
+<li>POST: 1. used to <em>put or amend</em> resources in server 2. request message <em>has body</em> to put or amend resources</li>
+<li>PUT: 1. used to <em>amend</em> resources in server 2. request message <em>has body</em> to amend resources</li>
+<li>DELETE: 1. used to delete body 2. request message <em>do not have body</em></li>
+<li>HEAD: 1. to get resources’ message 2. request message <em>do not have body</em> 3. response message <em>do not have body</em></li>
+</ol>
+<h2 id="response-message-construction"><a href="#response-message-construction" class="headerlink" title="response message construction"></a>response message construction</h2><p><img src="https://i.loli.net/2020/04/18/URIoutxTmYfV9kl.png" alt="http2.png"></p>
+<p>Response message can be divided into three parts: Status Line、 Header and Body.</p>
+<ul>
+<li>Status Line: it must contains protocol[http/1.1], status code [200], and response message [ok]</li>
+<li>Header: depend on server</li>
+<li>body: it can be empty</li>
+</ul>
+<h3 id="status-code"><a href="#status-code" class="headerlink" title="status code"></a>status code</h3><p>Common code includes five types, and their sense as follows:</p>
+<ul>
+<li>1XX: temporary message，for example : 100[continue sending], 101[changing protocol]</li>
+<li>2XX: request successfully code, for example : 200[OK], 201[build successfully]</li>
+<li>3XX: redirecting, for example: 301[moved forever], 302[moved temporary],304[content not change]</li>
+<li>4XX: client error, for example: 400[client request error]、401[authentication fail]、403[forbidden]、404[resource not fund]</li>
+<li>5XX: server error, for example: 500[internal error]</li>
+</ul>
+<h2 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h2><p>Header is a important construction of Http message, it can be regard as a content summary, it has a official name, metadata.</p>
+<p>it mainly includes those types:</p>
+<h3 id="host"><a href="#host" class="headerlink" title="host"></a>host</h3><p>Used in request message, to find goal server via mainframe.</p>
+<h3 id="content-Type"><a href="#content-Type" class="headerlink" title="content-Type"></a>content-Type</h3><p>To declare content’s type, included： </p>
+<h4 id="text-html"><a href="#text-html" class="headerlink" title="text/html"></a>text/html</h4><p>Html document</p>
+<h4 id="x-www-form-urlencoded"><a href="#x-www-form-urlencoded" class="headerlink" title="x-www-form-urlencoded"></a>x-www-form-urlencoded</h4><p>Plain text form</p>
+<h4 id="multitype-form-data"><a href="#multitype-form-data" class="headerlink" title="multitype/form-data"></a>multitype/form-data</h4><p>Binary resources, and those resources can be divided by boundary</p>
+<h4 id="other"><a href="#other" class="headerlink" title="other"></a>other</h4><p>application/json , image/jpeg , application/zip …</p>
+<h3 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h3><p>Body’s length(unit:byte)</p>
+<h3 id="Transfer-Encoding-chunked"><a href="#Transfer-Encoding-chunked" class="headerlink" title="Transfer-Encoding: chunked"></a>Transfer-Encoding: chunked</h3><p>Used to response as soon as possible, can not use together with content-length, body can transfer by chunk， and it would give serial number in body to declare whether data is transferred finish.</p>
+<h3 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h3><p>Give url after redirect.</p>
+<h3 id="User-Agent"><a href="#User-Agent" class="headerlink" title="User-Agent"></a>User-Agent</h3><p>Give what platform(computer or phone) user used.</p>
+<h3 id="Range-Accept-Range"><a href="#Range-Accept-Range" class="headerlink" title="Range / Accept-Range"></a>Range / Accept-Range</h3><p>Declare resource data range in body, used to breakpoint resume and multithreading download.</p>
+<h4 id="Accept-Range"><a href="#Accept-Range" class="headerlink" title="Accept-Range"></a>Accept-Range</h4><p>Used in response message, it declare data can be divided by which unit, like byte.</p>
+<h4 id="Range-bytes"><a href="#Range-bytes" class="headerlink" title="Range: bytes=-"></a>Range: bytes=<start>-<end></end></start></h4><p>Used in request message, it declare the range of data client requested</p>
+<h4 id="Content-Range-total"><a href="#Content-Range-total" class="headerlink" title="Content-Range:-/total"></a>Content-Range:<start>-<end>/total</end></start></h4><p>Used in response message, declare the range of data in body.</p>
+<h3 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h3><p>Declare whether data can be cached in middle point.</p>
+<h3 id="other-Headers"><a href="#other-Headers" class="headerlink" title="other Headers"></a>other Headers</h3><h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>Used in request message, declare which type of content client can accept, for example : text/html.</p>
+<blockquote>
+<p>opposite: content-type</p>
+</blockquote>
+<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>Used in request message, declare which charset of content client can accept, for example : utf-8.</p>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>Used in request message, declare which encoding type client can accept, for example : gzip.</p>
+<h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>Declare content’s encoding type of body.</p>
+<h1 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h1><p>In Wiki， Rest means Representational state transfer， it is a really abstract concept. Roy Filed come up with Rest based on the exist of HTTP，Rest is extracted from http.</p>
+<p>To use Rest correctly, we should obey http’s standard, but unfortunately, a large number of chinese company do not obey this(I do not know foreign company), event in many international company, they use method in a incorrect way, use POST do every thing in request message.</p>
+
       
     </div>
     
@@ -490,8 +593,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -519,7 +631,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -572,6 +684,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Http’s-Concept"><span class="nav-number">1.</span> <span class="nav-text">Http’s Concept</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Http’s-Working-Mechanism"><span class="nav-number">2.</span> <span class="nav-text">Http’s Working Mechanism</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#computer-browser"><span class="nav-number">2.1.</span> <span class="nav-text">computer browser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mobile-phone-application"><span class="nav-number">2.2.</span> <span class="nav-text">mobile phone application</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-relationship-between-url-and-http"><span class="nav-number">2.3.</span> <span class="nav-text">the relationship between url and http</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-construction"><span class="nav-number">3.</span> <span class="nav-text">Message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#request-message-construction"><span class="nav-number">3.1.</span> <span class="nav-text">request message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#request-method"><span class="nav-number">3.1.1.</span> <span class="nav-text">request method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-message-construction"><span class="nav-number">3.2.</span> <span class="nav-text">response message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#status-code"><span class="nav-number">3.2.1.</span> <span class="nav-text">status code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Header"><span class="nav-number">3.3.</span> <span class="nav-text">Header</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#host"><span class="nav-number">3.3.1.</span> <span class="nav-text">host</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#content-Type"><span class="nav-number">3.3.2.</span> <span class="nav-text">content-Type</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#text-html"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">text/html</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#x-www-form-urlencoded"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multitype-form-data"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">multitype/form-data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#other"><span class="nav-number">3.3.2.4.</span> <span class="nav-text">other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Content-Length"><span class="nav-number">3.3.3.</span> <span class="nav-text">Content-Length</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transfer-Encoding-chunked"><span class="nav-number">3.3.4.</span> <span class="nav-text">Transfer-Encoding: chunked</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Location"><span class="nav-number">3.3.5.</span> <span class="nav-text">Location</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#User-Agent"><span class="nav-number">3.3.6.</span> <span class="nav-text">User-Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-Accept-Range"><span class="nav-number">3.3.7.</span> <span class="nav-text">Range / Accept-Range</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Range"><span class="nav-number">3.3.7.1.</span> <span class="nav-text">Accept-Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Range-bytes"><span class="nav-number">3.3.7.2.</span> <span class="nav-text">Range: bytes=-</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Range-total"><span class="nav-number">3.3.7.3.</span> <span class="nav-text">Content-Range:-/total</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache"><span class="nav-number">3.3.8.</span> <span class="nav-text">Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other-Headers"><span class="nav-number">3.3.9.</span> <span class="nav-text">other Headers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept"><span class="nav-number">3.3.9.1.</span> <span class="nav-text">Accept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Charset"><span class="nav-number">3.3.9.2.</span> <span class="nav-text">Accept-Charset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Encoding"><span class="nav-number">3.3.9.3.</span> <span class="nav-text">Accept-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Encoding"><span class="nav-number">3.3.9.4.</span> <span class="nav-text">Content-Encoding</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Rest"><span class="nav-number">4.</span> <span class="nav-text">Rest</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

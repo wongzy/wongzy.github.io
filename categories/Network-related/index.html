@@ -86,17 +86,16 @@
 
 
 
-<meta name="description" content="Java中接口的实现只给了ReentrantLock这一个默认的实现，也就是重入锁，它的概念是在获得锁后可以重复获得该资源的锁，但是这是一个听起来很绕的概念，重复获得该资源的锁是什么意思？如果不能获得，也就是这个锁是不可重入的，又会是怎么样的呢？请看下文 重入锁与不可重入锁的区别先给出结论：  重入锁是可重复获得资源的锁，已经获得锁的线程可以对当前的资源重入加锁而不会引起阻塞；不可重入锁是不可重复">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Lock接口实现解析：到底什么是非重入锁和可重入锁">
-<meta property="og:url" content="https://wongzhenyu.cn/2018/08/12/Lock接口实现解析：到底什么是非重入锁和可重入锁/index.html">
+<meta name="description" content="科班出身的野生程序猿">
+<meta property="og:type" content="website">
+<meta property="og:title" content="卖欠账包的王大麻">
+<meta property="og:url" content="https://wongzhenyu.cn/categories/Network-related/index.html">
 <meta property="og:site_name" content="卖欠账包的王大麻">
-<meta property="og:description" content="Java中接口的实现只给了ReentrantLock这一个默认的实现，也就是重入锁，它的概念是在获得锁后可以重复获得该资源的锁，但是这是一个听起来很绕的概念，重复获得该资源的锁是什么意思？如果不能获得，也就是这个锁是不可重入的，又会是怎么样的呢？请看下文 重入锁与不可重入锁的区别先给出结论：  重入锁是可重复获得资源的锁，已经获得锁的线程可以对当前的资源重入加锁而不会引起阻塞；不可重入锁是不可重复">
+<meta property="og:description" content="科班出身的野生程序猿">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-02-01T05:51:52.357Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lock接口实现解析：到底什么是非重入锁和可重入锁">
-<meta name="twitter:description" content="Java中接口的实现只给了ReentrantLock这一个默认的实现，也就是重入锁，它的概念是在获得锁后可以重复获得该资源的锁，但是这是一个听起来很绕的概念，重复获得该资源的锁是什么意思？如果不能获得，也就是这个锁是不可重入的，又会是怎么样的呢？请看下文 重入锁与不可重入锁的区别先给出结论：  重入锁是可重复获得资源的锁，已经获得锁的线程可以对当前的资源重入加锁而不会引起阻塞；不可重入锁是不可重复">
+<meta name="twitter:title" content="卖欠账包的王大麻">
+<meta name="twitter:description" content="科班出身的野生程序猿">
 
 
 
@@ -126,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://wongzhenyu.cn/2018/08/12/Lock接口实现解析：到底什么是非重入锁和可重入锁/">
+  <link rel="canonical" href="https://wongzhenyu.cn/categories/Network-related/">
 
 
 
 
 
-  <title>Lock接口实现解析：到底什么是非重入锁和可重入锁 | 卖欠账包的王大麻</title>
+  <title>Category: Network related | 卖欠账包的王大麻</title>
   
 
 
@@ -151,7 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
     <a href="https://github.com/wongzy"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 
@@ -288,213 +287,53 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>Network related<small>Category</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/08/12/Lock接口实现解析：到底什么是非重入锁和可重入锁/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wong Zhenyu">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="卖欠账包的王大麻">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2020/04/13/Http-s-concept、working-mashanism-and-data-construction/" itemprop="url">
+              
+                <span itemprop="name">Http's  concept、working mechanism  and data construction</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">Lock接口实现解析：到底什么是非重入锁和可重入锁</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-12T13:37:45+08:00">
-                2018-08-12
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2020-04-13T21:15:30+08:00" content="2020-04-13">
+          04-13
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">Java多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  849 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Reading time &asymp;</span>
-                
-                <span title="Reading time">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>Java中接口的实现只给了ReentrantLock这一个默认的实现，也就是重入锁，它的概念是在获得锁后可以重复获得该资源的锁，但是这是一个听起来很绕的概念，重复获得该资源的锁是什么意思？如果不能获得，也就是这个锁是不可重入的，又会是怎么样的呢？请看下文</p>
-<h4 id="重入锁与不可重入锁的区别"><a href="#重入锁与不可重入锁的区别" class="headerlink" title="重入锁与不可重入锁的区别"></a>重入锁与不可重入锁的区别</h4><p>先给出结论：</p>
-<blockquote>
-<p>重入锁是可重复获得资源的锁，已经获得锁的线程可以对当前的资源重入加锁而不会引起阻塞；不可重入锁是不可重复获得资源的锁，当已经获得锁的线程对当前资源再次加锁时，会把自己阻塞。</p>
-</blockquote>
-<h5 id="重入锁与不可重入锁区别的本质：AQS-AbstractQueuedSynchronizer-的实现"><a href="#重入锁与不可重入锁区别的本质：AQS-AbstractQueuedSynchronizer-的实现" class="headerlink" title="重入锁与不可重入锁区别的本质：AQS(AbstractQueuedSynchronizer)的实现"></a>重入锁与不可重入锁区别的本质：AQS(AbstractQueuedSynchronizer)的实现</h5><p>Lock接口为我们提供了两个获取锁的方法，一个是tryLock()，另一个是Lock()方法，tryLock()方法是不会引起阻塞的，而Lock方法在无法获得锁的情况下，会将自己挂起。首先，我们来看看重入锁中Lock方法的实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">final void lock() &#123;</span><br><span class="line">            acquire(1);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>在这里可以看到，他调用了acquire方法，这个方法的实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final void acquire(int arg) &#123;</span><br><span class="line">        if (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>在这里可以看到，它首先进行了!tryAcquire(arg)的操作，然后再进行后续操作，但实际上在&amp;&amp;后面的判断是由AQS来完成的，意思就是将当前的线程包装成一个Node然后加入到同步队列中去。在这里我们只关心tryAcquire方法的实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">            final Thread current = Thread.currentThread();</span><br><span class="line">            int c = getState();</span><br><span class="line">            if (c == 0) &#123;</span><br><span class="line">                if (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                    compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">                int nextc = c + acquires;</span><br><span class="line">                if (nextc &lt; 0)</span><br><span class="line">                    throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">                setState(nextc);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，在ReentrantLock中tryAcquire的方法如下，先获得当前AQS的state，当state为0时代表现在没有线程获得这个锁，当前线程就可以获得这个锁，并返回true表示锁是可获得的，<em>但是后面还有一个判断，就是当state不为0，但是是当前的线程获得的锁的话，也是返回true，这里其实就是重入锁实现的关键</em> 。如果我们自己重写Lock接口，在继承AQS并重写的时候不做这个判断，得到的就是一个不可重入锁。可以这样写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">            final Thread current = Thread.currentThread();</span><br><span class="line">            int c = getState();</span><br><span class="line">            if (c == 0) &#123;</span><br><span class="line">                if (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                    compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>这样就是一个不可重入锁的结构，因为已获得锁的线程再次尝试获得锁的话会返回false，在acquire方法中就会将自己阻塞。</p>
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>不可重入锁与重入锁的区别实质其实就是在tryAcquire方法中，如果不对是否是当前的线程持有的锁进行判断，而直接返回false的话，它就是一个不可重入锁，反之，如果进行了判断，则是可重入锁。tryAcquire方法中返回true表示当前锁是可获得的，返回false则表示当前锁不可获得。</p>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-      
-      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/08/05/synchronized关键字与volatile原理浅析/">synchronized关键字与volatile原理浅析</a></li><li><a href="/2018/07/08/同步器-倒计时门闩/">同步器-倒计时门闩</a></li></ul>
-      
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/08/05/synchronized关键字与volatile原理浅析/" rel="next" title="synchronized关键字与volatile原理浅析">
-                <i class="fa fa-chevron-left"></i> synchronized关键字与volatile原理浅析
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/25/Android绘制流程总结/" rel="prev" title="Android绘制流程总结">
-                Android绘制流程总结 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -502,15 +341,6 @@
 
 
           
-
-  
-    <div class="comments" id="comments">
-      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMzYxNS8xMDE3MA=="></div>
-    </div>
-
-  
-
-
 
         </div>
         
@@ -531,17 +361,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -622,22 +443,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#重入锁与不可重入锁的区别"><span class="nav-number">1.</span> <span class="nav-text">重入锁与不可重入锁的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#重入锁与不可重入锁区别的本质：AQS-AbstractQueuedSynchronizer-的实现"><span class="nav-number">1.1.</span> <span class="nav-text">重入锁与不可重入锁区别的本质：AQS(AbstractQueuedSynchronizer)的实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">1.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -771,10 +576,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
@@ -803,17 +604,6 @@
 
 
 
-  
-    <script type="text/javascript">
-      (function(d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') { return; }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-      })(document, 'script');
-    </script>
   
 
 
