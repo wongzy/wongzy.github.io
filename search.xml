@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Encryption, Encoding, Hash and related</title>
+    <url>/2020/04/19/Encryption-Encoding-Hash-and-related/</url>
+    <content><![CDATA[<h1 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h1><p>There are two useful encrypt algorithms, symmetry encryption and asymmetry encryption.</p>
+<h2 id="Symmetry-Encryption"><a href="#Symmetry-Encryption" class="headerlink" title="Symmetry Encryption"></a>Symmetry Encryption</h2><p><img src="https://i.loli.net/2020/04/19/h5kJGc4peL6i7xS.png" alt="symmetry_enctypt.png"></p>
+<p>Symmetry encryption use same secret key to encrypt data and decrypt data.</p>
+<p>Examples: AES, DES</p>
+<blockquote>
+<p>The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.</p>
+</blockquote>
+<h2 id="Asymmetry-Encryption"><a href="#Asymmetry-Encryption" class="headerlink" title="Asymmetry Encryption"></a>Asymmetry Encryption</h2><p>//todo finish it in future</p>
+]]></content>
+      <categories>
+        <category>data basement</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Http&#39;s  concept、working mechanism  and data construction</title>
     <url>/2020/04/13/Http-s-concept%E3%80%81working-mashanism-and-data-construction/</url>
     <content><![CDATA[<h1 id="Http’s-Concept"><a href="#Http’s-Concept" class="headerlink" title="Http’s Concept"></a>Http’s Concept</h1><p>Http is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network.</p>
