@@ -7,9 +7,7 @@
 <h2 id="Symmetry-Encryption"><a href="#Symmetry-Encryption" class="headerlink" title="Symmetry Encryption"></a>Symmetry Encryption</h2><p><img src="https://i.loli.net/2020/04/19/h5kJGc4peL6i7xS.png" alt="symmetry_enctypt.png"></p>
 <p>Symmetry encryption use same secret key to encrypt data and decrypt data.</p>
 <p>Examples: AES, DES</p>
-<blockquote>
-<p>The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.</p>
-</blockquote>
+<p>Advantage: good performance<br>Disadvantage: The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.</p>
 <h2 id="Asymmetry-Encryption"><a href="#Asymmetry-Encryption" class="headerlink" title="Asymmetry Encryption"></a>Asymmetry Encryption</h2><p>//todo finish it in future</p>
 ]]></content>
       <categories>
