@@ -16,7 +16,8 @@ Symmetry encryption use same secret key to encrypt data and decrypt data.
 
 Examples: AES, DES
 
-> The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.
+Advantage: good performance
+Disadvantage: The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.
 
 ## Asymmetry Encryption
 
