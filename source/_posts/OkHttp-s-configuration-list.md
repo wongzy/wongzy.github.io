@@ -4,7 +4,7 @@ date: 2020-04-25 14:28:23
 categories: Network related
 ---
 
-OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is [Interceptor Chain]([https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/))
+OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(bottom of page).
 
 But in the process of http request, OkHttp read OkHttpClient's configuration list and add it to transact process. There are main member attributes in OkHttpClient.
 
