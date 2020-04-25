@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
+<meta name="description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(botto">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OkHttp&#39;s configuration list">
 <meta property="og:url" content="https://wongzhenyu.cn/2020/04/25/OkHttp-s-configuration-list/index.html">
 <meta property="og:site_name" content="卖欠账包的王大麻">
-<meta property="og:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
+<meta property="og:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(botto">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-25T08:29:16.317Z">
+<meta property="og:updated_time" content="2020-04-25T08:32:12.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OkHttp&#39;s configuration list">
-<meta name="twitter:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
+<meta name="twitter:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(botto">
 
 
 
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  648 字
+                  651 字
                 </span>
               
 
@@ -422,7 +422,7 @@
       
 
       
-        <p>OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is <a href="[https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/">Interceptor Chain</a>)</p>
+        <p>OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(bottom of page).</p>
 <p>But in the process of http request, OkHttp read OkHttpClient’s configuration list and add it to transact process. There are main member attributes in OkHttpClient.</p>
 <h1 id="main-member-in-OkHttpClient"><a href="#main-member-in-OkHttpClient" class="headerlink" title="main member in OkHttpClient"></a>main member in OkHttpClient</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> dispatcher: Dispatcher = Dispatcher()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> protocols: List&lt;Protocol&gt; = DEFAULT_PROTOCOLS</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> connectionSpecs: List&lt;ConnectionSpec&gt; = DEFAULT_CONNECTION_SPECS</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> interceptors: MutableList&lt;Interceptor&gt; = mutableListOf()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> networkInterceptors: MutableList&lt;Interceptor&gt; = mutableListOf()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> cookieJar: CookieJar = CookieJar.NO_COOKIES</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> cache: Cache? = <span class="literal">null</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> hostnameVerifier: HostnameVerifier = OkHostnameVerifier</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> certificatePinner: CertificatePinner = CertificatePinner.DEFAULT</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> authenticator: Authenticator = Authenticator.NONE</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> followRedirects = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> followSslRedirects = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> retryOnConnectionFailure = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> connectTimeout = <span class="number">10</span>_000</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> readTimeout = <span class="number">10</span>_000</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> writeTimeout = <span class="number">10</span>_000</span><br></pre></td></tr></table></figure>
 <p>And their main responsibilities as follows:</p>
