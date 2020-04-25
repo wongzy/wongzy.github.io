@@ -86,19 +86,20 @@
 
 
 
-<meta name="description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
+<meta name="description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DNS">
-<meta property="og:url" content="https://wongzhenyu.cn/2018/11/07/DNS/index.html">
+<meta property="og:title" content="Http&#39;s  concept、working mechanism  and data construction">
+<meta property="og:url" content="https://wongzhenyu.cn/2020/04/13/Http-s-concept、working-mechanism-and-data-construction/index.html">
 <meta property="og:site_name" content="卖欠账包的王大麻">
-<meta property="og:description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
+<meta property="og:description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png">
-<meta property="og:updated_time" content="2020-02-01T05:51:52.355Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/18/URIoutxTmYfV9kl.png">
+<meta property="og:updated_time" content="2020-04-18T12:24:10.414Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DNS">
-<meta name="twitter:description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
-<meta name="twitter:image" content="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png">
+<meta name="twitter:title" content="Http&#39;s  concept、working mechanism  and data construction">
+<meta name="twitter:description" content="Http’s ConceptHttp is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network. Hypertext means expanded text, we can put html content in it, and html content can pro">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png">
 
 
 
@@ -128,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="https://wongzhenyu.cn/2018/11/07/DNS/">
+  <link rel="canonical" href="https://wongzhenyu.cn/2020/04/13/Http-s-concept、working-mechanism-and-data-construction/">
 
 
 
 
 
-  <title>DNS | 卖欠账包的王大麻</title>
+  <title>Http's  concept、working mechanism  and data construction | 卖欠账包的王大麻</title>
   
 
 
@@ -304,7 +305,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/11/07/DNS/">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2020/04/13/Http-s-concept、working-mechanism-and-data-construction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wong Zhenyu">
@@ -321,7 +322,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DNS</h1>
+          <h1 class="post-title" itemprop="name headline">Http's  concept、working mechanism  and data construction</h1>
         
 
         <div class="post-meta">
@@ -333,8 +334,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T15:28:18+08:00">
-                2018-11-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-13T21:15:30+08:00">
+                2020-04-13
               </time>
             
 
@@ -356,8 +357,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
-                    <span itemprop="name">Android网络开发</span>
+                  <a href="/categories/Network-related/" itemprop="url" rel="index">
+                    <span itemprop="name">Network related</span>
                   </a>
                 </span>
 
@@ -387,7 +388,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,203 字
+                  845 字
                 </span>
               
 
@@ -403,7 +404,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4 分钟
+                  5 分钟
                 </span>
               
             </div>
@@ -424,29 +425,84 @@
       
 
       
-        <h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><h4 id="概述及作用"><a href="#概述及作用" class="headerlink" title="概述及作用"></a>概述及作用</h4><p>我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。</p>
-<h4 id="DNS的产生"><a href="#DNS的产生" class="headerlink" title="DNS的产生"></a>DNS的产生</h4><p>在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个hosts文件就得更新，而其他计算机则不得不定期下载最新的hosts文件才能正常使用网络。</p>
-<p>随着网络规模的不断扩大、接入计算机的个数不断增加，使得这种集中管理主机名和IP地址的登陆、变更处理的可行性逐渐降低。</p>
-<p>在上述背景之下，产生了一个可以有效管理主机名和IP地址之间对应关系的系统，就是DNS系统。在应用中，当用户输入主机名（域名）时，DNS会自动检索哪个注册了主机名和IP地址的数据库，并迅速定位对应的IP地址。而且，如果主机名和IP地址需要进行变更时，也只需要在组织机构内部进行处理即可，而没必要再向其他机构进行申请或报告。这样，有了DNS，无论网络规模变得多么庞大，都能在一个较小的范围内通过DNS进行管理，充分解决了ARPANET初期遇到的问题。</p>
-<h4 id="DNS域名的构成"><a href="#DNS域名的构成" class="headerlink" title="DNS域名的构成"></a>DNS域名的构成</h4><p>域名是指为了识别主机名称和组织机构名称的一种具有分层的名称。例如，仓敷艺术科学大学的域名如下：</p>
-<p><em>kusa.ac.jp</em></p>
-<p>域名由几个英文字母用点号链接构成。在上述域名中最左边的“kusa”表示仓敷艺术科学大学固有的域名。而“ac”代表大学或其他高等教育机构。最后边的“jp”则代表日本。</p>
-<p>在使用域名时，可以在每个主机名后面追加上组织机构的域名。例如，由pepper、piyo、kinoko等主机时，它们完整的带域名的主机名将呈如下形式：</p>
-<p><em>pepper.kusa.ac.jp</em><br><em>piyo.kusa.ac.jp</em><br><em>kinoko.kusa.ac.jp</em></p>
-<h5 id="分层结构"><a href="#分层结构" class="headerlink" title="分层结构"></a>分层结构</h5><p>DNS的分层结构如图所示，由于看起来像一颗倒挂的树，人们也罢这种分层结构叫做树形结构。</p>
-<p><img src="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png" alt="捕获.PNG"></p>
-<p>每个分层中，都设有一个域名服务器，它可以管理所在分层的域的相关信息。根部所设置的DNS叫做根域名服务器。它对DNS的检索数据功能起着至关重要的作用。根域名服务器中注册着根一下第一层域名服务器的IP地址。如果想要增加顶级域名或者修改顶级域名，就得在根域名服务器中进行追加或变更。类似地，如果想要修改该分层的域名或重新设置域名服务器的IP地址，还必须得在其上层的域名服务器中进行追加或修改。</p>
-<h4 id="DNS查询"><a href="#DNS查询" class="headerlink" title="DNS查询"></a>DNS查询</h4><p>例如，当处于kusa.co.jp域中的计算机想要访问网站 www.ietf.org ，会经过如下流程</p>
-<ol>
-<li>向DNS服务器查询IP地址</li>
-<li>由于kusa的DNS服务器并不知道 www.ietf.org 的IP地址是什么，它向根域名服务器请求进行查询</li>
-<li>由于根域名服务器知道 www.ietf.org 的域名服务器的地址，所以将地址返回</li>
-<li>DNS服务器向 ietf.org 查询 www.ietf.org 的IP地址</li>
-<li>将查询到的IP地址返回给客户端</li>
-<li>计算机开始与 www.ietf.org 进行通信</li>
+        <h1 id="Http’s-Concept"><a href="#Http’s-Concept" class="headerlink" title="Http’s Concept"></a>Http’s Concept</h1><p>Http is a abbreviation of Hypertext Transfer Protocol, it runs in the application layer of network.</p>
+<p>Hypertext means expanded text, we can put html content in it, and html content can provide a link refer to other text content(hyperlink).</p>
+<h1 id="Http’s-Working-Mechanism"><a href="#Http’s-Working-Mechanism" class="headerlink" title="Http’s Working Mechanism"></a>Http’s Working Mechanism</h1><p>The most common scene to use http in our life is browsing website on our computer and use application on  mobile phone, the work mechanism is this:</p>
+<h2 id="computer-browser"><a href="#computer-browser" class="headerlink" title="computer browser"></a>computer browser</h2><ol>
+<li>input url in computer browser</li>
+<li>computer browser build http request message</li>
+<li>http message send to goal server via DNS server</li>
+<li>server return response message</li>
+<li>computer browser analyze response message and rending content of response message via render engine</li>
 </ol>
-<p>解析器（进行DNS查询的主机和软件）为了查询IP地址，向域名服务器（不仅可以访问域中的域名服务器，还可以访问其他域的域名服务器）进行查询处理。接收这个查询请求的域名服务器首先会在自己的数据库进行查找。如果有该域名所对应的IP地址就返回。如果没有，则域名服务器再向上一层根域名服务器进行查询处理。上一层根服务器则对下层进行遍历，直到找到指定的域名服务器，否则再向上层根服务器查询。</p>
-<p>解析器和域名服务区将最新了解到的信息暂时保存再缓存里，这样，可以减少每次查询时的性能消耗。</p>
+<h2 id="mobile-phone-application"><a href="#mobile-phone-application" class="headerlink" title="mobile phone application"></a>mobile phone application</h2><ol>
+<li>click or open user interface </li>
+<li>application build request message in code</li>
+<li>send request message to server via DNS server</li>
+<li>server return response message</li>
+<li>application received response message and analyze it(in code) and do their own work.</li>
+</ol>
+<p>The general flow of those two scenes is similar.</p>
+<h2 id="the-relationship-between-url-and-http"><a href="#the-relationship-between-url-and-http" class="headerlink" title="the relationship between url and http"></a>the relationship between url and http</h2><p>For example, this url:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/wongzy</span><br></pre></td></tr></table></figure>
+<p>It can be divided to three parts, protocol type, host address and path</p>
+<p><em>https</em> is protocol type<br><em>github.com</em> is host address<br><em>/wongay</em> is path</p>
+<h1 id="Message-construction"><a href="#Message-construction" class="headerlink" title="Message construction"></a>Message construction</h1><h2 id="request-message-construction"><a href="#request-message-construction" class="headerlink" title="request message construction"></a>request message construction</h2><p><img src="https://i.loli.net/2020/04/18/zY4NpJZaXqtIQuK.png" alt="http1.png"></p>
+<p>Request message can be divided into three parts: Request Line、Headers and Body.</p>
+<ul>
+<li>Request Line: it must contains request method [POST], path [/wongzy] and protocol version [http/1.1]</li>
+<li>Header: it must contains host [github.com], and other header is optional</li>
+<li>body: different from other two parts(Request Line and Header), it can be empty</li>
+</ul>
+<h3 id="request-method"><a href="#request-method" class="headerlink" title="request method"></a>request method</h3><p>Useful request methods includes several methods and their standard as follows:</p>
+<ol>
+<li>GET: 1. for request resource 2. do not amend service resource 3. request message <em>do not have body</em></li>
+<li>POST: 1. used to <em>put or amend</em> resources in server 2. request message <em>has body</em> to put or amend resources</li>
+<li>PUT: 1. used to <em>amend</em> resources in server 2. request message <em>has body</em> to amend resources</li>
+<li>DELETE: 1. used to delete body 2. request message <em>do not have body</em></li>
+<li>HEAD: 1. to get resources’ message 2. request message <em>do not have body</em> 3. response message <em>do not have body</em></li>
+</ol>
+<h2 id="response-message-construction"><a href="#response-message-construction" class="headerlink" title="response message construction"></a>response message construction</h2><p><img src="https://i.loli.net/2020/04/18/URIoutxTmYfV9kl.png" alt="http2.png"></p>
+<p>Response message can be divided into three parts: Status Line、 Header and Body.</p>
+<ul>
+<li>Status Line: it must contains protocol[http/1.1], status code [200], and response message [ok]</li>
+<li>Header: depend on server</li>
+<li>body: it can be empty</li>
+</ul>
+<h3 id="status-code"><a href="#status-code" class="headerlink" title="status code"></a>status code</h3><p>Common code includes five types, and their sense as follows:</p>
+<ul>
+<li>1XX: temporary message，for example : 100[continue sending], 101[changing protocol]</li>
+<li>2XX: request successfully code, for example : 200[OK], 201[build successfully]</li>
+<li>3XX: redirecting, for example: 301[moved forever], 302[moved temporary],304[content not change]</li>
+<li>4XX: client error, for example: 400[client request error]、401[authentication fail]、403[forbidden]、404[resource not fund]</li>
+<li>5XX: server error, for example: 500[internal error]</li>
+</ul>
+<h2 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h2><p>Header is a important construction of Http message, it can be regard as a content summary, it has a official name, metadata.</p>
+<p>it mainly includes those types:</p>
+<h3 id="host"><a href="#host" class="headerlink" title="host"></a>host</h3><p>Used in request message, to find goal server via mainframe.</p>
+<h3 id="content-Type"><a href="#content-Type" class="headerlink" title="content-Type"></a>content-Type</h3><p>To declare content’s type, included： </p>
+<h4 id="text-html"><a href="#text-html" class="headerlink" title="text/html"></a>text/html</h4><p>Html document</p>
+<h4 id="x-www-form-urlencoded"><a href="#x-www-form-urlencoded" class="headerlink" title="x-www-form-urlencoded"></a>x-www-form-urlencoded</h4><p>Plain text form</p>
+<h4 id="multitype-form-data"><a href="#multitype-form-data" class="headerlink" title="multitype/form-data"></a>multitype/form-data</h4><p>Binary resources, and those resources can be divided by boundary</p>
+<h4 id="other"><a href="#other" class="headerlink" title="other"></a>other</h4><p>application/json , image/jpeg , application/zip …</p>
+<h3 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h3><p>Body’s length(unit:byte)</p>
+<h3 id="Transfer-Encoding-chunked"><a href="#Transfer-Encoding-chunked" class="headerlink" title="Transfer-Encoding: chunked"></a>Transfer-Encoding: chunked</h3><p>Used to response as soon as possible, can not use together with content-length, body can transfer by chunk， and it would give serial number in body to declare whether data is transferred finish.</p>
+<h3 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h3><p>Give url after redirect.</p>
+<h3 id="User-Agent"><a href="#User-Agent" class="headerlink" title="User-Agent"></a>User-Agent</h3><p>Give what platform(computer or phone) user used.</p>
+<h3 id="Range-Accept-Range"><a href="#Range-Accept-Range" class="headerlink" title="Range / Accept-Range"></a>Range / Accept-Range</h3><p>Declare resource data range in body, used to breakpoint resume and multithreading download.</p>
+<h4 id="Accept-Range"><a href="#Accept-Range" class="headerlink" title="Accept-Range"></a>Accept-Range</h4><p>Used in response message, it declare data can be divided by which unit, like byte.</p>
+<h4 id="Range-bytes"><a href="#Range-bytes" class="headerlink" title="Range: bytes=-"></a>Range: bytes=<start>-<end></end></start></h4><p>Used in request message, it declare the range of data client requested</p>
+<h4 id="Content-Range-total"><a href="#Content-Range-total" class="headerlink" title="Content-Range:-/total"></a>Content-Range:<start>-<end>/total</end></start></h4><p>Used in response message, declare the range of data in body.</p>
+<h3 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h3><p>Declare whether data can be cached in middle point.</p>
+<h3 id="other-Headers"><a href="#other-Headers" class="headerlink" title="other Headers"></a>other Headers</h3><h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>Used in request message, declare which type of content client can accept, for example : text/html.</p>
+<blockquote>
+<p>opposite: content-type</p>
+</blockquote>
+<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>Used in request message, declare which charset of content client can accept, for example : utf-8.</p>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>Used in request message, declare which encoding type client can accept, for example : gzip.</p>
+<h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>Declare content’s encoding type of body.</p>
+<h1 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h1><p>In Wiki， Rest means Representational state transfer， it is a really abstract concept. Roy Filed come up with Rest based on the exist of HTTP，Rest is extracted from http.</p>
+<p>To use Rest correctly, we should obey http’s standard, but unfortunately, a large number of chinese company do not obey this(I do not know foreign company), event in many international company, they use method in a incorrect way, use POST do every thing in request message.</p>
 
       
     </div>
@@ -467,14 +523,14 @@
       
       
       
-      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">Rxjava2和Retrofit2实现解析bing每日一图JSON</a></li><li><a href="/2018/11/08/UDP-and-TCP/">传输层协议：UDP与TCP（一）</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/28/客户端Socket/">Java Socket(TCP)</a></li></ul>
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/09/10/OkHttp中拦截器流程解析/">OkHttp中拦截器流程解析</a></li><li><a href="/2020/04/25/OkHttp-s-configuration-list/">OkHttp's configuration list</a></li></ul>
       
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/31/虚拟存储器/" rel="next" title="虚拟存储器">
-                <i class="fa fa-chevron-left"></i> 虚拟存储器
+              <a href="/2019/10/03/deep-understanding-of-Android-ActivityManagerService/" rel="next" title="deep understand of Android ActivityManagerService">
+                <i class="fa fa-chevron-left"></i> deep understand of Android ActivityManagerService
               </a>
             
           </div>
@@ -483,8 +539,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/08/UDP-and-TCP/" rel="prev" title="传输层协议：UDP与TCP（一）">
-                传输层协议：UDP与TCP（一） <i class="fa fa-chevron-right"></i>
+              <a href="/2020/04/19/Encryption-Encoding-Hash-and-related/" rel="prev" title="Encryption, Encoding, Hash and related">
+                Encryption, Encoding, Hash and related <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -642,7 +698,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS"><span class="nav-number">1.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述及作用"><span class="nav-number">1.1.</span> <span class="nav-text">概述及作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS的产生"><span class="nav-number">1.2.</span> <span class="nav-text">DNS的产生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS域名的构成"><span class="nav-number">1.3.</span> <span class="nav-text">DNS域名的构成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分层结构"><span class="nav-number">1.3.1.</span> <span class="nav-text">分层结构</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS查询"><span class="nav-number">1.4.</span> <span class="nav-text">DNS查询</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Http’s-Concept"><span class="nav-number">1.</span> <span class="nav-text">Http’s Concept</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Http’s-Working-Mechanism"><span class="nav-number">2.</span> <span class="nav-text">Http’s Working Mechanism</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#computer-browser"><span class="nav-number">2.1.</span> <span class="nav-text">computer browser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mobile-phone-application"><span class="nav-number">2.2.</span> <span class="nav-text">mobile phone application</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-relationship-between-url-and-http"><span class="nav-number">2.3.</span> <span class="nav-text">the relationship between url and http</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Message-construction"><span class="nav-number">3.</span> <span class="nav-text">Message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#request-message-construction"><span class="nav-number">3.1.</span> <span class="nav-text">request message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#request-method"><span class="nav-number">3.1.1.</span> <span class="nav-text">request method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-message-construction"><span class="nav-number">3.2.</span> <span class="nav-text">response message construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#status-code"><span class="nav-number">3.2.1.</span> <span class="nav-text">status code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Header"><span class="nav-number">3.3.</span> <span class="nav-text">Header</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#host"><span class="nav-number">3.3.1.</span> <span class="nav-text">host</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#content-Type"><span class="nav-number">3.3.2.</span> <span class="nav-text">content-Type</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#text-html"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">text/html</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#x-www-form-urlencoded"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multitype-form-data"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">multitype/form-data</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#other"><span class="nav-number">3.3.2.4.</span> <span class="nav-text">other</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Content-Length"><span class="nav-number">3.3.3.</span> <span class="nav-text">Content-Length</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transfer-Encoding-chunked"><span class="nav-number">3.3.4.</span> <span class="nav-text">Transfer-Encoding: chunked</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Location"><span class="nav-number">3.3.5.</span> <span class="nav-text">Location</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#User-Agent"><span class="nav-number">3.3.6.</span> <span class="nav-text">User-Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-Accept-Range"><span class="nav-number">3.3.7.</span> <span class="nav-text">Range / Accept-Range</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Range"><span class="nav-number">3.3.7.1.</span> <span class="nav-text">Accept-Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Range-bytes"><span class="nav-number">3.3.7.2.</span> <span class="nav-text">Range: bytes=-</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Range-total"><span class="nav-number">3.3.7.3.</span> <span class="nav-text">Content-Range:-/total</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache"><span class="nav-number">3.3.8.</span> <span class="nav-text">Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other-Headers"><span class="nav-number">3.3.9.</span> <span class="nav-text">other Headers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept"><span class="nav-number">3.3.9.1.</span> <span class="nav-text">Accept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Charset"><span class="nav-number">3.3.9.2.</span> <span class="nav-text">Accept-Charset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Encoding"><span class="nav-number">3.3.9.3.</span> <span class="nav-text">Accept-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Encoding"><span class="nav-number">3.3.9.4.</span> <span class="nav-text">Content-Encoding</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Rest"><span class="nav-number">4.</span> <span class="nav-text">Rest</span></a></li></ol></div>
             
 
           </div>

@@ -86,19 +86,17 @@
 
 
 
-<meta name="description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
+<meta name="description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DNS">
-<meta property="og:url" content="https://wongzhenyu.cn/2018/11/07/DNS/index.html">
+<meta property="og:title" content="OkHttp&#39;s configuration list">
+<meta property="og:url" content="https://wongzhenyu.cn/2020/04/25/OkHttp-s-configuration-list/index.html">
 <meta property="og:site_name" content="卖欠账包的王大麻">
-<meta property="og:description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
+<meta property="og:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png">
-<meta property="og:updated_time" content="2020-02-01T05:51:52.355Z">
+<meta property="og:updated_time" content="2020-04-25T08:21:49.346Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DNS">
-<meta name="twitter:description" content="DNS概述及作用我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。 DNS的产生在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个ho">
-<meta name="twitter:image" content="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png">
+<meta name="twitter:title" content="OkHttp&#39;s configuration list">
+<meta name="twitter:description" content="OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain) But">
 
 
 
@@ -128,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://wongzhenyu.cn/2018/11/07/DNS/">
+  <link rel="canonical" href="https://wongzhenyu.cn/2020/04/25/OkHttp-s-configuration-list/">
 
 
 
 
 
-  <title>DNS | 卖欠账包的王大麻</title>
+  <title>OkHttp's configuration list | 卖欠账包的王大麻</title>
   
 
 
@@ -304,7 +302,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2018/11/07/DNS/">
+    <link itemprop="mainEntityOfPage" href="https://wongzhenyu.cn/2020/04/25/OkHttp-s-configuration-list/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Wong Zhenyu">
@@ -321,7 +319,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DNS</h1>
+          <h1 class="post-title" itemprop="name headline">OkHttp's configuration list</h1>
         
 
         <div class="post-meta">
@@ -333,8 +331,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T15:28:18+08:00">
-                2018-11-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-25T14:28:23+08:00">
+                2020-04-25
               </time>
             
 
@@ -356,8 +354,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android网络开发/" itemprop="url" rel="index">
-                    <span itemprop="name">Android网络开发</span>
+                  <a href="/categories/Network-related/" itemprop="url" rel="index">
+                    <span itemprop="name">Network related</span>
                   </a>
                 </span>
 
@@ -387,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1,203 字
+                  728 字
                 </span>
               
 
@@ -403,7 +401,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  4 分钟
+                  5 分钟
                 </span>
               
             </div>
@@ -424,29 +422,26 @@
       
 
       
-        <h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><h4 id="概述及作用"><a href="#概述及作用" class="headerlink" title="概述及作用"></a>概述及作用</h4><p>我们平常在访问某个网站时不使用IP地址，而是用一串由罗马字和点号组成的字符串。而一般用户在使用TCP/IP进行通信时也不使用IP地址。而这样做正是因为有了DNS将字符串自动转换为具体的IP地址的功能。</p>
-<h4 id="DNS的产生"><a href="#DNS的产生" class="headerlink" title="DNS的产生"></a>DNS的产生</h4><p>在互联网的起源ARPANET中，起初由互联网信息中心整体管理一份hosts文件。如果新增一台计算机接入到ARPANET网或者已有的计算机要进行IP地址变更，中心的这个hosts文件就得更新，而其他计算机则不得不定期下载最新的hosts文件才能正常使用网络。</p>
-<p>随着网络规模的不断扩大、接入计算机的个数不断增加，使得这种集中管理主机名和IP地址的登陆、变更处理的可行性逐渐降低。</p>
-<p>在上述背景之下，产生了一个可以有效管理主机名和IP地址之间对应关系的系统，就是DNS系统。在应用中，当用户输入主机名（域名）时，DNS会自动检索哪个注册了主机名和IP地址的数据库，并迅速定位对应的IP地址。而且，如果主机名和IP地址需要进行变更时，也只需要在组织机构内部进行处理即可，而没必要再向其他机构进行申请或报告。这样，有了DNS，无论网络规模变得多么庞大，都能在一个较小的范围内通过DNS进行管理，充分解决了ARPANET初期遇到的问题。</p>
-<h4 id="DNS域名的构成"><a href="#DNS域名的构成" class="headerlink" title="DNS域名的构成"></a>DNS域名的构成</h4><p>域名是指为了识别主机名称和组织机构名称的一种具有分层的名称。例如，仓敷艺术科学大学的域名如下：</p>
-<p><em>kusa.ac.jp</em></p>
-<p>域名由几个英文字母用点号链接构成。在上述域名中最左边的“kusa”表示仓敷艺术科学大学固有的域名。而“ac”代表大学或其他高等教育机构。最后边的“jp”则代表日本。</p>
-<p>在使用域名时，可以在每个主机名后面追加上组织机构的域名。例如，由pepper、piyo、kinoko等主机时，它们完整的带域名的主机名将呈如下形式：</p>
-<p><em>pepper.kusa.ac.jp</em><br><em>piyo.kusa.ac.jp</em><br><em>kinoko.kusa.ac.jp</em></p>
-<h5 id="分层结构"><a href="#分层结构" class="headerlink" title="分层结构"></a>分层结构</h5><p>DNS的分层结构如图所示，由于看起来像一颗倒挂的树，人们也罢这种分层结构叫做树形结构。</p>
-<p><img src="https://i.loli.net/2018/11/07/5be2a0f9ba1b0.png" alt="捕获.PNG"></p>
-<p>每个分层中，都设有一个域名服务器，它可以管理所在分层的域的相关信息。根部所设置的DNS叫做根域名服务器。它对DNS的检索数据功能起着至关重要的作用。根域名服务器中注册着根一下第一层域名服务器的IP地址。如果想要增加顶级域名或者修改顶级域名，就得在根域名服务器中进行追加或变更。类似地，如果想要修改该分层的域名或重新设置域名服务器的IP地址，还必须得在其上层的域名服务器中进行追加或修改。</p>
-<h4 id="DNS查询"><a href="#DNS查询" class="headerlink" title="DNS查询"></a>DNS查询</h4><p>例如，当处于kusa.co.jp域中的计算机想要访问网站 www.ietf.org ，会经过如下流程</p>
-<ol>
-<li>向DNS服务器查询IP地址</li>
-<li>由于kusa的DNS服务器并不知道 www.ietf.org 的IP地址是什么，它向根域名服务器请求进行查询</li>
-<li>由于根域名服务器知道 www.ietf.org 的域名服务器的地址，所以将地址返回</li>
-<li>DNS服务器向 ietf.org 查询 www.ietf.org 的IP地址</li>
-<li>将查询到的IP地址返回给客户端</li>
-<li>计算机开始与 www.ietf.org 进行通信</li>
-</ol>
-<p>解析器（进行DNS查询的主机和软件）为了查询IP地址，向域名服务器（不仅可以访问域中的域名服务器，还可以访问其他域的域名服务器）进行查询处理。接收这个查询请求的域名服务器首先会在自己的数据库进行查找。如果有该域名所对应的IP地址就返回。如果没有，则域名服务器再向上一层根域名服务器进行查询处理。上一层根服务器则对下层进行遍历，直到找到指定的域名服务器，否则再向上层根服务器查询。</p>
-<p>解析器和域名服务区将最新了解到的信息暂时保存再缓存里，这样，可以减少每次查询时的性能消耗。</p>
+        <p>OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is <a href="[https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/">Interceptor Chain</a>)</p>
+<p>But in the process of http request, OkHttp read OkHttpClient’s configuration list and add it to transact process. There are main member attributes in OkHttpClient.</p>
+<h1 id="main-member-in-OkHttpClient"><a href="#main-member-in-OkHttpClient" class="headerlink" title="main member in OkHttpClient"></a>main member in OkHttpClient</h1><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> dispatcher: Dispatcher = Dispatcher()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> protocols: List&lt;Protocol&gt; = DEFAULT_PROTOCOLS</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> connectionSpecs: List&lt;ConnectionSpec&gt; = DEFAULT_CONNECTION_SPECS</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> interceptors: MutableList&lt;Interceptor&gt; = mutableListOf()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> networkInterceptors: MutableList&lt;Interceptor&gt; = mutableListOf()</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> cookieJar: CookieJar = CookieJar.NO_COOKIES</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> cache: Cache? = <span class="literal">null</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> hostnameVerifier: HostnameVerifier = OkHostnameVerifier</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> certificatePinner: CertificatePinner = CertificatePinner.DEFAULT</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> authenticator: Authenticator = Authenticator.NONE</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> followRedirects = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> followSslRedirects = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> retryOnConnectionFailure = <span class="literal">true</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> connectTimeout = <span class="number">10</span>_000</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> readTimeout = <span class="number">10</span>_000</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">var</span> writeTimeout = <span class="number">10</span>_000</span><br></pre></td></tr></table></figure>
+<p>And their main responsibilities as follows:</p>
+<h2 id="dispatcher"><a href="#dispatcher" class="headerlink" title="dispatcher"></a>dispatcher</h2><p>Dispatcher will switch thread when we send a request, as we know, it will make ANR(Android Not Responding) if we do network request in UI thread.</p>
+<h2 id="protocols"><a href="#protocols" class="headerlink" title="protocols"></a>protocols</h2><p>Protocols that OkHttpClient supports, default include Http/1.1 and Http/2.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> DEFAULT_PROTOCOLS = immutableListOf(HTTP_2, HTTP_1_1)</span><br></pre></td></tr></table></figure>
+<h2 id="connectionSpecs"><a href="#connectionSpecs" class="headerlink" title="connectionSpecs"></a>connectionSpecs</h2><p>Socket’s settings OkHttpClient supports, it default include modern TSL(Https) and clear text(http).</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">val</span> DEFAULT_CONNECTION_SPECS = immutableListOf(</span><br><span class="line">        ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT)</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">## interceptors</span><br><span class="line"></span><br><span class="line">Interceptors before real interaction with serve, we can add it <span class="keyword">by</span> ourself it will work before cache interceptor, can see details at [Interceptor Chain]([https:<span class="comment">//wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/)).</span></span><br><span class="line"></span><br><span class="line">## networkInterceptors</span><br><span class="line"></span><br><span class="line">NetworkInterceptors after interacting with serve, we also need add it <span class="keyword">by</span> ourself, but it may not work <span class="keyword">if</span> <span class="keyword">data</span> <span class="keyword">is</span> cached, can see details at [Interceptor Chain]([https:<span class="comment">//wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/)).</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## cookieJar</span><br><span class="line"></span><br><span class="line">CookieJar used to save cookies <span class="keyword">in</span> our application, but it <span class="keyword">do</span> not have <span class="keyword">default</span> implement, so <span class="keyword">if</span> we need save cookies, we should implement it <span class="keyword">by</span> ourself <span class="keyword">in</span> OkHttpClient.</span><br><span class="line"></span><br><span class="line">```kotlin</span><br><span class="line"><span class="keyword">val</span> client = OkHttpClient.Builder().cookieJar(<span class="keyword">object</span> : CookieJar&#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">loadForRequest</span><span class="params">(url: <span class="type">HttpUrl</span>)</span></span>: List&lt;Cookie&gt; &#123;</span><br><span class="line">                TODO(<span class="string">"not implemented"</span>) <span class="comment">//To change body of created functions use File | Settings | File Templates.</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">saveFromResponse</span><span class="params">(url: <span class="type">HttpUrl</span>, cookies: <span class="type">List</span>&lt;<span class="type">Cookie</span>&gt;)</span></span> &#123;</span><br><span class="line">                TODO(<span class="string">"not implemented"</span>) <span class="comment">//To change body of created functions use File | Settings | File Templates.</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).build()</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">## cache</span><br><span class="line"></span><br><span class="line">Similar with cookJar, it also have <span class="keyword">default</span> implement, we can implement it <span class="keyword">by</span> ourself.We should define cache file and maxSize.</span><br><span class="line"></span><br><span class="line">```kotlin</span><br><span class="line"><span class="comment">/** Create a cache of at most [maxSize] bytes in [directory]. */</span></span><br><span class="line"> <span class="keyword">constructor</span>(directory: File, maxSize: <span class="built_in">Long</span>) : <span class="keyword">this</span>(directory, maxSize, FileSystem.SYSTEM)</span><br></pre></td></tr></table></figure>
+<h2 id="hostnameVerifier"><a href="#hostnameVerifier" class="headerlink" title="hostnameVerifier"></a>hostnameVerifier</h2><p>HostnameVerifier used to verify whether hostname is valid.</p>
+<h2 id="certificatePinner"><a href="#certificatePinner" class="headerlink" title="certificatePinner"></a>certificatePinner</h2><p>CertificatePinner used to verify certificate, it has default implement, but if we need to self certificate, we can add it by ourself, example as follows:</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> client = OkHttpClient.Builder()</span><br><span class="line">            .certificatePinner(CertificatePinner.Builder().add(<span class="string">"XXXXXX"</span>).add(<span class="string">"XXXXXX"</span>).build())</span><br><span class="line">            .build()</span><br></pre></td></tr></table></figure>
+<h2 id="authenticator"><a href="#authenticator" class="headerlink" title="authenticator"></a>authenticator</h2><p>Authenticator used to add authenticator header after received service response code 401(authorize fail). Examples as follows</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> client = OkHttpClient.Builder().authenticator(<span class="keyword">object</span> : Authenticator&#123;</span><br><span class="line">            <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">authenticate</span><span class="params">(route: <span class="type">Route</span>?, response: <span class="type">Response</span>)</span></span>: Request? &#123;</span><br><span class="line">                <span class="keyword">val</span> request = Request.Builder().addHeader(<span class="string">"Authorization"</span>, <span class="string">" Bearer &lt;XXXXXXX&gt;"</span>)</span><br><span class="line">                <span class="keyword">return</span> request.build()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).build()</span><br></pre></td></tr></table></figure>
+<h2 id="followRedirects"><a href="#followRedirects" class="headerlink" title="followRedirects"></a>followRedirects</h2><p>FollowRedirects can set whether follow url when received response 3XX(redirect).</p>
+<h2 id="followSslRedirects"><a href="#followSslRedirects" class="headerlink" title="followSslRedirects"></a>followSslRedirects</h2><p>FollowSslRedirects can set whether follow url when received response 3XX(redirect) and current url is a http link, follow url is a https link.</p>
+<h2 id="connectTimeout"><a href="#connectTimeout" class="headerlink" title="connectTimeout"></a>connectTimeout</h2><p>Set connect socket time limit.</p>
+<h2 id="readTimeout"><a href="#readTimeout" class="headerlink" title="readTimeout"></a>readTimeout</h2><p>Set read socket data time limit.</p>
+<h2 id="writeTimeout"><a href="#writeTimeout" class="headerlink" title="writeTimeout"></a>writeTimeout</h2><p>Set write time limit in write data to socket.</p>
+<h1 id="other"><a href="#other" class="headerlink" title="other"></a>other</h1><p>Can see https’s connection build process at <a href="[https://wongzhenyu.cn/2018/07/15/Https%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B/](https://wongzhenyu.cn/2018/07/15/Https连接建立过程/">Https build process</a>) and OkHttp’s interceptors chain at <a href="[https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/">Interceptor Chain</a>).</p>
 
       
     </div>
@@ -467,14 +462,14 @@
       
       
       
-      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2018/11/30/Java-Socket-UDP/">Java Socket(UDP)</a></li><li><a href="/2017/10/12/Rxjava2和Retrofit2实现解析bing每日一图JSON/">Rxjava2和Retrofit2实现解析bing每日一图JSON</a></li><li><a href="/2018/11/08/UDP-and-TCP/">传输层协议：UDP与TCP（一）</a></li><li><a href="/2018/11/13/UDP-and-TCP1/">传输层协议：UDP与TCP（二）</a></li><li><a href="/2018/11/20/URL与URLconnection/">URL、URI和代理</a></li><li><a href="/2018/11/15/UDP-and-TCP2/">传输层协议：UDP与TCP（三）</a></li><li><a href="/2018/11/28/客户端Socket/">Java Socket(TCP)</a></li></ul>
+      	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/2020/04/13/Http-s-concept、working-mechanism-and-data-construction/">Http's  concept、working mechanism  and data construction</a></li><li><a href="/2018/07/15/Https连接建立过程/">Https连接建立过程</a></li><li><a href="/2018/09/10/OkHttp中拦截器流程解析/">OkHttp中拦截器流程解析</a></li></ul>
       
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/31/虚拟存储器/" rel="next" title="虚拟存储器">
-                <i class="fa fa-chevron-left"></i> 虚拟存储器
+              <a href="/2020/04/19/Encryption-Encoding-Hash-and-related/" rel="next" title="Encryption, Encoding, Hash and related">
+                <i class="fa fa-chevron-left"></i> Encryption, Encoding, Hash and related
               </a>
             
           </div>
@@ -482,10 +477,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/08/UDP-and-TCP/" rel="prev" title="传输层协议：UDP与TCP（一）">
-                传输层协议：UDP与TCP（一） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -642,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS"><span class="nav-number">1.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述及作用"><span class="nav-number">1.1.</span> <span class="nav-text">概述及作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS的产生"><span class="nav-number">1.2.</span> <span class="nav-text">DNS的产生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS域名的构成"><span class="nav-number">1.3.</span> <span class="nav-text">DNS域名的构成</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分层结构"><span class="nav-number">1.3.1.</span> <span class="nav-text">分层结构</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DNS查询"><span class="nav-number">1.4.</span> <span class="nav-text">DNS查询</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#main-member-in-OkHttpClient"><span class="nav-number">1.</span> <span class="nav-text">main member in OkHttpClient</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatcher"><span class="nav-number">1.1.</span> <span class="nav-text">dispatcher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protocols"><span class="nav-number">1.2.</span> <span class="nav-text">protocols</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connectionSpecs"><span class="nav-number">1.3.</span> <span class="nav-text">connectionSpecs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hostnameVerifier"><span class="nav-number">1.4.</span> <span class="nav-text">hostnameVerifier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#certificatePinner"><span class="nav-number">1.5.</span> <span class="nav-text">certificatePinner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#authenticator"><span class="nav-number">1.6.</span> <span class="nav-text">authenticator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#followRedirects"><span class="nav-number">1.7.</span> <span class="nav-text">followRedirects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#followSslRedirects"><span class="nav-number">1.8.</span> <span class="nav-text">followSslRedirects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connectTimeout"><span class="nav-number">1.9.</span> <span class="nav-text">connectTimeout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readTimeout"><span class="nav-number">1.10.</span> <span class="nav-text">readTimeout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writeTimeout"><span class="nav-number">1.11.</span> <span class="nav-text">writeTimeout</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#other"><span class="nav-number">2.</span> <span class="nav-text">other</span></a></li></ol></div>
             
 
           </div>
