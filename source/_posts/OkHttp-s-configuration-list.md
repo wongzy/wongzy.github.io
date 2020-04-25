@@ -54,11 +54,11 @@ internal val DEFAULT_CONNECTION_SPECS = immutableListOf(
 
 ## interceptors
 
-Interceptors before real interaction with serve, we can add it by ourself it will work before cache interceptor, can see details at [Interceptor Chain]([https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/)).
+Interceptors before real interaction with serve, we can add it by ourself it will work before cache interceptor, can see details at Interceptor Chain(bottom of page).
 
 ## networkInterceptors
 
-NetworkInterceptors after interacting with serve, we also need add it by ourself, but it may not work if data is cached, can see details at [Interceptor Chain]([https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/)).
+NetworkInterceptors after interacting with serve, we also need add it by ourself, but it may not work if data is cached, can see details at Interceptor Chain(bottom of page).
 
 
 ## cookieJar
@@ -139,4 +139,4 @@ Set write time limit in write data to socket.
 
 # other
 
-Can see https's connection build process at [Https build process]([https://wongzhenyu.cn/2018/07/15/Https%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B/](https://wongzhenyu.cn/2018/07/15/Https连接建立过程/)) and OkHttp's interceptors chain at [Interceptor Chain]([https://wongzhenyu.cn/2018/09/10/OkHttp%E4%B8%AD%E6%8B%A6%E6%88%AA%E5%99%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/](https://wongzhenyu.cn/2018/09/10/OkHttp中拦截器流程解析/)).
+Can see https's connection build process at Https build process and OkHttp's interceptors(bottom of page) chain at Interceptor Chain(bottom of page).
