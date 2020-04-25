@@ -1,7 +1,7 @@
 ---
 title: OkHttp中拦截器流程解析
 date: 2018-09-10 20:11:05
-categories: Android网络开发
+categories: Network related
 ---
 
 > OkHttp中，我们对请求报文和返回报文的处理都是在拦截器中进行的，所以熟悉OkHttp中的各个拦截器以及它们是怎样的处理流程是理解OkHttp的重点

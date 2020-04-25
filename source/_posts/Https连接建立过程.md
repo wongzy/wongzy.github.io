@@ -1,7 +1,7 @@
 ---
 title: Https连接建立过程
 date: 2018-07-15 16:53:27
-categories: Android网络开发
+categories: Network related
 ---
 > Https的全称是Http over SSL，而SSL是在TCP协议之上的保密层，但是它也是属于传输层的，如果直接传输Http，报文的信息安全是无法被保障的，因为它在应用层的信息传输是明文传输的。
 
