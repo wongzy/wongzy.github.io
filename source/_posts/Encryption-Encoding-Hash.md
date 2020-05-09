@@ -1,5 +1,5 @@
 ---
-title: Encryption, Encoding, Hash and related
+title: Encryption, Encoding, Hash
 date: 2020-04-19 15:49:09
 categories: data basement
 ---
@@ -54,7 +54,14 @@ If we both use base asymmetric and signature algorithm, we can avoid man-in-midd
 2. A send B data(encrypt by [public key B], and add signature data signing by [private key A]  to the end of data )
 3. B received data from A, and use [private key B] to decrypt encrypted data, and use [public key A] to authentication signature data, if decrypted data is equal with signature data, B can confirm that this data is sent by A, man in middle can not make fake data.
 
- 
+# Encoding
+
+A famous Encoding function is Base64, we use it to convert data to String, so it can display in text, Base64 is not a encrypt algorithm.
+
+# Hash
+
+Hash algorithm includes SHA256, MD5 etc. Hash used in many situation, in java, a base function HashCode, is one of Hash's uses, it can be regard as a summary or outline of data, and when we use encrypt algorithm, we can use Hash to obtain a better performance.
+
 
 
 
