@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="" />
+    <list default="true" id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/_posts/Encryption-Encoding-Hash-and-related.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Encryption-Encoding-Hash-and-related.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,12 +47,12 @@
       <screen x="0" y="23" width="1792" height="1017" />
     </state>
     <state x="296" y="143" width="1200" height="777" key="DiffContextDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1580537973732" />
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1588943006695">
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1589014332820">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="573" y="376" key="com.intellij.ide.util.TipDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1586783339962" />
     <state x="573" y="364" key="com.intellij.ide.util.TipDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1580542565165" />
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1588943006695" />
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1589014332820" />
     <state x="554" y="178" width="683" height="787" key="find.popup" timestamp="1587795162698">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
