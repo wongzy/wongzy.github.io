@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java&#39;s multithreading and android&#39;s handler</title>
+    <url>/2020/05/16/Java-s-multithreading-and-android-s-handler/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>OkHttp&#39;s configuration list</title>
     <url>/2020/04/25/OkHttp-s-configuration-list/</url>
     <content><![CDATA[<p>OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(bottom of page).</p>
@@ -29,14 +34,36 @@
       </categories>
   </entry>
   <entry>
-    <title>Encryption, Encoding, Hash and related</title>
-    <url>/2020/04/19/Encryption-Encoding-Hash-and-related/</url>
+    <title>Encryption, Encoding, Hash</title>
+    <url>/2020/04/19/Encryption-Encoding-Hash/</url>
     <content><![CDATA[<h1 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h1><p>There are two useful encrypt algorithms, symmetry encryption and asymmetry encryption.</p>
-<h2 id="Symmetry-Encryption"><a href="#Symmetry-Encryption" class="headerlink" title="Symmetry Encryption"></a>Symmetry Encryption</h2><p><img src="https://i.loli.net/2020/04/19/h5kJGc4peL6i7xS.png" alt="symmetry_enctypt.png"></p>
+<h2 id="Symmetric-Encryption"><a href="#Symmetric-Encryption" class="headerlink" title="Symmetric Encryption"></a>Symmetric Encryption</h2><p><img src="https://i.loli.net/2020/04/19/h5kJGc4peL6i7xS.png" alt="symmetry_enctypt.png"></p>
 <p>Symmetry encryption use same secret key to encrypt data and decrypt data.</p>
 <p>Examples: AES, DES</p>
 <p>Advantage: good performance<br>Disadvantage: The secret problem of symmetry of secret key, it is unsafe to transfer secret key on a unsafe network.</p>
-<h2 id="Asymmetry-Encryption"><a href="#Asymmetry-Encryption" class="headerlink" title="Asymmetry Encryption"></a>Asymmetry Encryption</h2>]]></content>
+<h2 id="Asymmetric-Encryption"><a href="#Asymmetric-Encryption" class="headerlink" title="Asymmetric Encryption"></a>Asymmetric Encryption</h2><h3 id="Base-Encrypt-and-decrypt"><a href="#Base-Encrypt-and-decrypt" class="headerlink" title="Base Encrypt and decrypt"></a>Base Encrypt and decrypt</h3><p><img src="https://i.loli.net/2020/05/09/cuXV3RvSPlxhYrQ.png" alt="Screen Shot 2020-05-09 at 5.23.16 PM.png"></p>
+<p>Examples: RSA,AES</p>
+<p>Advantage：Better performance in Secret<br>Disadvantage: bad performance, can not avoid man-in-middle attach  </p>
+<p>Base asymmetry encrypt include public key encrypt and private decrypt.</p>
+<p>THis is a base asymmetry encryption, when we use it in network, there is the process:</p>
+<ol>
+<li>A send its public key to B</li>
+<li>B send data encrypted by public key </li>
+<li>A received data and decrypt data with private key, so A got original data</li>
+</ol>
+<p>But in this way, we could not avoid man-in-middle attach, if C obtain public key send by A, C can make fake data and send it to A.</p>
+<h3 id="Signature-Algorithm"><a href="#Signature-Algorithm" class="headerlink" title="Signature Algorithm"></a>Signature Algorithm</h3><p>From previous session, we know base asymmetric can not avoid man-in-middle attach, so asymmetric algorithm also have a way to authentication.</p>
+<p>We can regard signature algorithm as an reverse of base encrypt algorithm, actually, signature algorithm is a kind of asymmetric algorithm.</p>
+<p><img src="https://i.loli.net/2020/05/09/ebBhOpZs254jW6Y.png" alt="Screen Shot 2020-05-09 at 5.46.32 PM.png"></p>
+<p>If we both use base asymmetric and signature algorithm, we can avoid man-in-middle attach in this process:</p>
+<ol>
+<li>A and B both send other its public key, A got B’s public key [public key B], B got A’s public key [public key A].</li>
+<li>A send B data(encrypt by [public key B], and add signature data signing by [private key A]  to the end of data )</li>
+<li>B received data from A, and use [private key B] to decrypt encrypted data, and use [public key A] to authentication signature data, if decrypted data is equal with signature data, B can confirm that this data is sent by A, man in middle can not make fake data.</li>
+</ol>
+<h1 id="Encoding"><a href="#Encoding" class="headerlink" title="Encoding"></a>Encoding</h1><p>A famous Encoding function is Base64, we use it to convert data to String, so it can display in text, Base64 is not a encrypt algorithm.</p>
+<h1 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h1><p>Hash algorithm includes SHA256, MD5 etc. Hash used in many situation, in java, a base function HashCode, is one of Hash’s uses, it can be regard as a summary or outline of data, and when we use encrypt algorithm, we can use Hash to obtain a better performance.</p>
+]]></content>
       <categories>
         <category>data basement</category>
       </categories>
@@ -1155,38 +1182,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Kotlin之码上开学课后习题（不时更新）</title>
-    <url>/2019/08/21/Kotlin%E4%B9%8B%E7%A0%81%E4%B8%8A%E5%BC%80%E5%AD%A6%E8%AF%BE%E5%90%8E%E4%B9%A0%E9%A2%98/</url>
-    <content><![CDATA[<p>马上开学地址为<a href="https://kaixue.io/" target="_blank" rel="noopener">链接</a></p>
-<h1 id="Kotlin-的变量、函数和类型"><a href="#Kotlin-的变量、函数和类型" class="headerlink" title="Kotlin 的变量、函数和类型"></a>Kotlin 的变量、函数和类型</h1><h2 id="使用-Android-Studio-创建一个基于-Kotlin-的新项目（Empty-Activity），添加一个新的属性（类型是非空的-View），在-onCreate-函数中初始化它。"><a href="#使用-Android-Studio-创建一个基于-Kotlin-的新项目（Empty-Activity），添加一个新的属性（类型是非空的-View），在-onCreate-函数中初始化它。" class="headerlink" title="使用 Android Studio 创建一个基于 Kotlin 的新项目（Empty Activity），添加一个新的属性（类型是非空的 View），在 onCreate 函数中初始化它。"></a>使用 Android Studio 创建一个基于 Kotlin 的新项目（Empty Activity），添加一个新的属性（类型是非空的 View），在 onCreate 函数中初始化它。</h2><p>kotlin如果需要创建非空的属性，我们需要用到<em>lateinit</em>关键字，代码如下：</p>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.kotlinkaixue</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle</span><br><span class="line"><span class="keyword">import</span> android.view.View</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> : <span class="type">AppCompatActivity</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">lateinit</span> <span class="keyword">var</span> view : View</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.activity_main)</span><br><span class="line">        view = findViewById(R.id.view)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="声明一个参数为-View-类型的方法，传入刚才的-View-类型属性，并在该方法中打印出该-View-的-id。"><a href="#声明一个参数为-View-类型的方法，传入刚才的-View-类型属性，并在该方法中打印出该-View-的-id。" class="headerlink" title="声明一个参数为 View? 类型的方法，传入刚才的 View 类型属性，并在该方法中打印出该 View? 的 id。"></a>声明一个参数为 View? 类型的方法，传入刚才的 View 类型属性，并在该方法中打印出该 View? 的 id。</h2><p>代码如下：</p>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.kotlinkaixue</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle</span><br><span class="line"><span class="keyword">import</span> android.util.Log</span><br><span class="line"><span class="keyword">import</span> android.view.View</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> : <span class="type">AppCompatActivity</span></span>() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> view : View? =  <span class="literal">null</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">val</span> TAG = MainActivity::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>.<span class="title">name</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">onCreate</span><span class="params">(savedInstanceState: <span class="type">Bundle</span>?)</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">        setContentView(R.layout.activity_main)</span><br><span class="line">        view = findViewById(R.id.view)</span><br><span class="line">        Log.i(TAG, view?.id.toString())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>打印出的日志如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-08-23 21:14:49.736 6126-6126/com.example.kotlinkaixue I/com.example.kotlinkaixue.MainActivity: 2131165328</span><br></pre></td></tr></table></figure>
-<h1 id="Kotlin-里那些「不是那么写的」"><a href="#Kotlin-里那些「不是那么写的」" class="headerlink" title="Kotlin 里那些「不是那么写的」"></a>Kotlin 里那些「不是那么写的」</h1><h2 id="创建一个-Kotlin-类，这个类需要禁止外部通过构造器创建实例，并提供至少一种实例化方式。"><a href="#创建一个-Kotlin-类，这个类需要禁止外部通过构造器创建实例，并提供至少一种实例化方式。" class="headerlink" title="创建一个 Kotlin 类，这个类需要禁止外部通过构造器创建实例，并提供至少一种实例化方式。"></a>创建一个 Kotlin 类，这个类需要禁止外部通过构造器创建实例，并提供至少一种实例化方式。</h2><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">kotlinKaixue</span> <span class="keyword">private</span> <span class="keyword">constructor</span></span>() &#123;</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">val</span> instance = kotlinKaixue()</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">getInstance</span><span class="params">()</span></span> : kotlinKaixue &#123;</span><br><span class="line">            <span class="keyword">return</span> instance</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这实际上是一种饿汉式单例的写法，但是它保证了线程安全</p>
-</blockquote>
-<h2 id="分别用-Array、IntArray、List-实现-「保存-1-100-000-的数字，并求出这些数字的平均值」，打印出这三种数据结构的执行时间。"><a href="#分别用-Array、IntArray、List-实现-「保存-1-100-000-的数字，并求出这些数字的平均值」，打印出这三种数据结构的执行时间。" class="headerlink" title="分别用 Array、IntArray、List 实现 「保存 1-100_000 的数字，并求出这些数字的平均值」，打印出这三种数据结构的执行时间。"></a>分别用 Array、IntArray、List 实现 「保存 1-100_000 的数字，并求出这些数字的平均值」，打印出这三种数据结构的执行时间。</h2><p>代码如下：</p>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.math.BigDecimal</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> maxNum = <span class="number">1000</span>_000;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testArray</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> startTime = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">val</span> array: Array&lt;<span class="built_in">Int</span>&gt; = Array(maxNum) &#123;</span><br><span class="line">            it.inc()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> sum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> (i <span class="keyword">in</span> array) &#123;</span><br><span class="line">            sum += i</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> avg = BigDecimal(sum).divide(BigDecimal(array.size))</span><br><span class="line">        <span class="keyword">val</span> duration = System.currentTimeMillis() - startTime</span><br><span class="line">        println(<span class="string">"Array: avg = <span class="variable">$avg</span>, duration = <span class="variable">$duration</span> ms"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testIntArray</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> startTime = System.currentTimeMillis()</span><br><span class="line">        <span class="keyword">val</span> intArray: IntArray = IntArray(maxNum) &#123;</span><br><span class="line">            it.inc()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> sum = <span class="number">0</span></span><br><span class="line">        intArray.forEach &#123;</span><br><span class="line">            sum += it</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> avg = BigDecimal(sum).divide(BigDecimal(intArray.size))</span><br><span class="line">        <span class="keyword">val</span> duration = System.currentTimeMillis() - startTime</span><br><span class="line">        println(<span class="string">"IntArray: avg = <span class="variable">$avg</span>, duration = <span class="variable">$duration</span> ms"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">testList</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">val</span> startTime = System.currentTimeMillis()</span><br><span class="line">        <span class="keyword">val</span> list : List&lt;<span class="built_in">Int</span>&gt; = List(maxNum) &#123;</span><br><span class="line">            it.inc()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> sum = <span class="number">0</span></span><br><span class="line">        list.forEach &#123;</span><br><span class="line">            sum += it</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">val</span> avg = BigDecimal(sum).divide(BigDecimal(list.size))</span><br><span class="line">        <span class="keyword">val</span> duration = System.currentTimeMillis() - startTime</span><br><span class="line">        println(<span class="string">"list: avg = <span class="variable">$avg</span>, duration = <span class="variable">$duration</span> ms"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    testArray()</span><br><span class="line">    testIntArray()</span><br><span class="line">    testList()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>结果如下所示</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Array: avg = 1784.293664, duration = 29 ms</span><br><span class="line">IntArray: avg = 1784.293664, duration = 9 ms</span><br><span class="line">list: avg = 1784.293664, duration = 35 ms</span><br></pre></td></tr></table></figure>
-<h1 id="Kotlin-里那些「更方便的」"><a href="#Kotlin-里那些「更方便的」" class="headerlink" title="Kotlin 里那些「更方便的」"></a>Kotlin 里那些「更方便的」</h1><h2 id="请按照以下要求实现一个-Student-类："><a href="#请按照以下要求实现一个-Student-类：" class="headerlink" title="请按照以下要求实现一个 Student 类："></a>请按照以下要求实现一个 Student 类：</h2><ol>
-<li>写出三个构造器，其中一个必须是主构造器</li>
-<li>主构造器中的参数作为属性</li>
-<li>写一个普通函数 show，要求通过字符串模板输出类中的属性</li>
-</ol>
-<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> student = Student(<span class="number">23</span>, <span class="literal">true</span>)</span><br><span class="line">    student.show()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">constructor</span></span>(<span class="keyword">var</span> age:<span class="built_in">Int</span>, <span class="keyword">val</span> sex:<span class="built_in">Boolean</span>) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> hobby : String ? = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(person: Person) : <span class="keyword">this</span>(person.age, person.sex)</span><br><span class="line">    <span class="keyword">constructor</span>(age: <span class="built_in">Int</span>, sex: <span class="built_in">Boolean</span>,hobby: String?) : <span class="keyword">this</span>(age, sex) &#123;</span><br><span class="line">        <span class="keyword">this</span>.hobby = hobby</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fun</span> <span class="title">show</span><span class="params">()</span></span> &#123;</span><br><span class="line">        println(<span class="string">"age = <span class="variable">$age</span>, sex = <span class="variable">$sex</span>, hobby = <span class="variable">$hobby</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">constructor</span></span>(<span class="keyword">var</span> age: <span class="built_in">Int</span>, <span class="keyword">val</span> sex: <span class="built_in">Boolean</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="编写程序，使用今天所讲的操作符，找出集合-21-40-11-33-78-中能够被-3-整除的所有元素，并输出。"><a href="#编写程序，使用今天所讲的操作符，找出集合-21-40-11-33-78-中能够被-3-整除的所有元素，并输出。" class="headerlink" title="编写程序，使用今天所讲的操作符，找出集合 {21, 40, 11, 33, 78} 中能够被 3 整除的所有元素，并输出。"></a>编写程序，使用今天所讲的操作符，找出集合 {21, 40, 11, 33, 78} 中能够被 3 整除的所有元素，并输出。</h2><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> array = intArrayOf(<span class="number">21</span>, <span class="number">40</span>, <span class="number">11</span>, <span class="number">33</span>, <span class="number">78</span>)</span><br><span class="line">     <span class="keyword">val</span> result = array.filter &#123;</span><br><span class="line">        it % <span class="number">3</span> == <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">    result.forEach &#123;</span><br><span class="line">        print(<span class="string">"<span class="variable">$it</span> "</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="Kotlin-的泛型"><a href="#Kotlin-的泛型" class="headerlink" title="Kotlin 的泛型"></a>Kotlin 的泛型</h1><h2 id="实现一个-fill-函数，传入一个-Array-和一个对象，将对象填充到-Array-中，要求-Array-参数的泛型支持逆变（假设-Array-size-为-1）。"><a href="#实现一个-fill-函数，传入一个-Array-和一个对象，将对象填充到-Array-中，要求-Array-参数的泛型支持逆变（假设-Array-size-为-1）。" class="headerlink" title="实现一个 fill 函数，传入一个 Array 和一个对象，将对象填充到 Array 中，要求 Array 参数的泛型支持逆变（假设 Array size 为 1）。"></a>实现一个 fill 函数，传入一个 Array 和一个对象，将对象填充到 Array 中，要求 Array 参数的泛型支持逆变（假设 Array size 为 1）。</h2><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span><span class="type">&lt;T&gt;</span> <span class="title">fill</span><span class="params">(array : <span class="type">Array</span>&lt;<span class="type">T</span>&gt;, item : <span class="type">T</span>)</span></span> &#123;</span><br><span class="line">    array[<span class="number">0</span>] = item</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="实现一个-copy-函数，传入两个-Array-参数，将一个-Array-中的元素复制到另外个-Array-中，要求-Array-参数的泛型分别支持协变和逆变。（提示：Kotlin-中的-for-循环如果要用索引，需要使用-Array-indices）"><a href="#实现一个-copy-函数，传入两个-Array-参数，将一个-Array-中的元素复制到另外个-Array-中，要求-Array-参数的泛型分别支持协变和逆变。（提示：Kotlin-中的-for-循环如果要用索引，需要使用-Array-indices）" class="headerlink" title="实现一个 copy 函数，传入两个 Array 参数，将一个 Array 中的元素复制到另外个 Array 中，要求 Array 参数的泛型分别支持协变和逆变。（提示：Kotlin 中的 for 循环如果要用索引，需要使用 Array.indices）"></a>实现一个 copy 函数，传入两个 Array 参数，将一个 Array 中的元素复制到另外个 Array 中，要求 Array 参数的泛型分别支持协变和逆变。（提示：Kotlin 中的 for 循环如果要用索引，需要使用 Array.indices）</h2><figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span><span class="type">&lt;T&gt;</span> <span class="title">copy</span><span class="params">(arrayIn : <span class="type">Array</span>&lt;<span class="type">in</span> <span class="type">T</span>&gt;, arrayOut : <span class="type">Array</span>&lt;<span class="type">out</span> <span class="type">T</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> arrayIn.indices) &#123;</span><br><span class="line">        arrayIn[i] = arrayOut[i]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Kotlin</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Android gradle插件基础</title>
     <url>/2019/08/18/Android-gradle%E6%8F%92%E4%BB%B6%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p>在项目的build.gradle文件中，我们可以看到默认的插件是这样的。</p>
@@ -1547,316 +1542,6 @@
 ]]></content>
       <categories>
         <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Java Socket(UDP)</title>
-    <url>/2018/11/30/Java-Socket-UDP/</url>
-    <content><![CDATA[<p>UDP是在IP之上发送数据的另一种传输层协议，速度很快，但不可靠。当发送UDP数据时，无法知道数据是否会到达，也不知道数据的各个部分是否会以发送时的顺序到达。不过，确实能到达的部分一般都会很快到达。</p>
-<p>Java中UDP的实现分为两个类：DatagramPacket和DatagramSocket。DatagramPacket类将数据填充到UDP包中，这称为数据报。为发送数据，将要数据报放到DatagramPacket中，使用DatagramSocket来发哦是那个这个包。要接收数据，可以从DatagramSocket中接收一个DatagramPacket对象，然后检查该包的内容。</p>
-<h5 id="DatagramPacket类"><a href="#DatagramPacket类" class="headerlink" title="DatagramPacket类"></a>DatagramPacket类</h5><p>在Java中，UDP数据报用DatagramPacket类的实例表示，这个类提供了一些方法来获取和设置IP首部中的源或目标地址、获取和设置源或目标端口、获取和设置数据，以及获取和设置数据长度。其余首部字段无法通过纯Java代码访问。</p>
-<h6 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h6><p>取决于数据报用于发送数据还是接收数据，DatagramPacket会使用不同的构造函数。希望接收数据报时，只需要提供保存数据报数据的byte数据和该数据用于数据报数据的字节数这两个参数。当socket从网络接收数据时，它将数据报的数据存储在DatagramPacket对象的缓冲区数据中，直到达到你指定的长度。希望发送数据报时，这些构造函数需要一个缓冲区和一个长度，另外还需要指定数据报发往的地址和端口。</p>
-<p>DatagramSocket从DatagramPacket中读取目标地址和端口，地址和端口不存储在Socket中。</p>
-<p>接收数据报的构造函数：</p>
-<ul>
-<li>public DatagramPacket(byte buf[], int length)</li>
-<li>public DatagramPacket(byte buf[], int offset, int length)</li>
-</ul>
-<p>发送数据报的构造函数：</p>
-<ul>
-<li>public DatagramPacket(byte buf[], int offset, int length,InetAddress address, int port)</li>
-<li>public DatagramPacket(byte buf[], int offset, int length, SocketAddress address)</li>
-<li>public DatagramPacket(byte buf[], int length,InetAddress address, int port)</li>
-<li>public DatagramPacket(byte buf[], int length, SocketAddress address)</li>
-</ul>
-<p>其中InetAddress或SocketAddress对象的destination指向包发往的目标主机，int参数port是该主机上的端口。</p>
-<blockquote>
-<p>在一个包中填充多少数据才合适，这取决于实际情况。有些协议规定了包大小。要选择最佳的包大小，涉及很多因素。如果网络非常不可靠，如分组无线电网络，则要选择较小的包，因为这样可以减少在传输中被破坏的可能。另一方面，非常快速而可靠的LAN应当使用尽可能大的包。对于很多类型的网络，<em>8KB字节（即8192字节）</em> 往往是一个很好的折中方案。</p>
-</blockquote>
-<h5 id="DatagramSocket类"><a href="#DatagramSocket类" class="headerlink" title="DatagramSocket类"></a>DatagramSocket类</h5><p>所有数据报Socket都绑定到一个本地端口，在这个端口上监听入站数据，这个端口也会放置在数据报的首部中。如果要编写一个客户端，不需要关心本地端口，可以调用一个构造函数，让系统来分配一个未使用的端口。这个端口号放置在所有出站数据报中，服务器将用它来确定响应数据报的发送地址。因此，当服务器构造DatagramSocket时，要指定它监听的本地端口。不过，客户端和服务器使用的Socket是一样的：区别只在于使用匿名端口还是已知端口。客户端Socket和服务器Socket没有区别。</p>
-<h6 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h6><ul>
-<li>public DatagramSocket() throws SocketException</li>
-</ul>
-<p>这个构造函数创建一个绑定到匿名端口的Socket。 <em>在发起与服务器对话的客户端中可能要使用这个构造函数。</em></p>
-<ul>
-<li>public DatagramSocket(int port) throws SocketException</li>
-</ul>
-<p>这个构造函数创建一个在指定端口监听入站数据报的Socket。 <em>可以使用这个构造函数编写在已知端口监听的服务器。</em></p>
-<ul>
-<li>public DatagramSocket(int port, InetAddress laddr) throws SocketException</li>
-</ul>
-<p>这个构造函数主要用于多宿主主机，它会创建在指定端口和网络接口监听入站数据报的Socket</p>
-<ul>
-<li>public DatagramSocket(SocketAddress bindaddr) throws SocketException</li>
-</ul>
-<p>与前一个相似，只是网络接口和端口由SocketAddress读取</p>
-<ul>
-<li>protected DatagramSocket(DatagramSocketImpl impl)</li>
-</ul>
-<p>这个构造函数允许子类提供自己的UDP实现，而不是接收默认实现。与其他4个构造函数创建的Socket不同，这个Socket一开始没有与端口绑定。使用前必须通过bind（）方法绑定到一个SocketAddress</p>
-<h6 id="发送和接收数据报"><a href="#发送和接收数据报" class="headerlink" title="发送和接收数据报"></a>发送和接收数据报</h6><p>DatagramSocket类的首要任务是发送和接收UDP数据报。一个Socket既可以发送又接收数据报。</p>
-<p>发送数据报：</p>
-<p>public void send(DatagramPacket p) throws IOException</p>
-<p>接收数据报：</p>
-<p>public synchronized void receive(DatagramPacket p) throws IOException</p>
-<blockquote>
-<p>这个方法会阻塞调用线程，直到数据报到达</p>
-</blockquote>
-<h6 id="Socket选项"><a href="#Socket选项" class="headerlink" title="Socket选项"></a>Socket选项</h6><p>Java支持6个UDP Socket选项：</p>
-<ul>
-<li>SO_TIMEOUT</li>
-</ul>
-<p>SO_TIMEOUT是receive()在抛出异常前等待入站数据报的时间，以毫秒计</p>
-<ul>
-<li>SO_RECBUF</li>
-</ul>
-<p>确定了用于网络I/O的缓冲区大小</p>
-<ul>
-<li>SO_SNDBUF</li>
-</ul>
-<p>获取和设置建议用于网络输出的发送缓冲区大小</p>
-<ul>
-<li>SO_REUSEDADDR</li>
-</ul>
-<p>可以控制是否允许多个数据报Socket同时绑定到相同的端口和地址</p>
-<ul>
-<li>SO_BROADCAST</li>
-</ul>
-<p>控制是否允许一个Socket向广播地址收发包</p>
-<ul>
-<li>IP_POS</li>
-</ul>
-<p>业务流类型</p>
-<h5 id="组播Socket类-MulticastSocket"><a href="#组播Socket类-MulticastSocket" class="headerlink" title="组播Socket类(MulticastSocket)"></a>组播Socket类(MulticastSocket)</h5><p>在Java中，要使用java.net.MulticastSocket类来组播数据，这是java.net.DatagramSocket的一个子类。</p>
-<p>MulticastSocket与DatagramSocket十分相似:将数据放在DatagramPacket中，然后通过MulticastSocket收发。</p>
-<p>MulticastSocket可以完成以下4种关键操作：</p>
-<ol>
-<li>加入组播组</li>
-<li>向组中成员发送数据</li>
-<li>接收组中的数据</li>
-<li>离开组播组</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Android网络开发</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Java Socket(TCP)</title>
-    <url>/2018/11/28/%E5%AE%A2%E6%88%B7%E7%AB%AFSocket/</url>
-    <content><![CDATA[<p>在Internet上，数据按有限大小的包传输，这些包称为数据报(datagram)。每个数据报包含一个首部（header)和一个有效载荷（payload）。首部包含包发送到的地址和端口、包来自的地址和端口、检测数据是否被破坏的校验和，以及用于保证可靠传输的各种其他管理信息。有效荷载包含数据本身。不过，由于数据报长度有限，通常必须将数据分解为多个包，再在目的地重新组合。也有可能一个包或多个包在传输中丢失或遭到破坏，需要重传。或者包乱序到达，需要重新排序。所有这些是很繁重的工作，需要大量复杂的代码。</p>
-<p>Socket允许程序员将网络连接看作是另外一个可以读/写的字节流。Socket对程序员掩盖了网络的底层细节，如错误检测、包大小、包分解、包重传、网络地址等。</p>
-<h4 id="使用Socket"><a href="#使用Socket" class="headerlink" title="使用Socket"></a>使用Socket</h4><p>Socket是两台主机之间的一个连接。它可以完成7个基本操作：</p>
-<ul>
-<li>连接远程机器</li>
-<li>发送数据</li>
-<li>接收数据</li>
-<li><p>关闭连接</p>
-<blockquote>
-<p>客户端Socket</p>
-</blockquote>
-</li>
-<li><p>绑定端口</p>
-</li>
-<li>监听入站数据</li>
-<li>在绑定端口上接受来自远程机器的连接<blockquote>
-<p>服务端ServerSocket</p>
-</blockquote>
-</li>
-</ul>
-<p>Java程序通常采用以下方式使用客户端Socket：</p>
-<ol>
-<li><p>程序用构造函数创建一个新的Socket</p>
-</li>
-<li><p>Socket尝试连接远程主机</p>
-</li>
-</ol>
-<p>一旦建立了连接，本地和远程主机就从这个Socket得到输入流和输出流，使用这两个流相互发送数据。连接是全双工的，两台主机都可以同时发送和接收数据。数据的含义取决于协议，发送给FTP服务器的命令与发送给HTTP服务器的命令就有所不同。一般会先完成某种协商握手，然后再具体传输数据。</p>
-<p>当数据传输结束后，一端或两端将关闭连接。有些协议，如HTTP 1.0，要求每次请求得到服务后都要关闭连接。其他协议，如FTP和HTTP 1.1，则允许在一个连接上处理多个请求。</p>
-<h5 id="构造和连接Socket"><a href="#构造和连接Socket" class="headerlink" title="构造和连接Socket"></a>构造和连接Socket</h5><p>java.net.Socket类是Java完成客户端TCP操作的基础类。其他建立TCP网络连接的面向客户端的类（如URL、URLConnection、Applet和JEditorPane）最终都会调用这个类的方法。这个类本身使用原生代码与主机操作系统的本地TCP栈进行通信。</p>
-<p>Socket的构造函数如下：</p>
-<ul>
-<li>public Socket()：无参构造函数，支持不同类型的socket</li>
-<li>public Socket(Proxy proxy)：可以使用某个特定的代理服务器</li>
-<li>public Socket(String host, int port) throws UnknownHostException, IOException</li>
-<li>public Socket(InetAddress address, int port) throws IOException</li>
-<li>public Socket(String host, int port, InetAddress localAddr, int localPort) throws IOException</li>
-<li>public Socket(InetAddress address, int port, InetAddress localAddr, int localPort) throws IOException</li>
-</ul>
-<p>已不建议使用：</p>
-<ul>
-<li>public Socket(String host, int port, boolean stream) throws IOException</li>
-<li>public Socket(InetAddress host, int port, boolean stream) throws IOException</li>
-</ul>
-<h5 id="设置Socket选项"><a href="#设置Socket选项" class="headerlink" title="设置Socket选项"></a>设置Socket选项</h5><p>Socket选项指定了Java Socket类所依赖的原生socket如何发送和接收数据。对于客户端Socket，Java支持9个选项：</p>
-<ol>
-<li>TCP_NODELAY</li>
-</ol>
-<p>设置TCP_NODELAY为true可确保包会尽可能快地发送，而无论包的大小。正常情况下，本地主机会有一个缓冲，而设置TCP_NODELAY为true可以打破这种缓冲模式，这样所有包一旦就绪就会发送</p>
-<ol>
-<li>SO_LINGER</li>
-</ol>
-<p>SO_LINGER选项指定了Socket关闭时如何处理尚未发送的数据报，将这个选项打开而且延迟时间设置为任意正数，close（）方法会阻塞，等待发送数据和接收确认。当过去相应秒数后，Socket关闭，所有剩余的数据都不会发送，也不会收到确认。</p>
-<ol>
-<li>SO_TIMEOUT</li>
-</ol>
-<p>正常情况下，尝试从Socket读取数据时，read（）调用会阻塞尽可能长的时间来得到足够的字节。设置SO_TIMEOUT可以确保这个调用阻塞的时间不会超过某个固定的毫秒数。</p>
-<ol>
-<li>SO_REVBUF和SO_SNDBUF</li>
-</ol>
-<p>SO_REVBUF选项用于控制用于网络输入的 <em>建议的</em> 接收缓冲区大小。SO_SNDBUF选项控制用于网络输入的 <em>建议的</em> 发送缓冲区的大小。</p>
-<p>尽管看起来应该能独立地设置发送和接收缓冲区，但实际上缓冲区通常会设置为二者中较小的一个。例如，如果将发送缓冲区设置为64KB，而接收缓冲区设置为128KB，那么发送和接收缓冲区的大小都将是64KB。Java会报告接收缓冲区为128KB，但底层TCP栈实际上会使用64KB。</p>
-<blockquote>
-<p>TCP的滑动窗口大小实际上就是socket的接收缓冲区（SO_RCVBUF）大小的字节数，拥塞窗口大小实际上就是socket的接收缓冲区（SO_SNDBUF）大小的字节数。</p>
-</blockquote>
-<ol>
-<li>SO_KEEPALIVE</li>
-</ol>
-<p>如果打开了SO_KEEPALIVE，客户端偶尔会通过一个空闲连接发送一个数据包，以确保服务器未崩溃。如果服务器没能响应这个包，客户端会持续尝试11分钟多的时间，直到接收到响应为止。如果在12分钟内未收到响应，客户端就关闭socket。</p>
-<ol>
-<li>OOBINLNE</li>
-</ol>
-<p>使用这个选项可以发送紧急数据。</p>
-<ol>
-<li>SO_REUSEADDR</li>
-</ol>
-<p>开启这个选项可以允许另一个SOcket绑定到这个之前Socket绑定的端口，即使此时仍有可能存在前一个SOcket未接收的数据。</p>
-<ol>
-<li>IP_TOS</li>
-</ol>
-<p>服务类型</p>
-<h4 id="使用ServerSocket"><a href="#使用ServerSocket" class="headerlink" title="使用ServerSocket"></a>使用ServerSocket</h4><p>ServerSocket类包含了使用Java编写服务器所需的全部内容。其中包括创建新ServerSocket对象的构造函数、在指定端口监听连接的方法、配置各个服务器Socket选项的方法，以及其他一些常见的方法。</p>
-<p>在Java中，服务器程序的基本生命周期如下：</p>
-<ol>
-<li>使用一个ServerSocket构造函数在一个特定端口创建一个新的ServerSocket</li>
-<li>ServerSocket使用其accept（）方法监听这个端口的入站连接。accept（）会一直阻塞，直到一个客户端尝试建立连接，此时accept（）将返回一个连接客户端和服务器的Socket对象。</li>
-<li>根据服务器的类型，会调用Socket的getInputStream（）方法或getOutputSteam（）方法，或者这两个方法都调用，以获得与客户端通信的输入和输出流</li>
-<li>服务器和客户端根据已协商的协议交互，直到要关闭连接</li>
-<li>服务器或客户端（或二者）关闭连接</li>
-<li>服务器返回步骤2，等待下一次连接</li>
-</ol>
-<h5 id="构造ServerSocket"><a href="#构造ServerSocket" class="headerlink" title="构造ServerSocket"></a>构造ServerSocket</h5><p>ServerSocket共有构造函数如下：</p>
-<ul>
-<li>public ServerSocket() throws IOException: 无参构造函数，会创建一个ServerSocket对象，但未将它绑定到某个端口，所以开始时它不能接收任何连接。以后可以使用bind（）来进行绑定。允许程序在绑定端口之前设置服务器socket选项。有些选项在服务器socket绑定后必须固定</li>
-<li>public ServerSocket(int port) throws IOException</li>
-<li>public ServerSocket(int port, int backlog) throws IOException</li>
-<li>public ServerSocket(int port, int backlog, InetAddress bindAddr) throws IOException</li>
-</ul>
-<h5 id="ServerSocket选项"><a href="#ServerSocket选项" class="headerlink" title="ServerSocket选项"></a>ServerSocket选项</h5><p>Socket选项指定了ServerSocket类所依赖的原生Socket如何发送和接收数据。对于服务器Socket，Java支持以下3个选项：</p>
-<ol>
-<li>SO_TIMEOUT</li>
-</ol>
-<p>SO_TIMEOUT是accept（）在抛出java.io.InterruptedIOExption异常前等待入站连接的时间，以毫秒计。如果SO_TIMEOUT为0，accept（）就永远不会超时。</p>
-<ol>
-<li>SO_REUSEADDR</li>
-</ol>
-<p>服务器Socket的SO_REUSEADDR选项与客户端Socket的SO_REUSEDADDR选项非常类似。它确定了是否允许一个Socket绑定到之前使用过的一个端口，而此时可能还有一些发送到原Socket的数据正在网络上传输。</p>
-<ol>
-<li>SO_REVBUF</li>
-</ol>
-<p>SO_REVBUF选项设置了服务器Socket接收的客户端Socket默认接收缓冲区大小。设置一个服务器的SO_REVBUF就像在accept（）返回的各个Socket上调用setReceivedBufferSize()，这个选项给出了一个 <em>建议值</em> 。</p>
-<h6 id="服务类型"><a href="#服务类型" class="headerlink" title="服务类型"></a>服务类型</h6><p>public void setPerformancePreferences(int connectionTime,int latency,int bandwidth)方法描述了其连接时间，延迟和带宽所给定的相对优先级。但很多实现（包括Android）会完全忽略这些值。</p>
-<h4 id="安全Socket"><a href="#安全Socket" class="headerlink" title="安全Socket"></a>安全Socket</h4><p>作为一个Internet用户，你确实有一些保护手段可以防范官方的监视。为了使Internet连接从根本上更加安全，可以对Socket加密。这可以保持事务的机密性、真实性和准确性。</p>
-<p>JSSE允许你创建Socket和服务器Socket，可以透明地处理安全通信中心必要的协商和加密。Java安全Socket扩展（JSSE）分为四个包：</p>
-<ul>
-<li>javax.net.ssl：定义Java安全网络通信API的抽象类</li>
-<li>javax.net: 替代构造函数创建安全Socket的抽象Socket工厂类</li>
-<li>java.security.cert: 处理SSL所需公开密钥证书的类</li>
-<li>com.sun.net.ssl: Sun的JSSE参考实现中实现加密算法和协议的具体类。从理论上讲，它们不属于JSSE标准的一部分。</li>
-</ul>
-<h5 id="创建安全客户端Socket"><a href="#创建安全客户端Socket" class="headerlink" title="创建安全客户端Socket"></a>创建安全客户端Socket</h5><p>创建安全客户端Socket并不是用构造函数来构造一个java.net.Socket对象，而是从javax.net.ssl.SSLSocketFactory使用其createSocket()方法得到一个Socket对象。SSLSocketFactory是一个遵循抽象工厂设计模式的抽象类。要通过调用静态SSLSocketFactory.getDefault()方法得到一个实例：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();</span><br><span class="line">Socket socket = sslSocketFactory.createSocket();</span><br></pre></td></tr></table></figure>
-<p>创建安全客户端Socket还有以下方法：</p>
-<ul>
-<li>public abstract Socket createSocket(String var1, int var2) throws IOException, UnknownHostException</li>
-<li>public abstract Socket createSocket(String var1, int var2, InetAddress var3, int var4) throws IOException, UnknownHostException</li>
-<li>public abstract Socket createSocket(InetAddress var1, int var2) throws IOException</li>
-<li>public abstract Socket createSocket(InetAddress var1, int var2, InetAddress var3, int var4) throws IOException</li>
-</ul>
-<h6 id="选择密码组"><a href="#选择密码组" class="headerlink" title="选择密码组"></a>选择密码组</h6><p>JSSE的不同实现支持认证和加密算法的不同组合。默认情况下，JDK 1.7实现启用了所有加密认证密码组。如果想要无认证的事务或认证但不加密的事务，必须用setEnalbledCipherSuites（）方法显式启用这些密码组。同时要避免名字中包含NULL、ANON或EXPORT的密码组。</p>
-<p>强制连接使用密码组可以使用这样的代码段：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SocketFactory sslSocketFactory = SSLSocketFactory.getDefault();</span><br><span class="line">SSLSocket socket = sslSocketFactory.createSocket();</span><br><span class="line">String[] suites = &#123;&quot;TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256&quot;&#125;;</span><br><span class="line">socket.setEnabledCipherSuites(suites);</span><br></pre></td></tr></table></figure>
-<p>每个密码组中的算法都分为四个部分：协议、密钥交换算法、加密算法和校验和。</p>
-<blockquote>
-<p>除了选择密码组，还有管理会话和确立客户端是否需要自行认证的方法。</p>
-</blockquote>
-<h5 id="创建安全服务器Socket"><a href="#创建安全服务器Socket" class="headerlink" title="创建安全服务器Socket"></a>创建安全服务器Socket</h5><p>与安全客户端Socket相似，创建安全服务器Socket同样是工厂模式。但是需要注意的是，为了同时进行加密，服务端安全Socket需要更多的初始化和设置，如以下步骤所示：</p>
-<ol>
-<li>使用keytool生成公开密钥和证书</li>
-<li>花钱请可信任的第三方认证你的证书</li>
-<li>为你使用的算法创建一个SSLContext</li>
-<li>为你要使用的证书源创建一个TrustManagerFactory</li>
-<li>为你要使用的密钥类型创建一个KeyManagerFactory</li>
-<li>为密钥和证书数据库创建一个KeyStore对象</li>
-<li>用密钥和证书填充KeyStore对象</li>
-<li>用KeyStore及其口令短语初始化KeyManagerFactory</li>
-<li>用KeyManagerFactory中的密钥管理器（必要）、TrustManagerFactory中的信任管理器和一个随机源来初始化上下文</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Android网络开发</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>URL、URI和代理</title>
-    <url>/2018/11/20/URL%E4%B8%8EURLconnection/</url>
-    <content><![CDATA[<h4 id="URL类"><a href="#URL类" class="headerlink" title="URL类"></a>URL类</h4><p>java.net.URL类是对统一资源定位符的抽象。它扩展了java.lang.Object，是一个final类，不能对其派生子类。它不依赖于继承来配置不同类型URL的实例，而使用了策略设计模式。<em>协议处理器</em> 就是策略，URL类构成上下文，通过它来选择不同的策略。</p>
-<p>URL类支持的协议取决于虚拟机支持哪些协议，如下所示，可以用来确定一个虚拟机支持哪些协议。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.net.MalformedURLException;</span><br><span class="line">import java.net.URL;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        testProtocol(&quot;http://www.abc.org&quot;);</span><br><span class="line">        testProtocol(&quot;https://www.baidu.com&quot;);</span><br><span class="line">        testProtocol(&quot;jdbc:mysql://luna.ibiblio.org:3306/NEWS&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void testProtocol(String url) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            URL url1 = new URL(url);</span><br><span class="line">            System.out.print(url1.getProtocol() + &quot; is Supported\n&quot;);</span><br><span class="line">        &#125; catch (MalformedURLException e) &#123;</span><br><span class="line">            String protocol = url.substring(0, url.indexOf(&apos;:&apos;));</span><br><span class="line">            System.out.print(protocol + &quot; is not supported\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http is Supported</span><br><span class="line">https is Supported</span><br><span class="line">jdbc is not supported</span><br></pre></td></tr></table></figure>
-<h4 id="URI类"><a href="#URI类" class="headerlink" title="URI类"></a>URI类</h4><p>URI是对URL的抽象，不仅包括URL，还包括URN（统一资源名）。这个类与java.net.URL类的区别表现在3个重要的方面：</p>
-<ol>
-<li>URI类完全有关于资源的标识和URI的解析。它没有提供方法来获取URI所标识资源的表示。</li>
-<li>相比URL类，URI类与相关的规范更一致。</li>
-<li>URI对象可以表示相对URI。URL类在存储URI之前会将其绝对化。</li>
-</ol>
-<h4 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h4><p>许多系统通过代理服务器访问Web，有时还会访问Internet的其他非HTTP部分。代理服务器接收到从本地客户端到远程服务器的请求。代理服务器向远程服务器发出请求，再将结果转发回本地客户端。有时这样做是出于安全原因，如防止远程主机了解关于本地网络配置的秘密细节。</p>
-<p>基于URL类的Java程序可以使用大多数常见的代理服务器和协议。</p>
-<h5 id="Proxy类"><a href="#Proxy类" class="headerlink" title="Proxy类"></a>Proxy类</h5><p>Proxy类允许从Java程序中对代理服务器进行更细粒度的控制。确切地讲，它允许你为不同的远程主机选择不同的代理服务器。代理本身用java.net.Proxy类的实例来表示。仍然只有三种代理：HTTP、SOCKS、和直接连接（即没有代理），分别用Proxy.Type枚举中的三个常量来表示：</p>
-<ul>
-<li>Proxy.Type.DIRECT</li>
-<li>Proxy.Type.HTTP</li>
-<li>Proxy.Type.SOCKS</li>
-</ul>
-<p>除了类型之外，关于代理的其他重要信息包括它的地址和端口，用SocketAddress对象表示。例如，下面的代码段创建了一个Proxy对象，表示proxy.example.com的端口80上的一个HTTP<br>代理服务器：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SocketAddress address = new InetSocketAddress(&quot;proxy.example.com&quot;, 80);</span><br><span class="line">Proxy proxy = new Proxy(Proxy.Type.HTTP, address);</span><br></pre></td></tr></table></figure>
-<p>虽然只有三种代理对象，但是对于不同主机上的不同代理服务器，可以有相同类型的多个不同代理。</p>
-<h4 id="与网站认证相关的类"><a href="#与网站认证相关的类" class="headerlink" title="与网站认证相关的类"></a>与网站认证相关的类</h4><p>很多流行的网站需要提供用户名和口令才能访问。有些网站（如W3C成员页面）通过HTTP认证来实现这一点。其他的网站，如New York Times网站，则通过cookie和HTML表单来实现。Java的URL类可以访问使用HTTP认证的网站，不过，当然需要提供用户名和口令。</p>
-<p>对于使用基于cookie的非标准认证的网站，要提供支持会更有难度，很重要的一个原因是：不同网站的cookie认证有很大区别。实现cookie认证往往要实现一个完整的Web浏览器，而且需要提供充分的HTML表单和cookie支持。</p>
-<h5 id="Authenticator类"><a href="#Authenticator类" class="headerlink" title="Authenticator类"></a>Authenticator类</h5><p>包java.net包括一个Authenticator类，可以用它为使用HTTP认证自我保护的网站提供用户名和口令，由于Authenticator是一个抽象类，所以必须派生子类，不同子类可以采用不同的方式获取信息。</p>
-<blockquote>
-<p>需要注意的是，Authenticator类中没有抽象方法</p>
-</blockquote>
-<p>为了让URL使用这个子类，要把它传递给Authenticator.setDefault()静态方法，将它安装为默认的认证程序（Authenticator）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Authenticator.setDefault(new Authenticator() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            protected PasswordAuthentication getPasswordAuthentication() &#123;</span><br><span class="line">                return super.getPasswordAuthentication();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            protected URL getRequestingURL() &#123;</span><br><span class="line">                return super.getRequestingURL();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            protected RequestorType getRequestorType() &#123;</span><br><span class="line">                return super.getRequestorType();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
-<p>只需要安装一次。此后，当URL类需要用户名和口令时，它就会使用Authenticator.requestPasswordAuthentication()静态方法询问这个Authenticator类的子类,这个方法的源代码如下所示:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static PasswordAuthentication requestPasswordAuthentication(</span><br><span class="line">                                    String host,</span><br><span class="line">                                    InetAddress addr,</span><br><span class="line">                                    int port,</span><br><span class="line">                                    String protocol,</span><br><span class="line">                                    String prompt,</span><br><span class="line">                                    String scheme,</span><br><span class="line">                                    URL url,</span><br><span class="line">                                    RequestorType reqType) &#123;</span><br><span class="line"></span><br><span class="line">        SecurityManager sm = System.getSecurityManager();</span><br><span class="line">        if (sm != null) &#123;</span><br><span class="line">            NetPermission requestPermission</span><br><span class="line">                = new NetPermission(&quot;requestPasswordAuthentication&quot;);</span><br><span class="line">            sm.checkPermission(requestPermission);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Authenticator a = theAuthenticator;</span><br><span class="line">        if (a == null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            synchronized(a) &#123;</span><br><span class="line">                a.reset();</span><br><span class="line">                a.requestingHost = host;</span><br><span class="line">                a.requestingSite = addr;</span><br><span class="line">                a.requestingPort = port;</span><br><span class="line">                a.requestingProtocol = protocol;</span><br><span class="line">                a.requestingPrompt = prompt;</span><br><span class="line">                a.requestingScheme = scheme;</span><br><span class="line">                a.requestingURL = url;</span><br><span class="line">                a.requestingAuthType = reqType;</span><br><span class="line">                return a.getPasswordAuthentication();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>如源代码中所示,它使用了getPasswordAuthentication()方法,所以这个方法也是必须被重写的</p>
-<p>requestPasswordAuthentication()函数中各个参数如下:</p>
-<ol>
-<li><p>String host: 主机名</p>
-</li>
-<li><p>InetAddress addr: 需要认证的主机</p>
-</li>
-<li><p>int port: 该主机上的端口</p>
-</li>
-<li><p>String protocol: 访问网站的应用层协议</p>
-</li>
-<li><p>String prompt: 需要认证的域的域名</p>
-</li>
-<li><p>String scheme: 认证模式</p>
-</li>
-<li><p>URL url: 引发身份验证的请求URL</p>
-</li>
-<li><p>RequestorType reqType: 认证类型(请求认证的是服务器还是代理服务器)</p>
-</li>
-</ol>
-<h5 id="PasswordAuthentication类"><a href="#PasswordAuthentication类" class="headerlink" title="PasswordAuthentication类"></a>PasswordAuthentication类</h5><p>非常简单的final类,它支持两个只读属性:用户名和口令</p>
-<h5 id="JPasswordField类"><a href="#JPasswordField类" class="headerlink" title="JPasswordField类"></a>JPasswordField类</h5><p>Swing中的组件,能以稍安全的方式来询问用户口令。</p>
-]]></content>
-      <categories>
-        <category>Android网络开发</category>
       </categories>
   </entry>
   <entry>
@@ -2450,61 +2135,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Lock接口实现解析：到底什么是非重入锁和可重入锁</title>
-    <url>/2018/08/12/Lock%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90%EF%BC%9A%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%9E%E9%87%8D%E5%85%A5%E9%94%81%E5%92%8C%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81/</url>
-    <content><![CDATA[<p>Java中接口的实现只给了ReentrantLock这一个默认的实现，也就是重入锁，它的概念是在获得锁后可以重复获得该资源的锁，但是这是一个听起来很绕的概念，重复获得该资源的锁是什么意思？如果不能获得，也就是这个锁是不可重入的，又会是怎么样的呢？请看下文</p>
-<h4 id="重入锁与不可重入锁的区别"><a href="#重入锁与不可重入锁的区别" class="headerlink" title="重入锁与不可重入锁的区别"></a>重入锁与不可重入锁的区别</h4><p>先给出结论：</p>
-<blockquote>
-<p>重入锁是可重复获得资源的锁，已经获得锁的线程可以对当前的资源重入加锁而不会引起阻塞；不可重入锁是不可重复获得资源的锁，当已经获得锁的线程对当前资源再次加锁时，会把自己阻塞。</p>
-</blockquote>
-<h5 id="重入锁与不可重入锁区别的本质：AQS-AbstractQueuedSynchronizer-的实现"><a href="#重入锁与不可重入锁区别的本质：AQS-AbstractQueuedSynchronizer-的实现" class="headerlink" title="重入锁与不可重入锁区别的本质：AQS(AbstractQueuedSynchronizer)的实现"></a>重入锁与不可重入锁区别的本质：AQS(AbstractQueuedSynchronizer)的实现</h5><p>Lock接口为我们提供了两个获取锁的方法，一个是tryLock()，另一个是Lock()方法，tryLock()方法是不会引起阻塞的，而Lock方法在无法获得锁的情况下，会将自己挂起。首先，我们来看看重入锁中Lock方法的实现。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">final void lock() &#123;</span><br><span class="line">            acquire(1);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>在这里可以看到，他调用了acquire方法，这个方法的实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final void acquire(int arg) &#123;</span><br><span class="line">        if (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">            selfInterrupt();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>在这里可以看到，它首先进行了!tryAcquire(arg)的操作，然后再进行后续操作，但实际上在&amp;&amp;后面的判断是由AQS来完成的，意思就是将当前的线程包装成一个Node然后加入到同步队列中去。在这里我们只关心tryAcquire方法的实现。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">            final Thread current = Thread.currentThread();</span><br><span class="line">            int c = getState();</span><br><span class="line">            if (c == 0) &#123;</span><br><span class="line">                if (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                    compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">                int nextc = c + acquires;</span><br><span class="line">                if (nextc &lt; 0)</span><br><span class="line">                    throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">                setState(nextc);</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，在ReentrantLock中tryAcquire的方法如下，先获得当前AQS的state，当state为0时代表现在没有线程获得这个锁，当前线程就可以获得这个锁，并返回true表示锁是可获得的，<em>但是后面还有一个判断，就是当state不为0，但是是当前的线程获得的锁的话，也是返回true，这里其实就是重入锁实现的关键</em> 。如果我们自己重写Lock接口，在继承AQS并重写的时候不做这个判断，得到的就是一个不可重入锁。可以这样写：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">            final Thread current = Thread.currentThread();</span><br><span class="line">            int c = getState();</span><br><span class="line">            if (c == 0) &#123;</span><br><span class="line">                if (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">                    compareAndSetState(0, acquires)) &#123;</span><br><span class="line">                    setExclusiveOwnerThread(current);</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>这样就是一个不可重入锁的结构，因为已获得锁的线程再次尝试获得锁的话会返回false，在acquire方法中就会将自己阻塞。</p>
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>不可重入锁与重入锁的区别实质其实就是在tryAcquire方法中，如果不对是否是当前的线程持有的锁进行判断，而直接返回false的话，它就是一个不可重入锁，反之，如果进行了判断，则是可重入锁。tryAcquire方法中返回true表示当前锁是可获得的，返回false则表示当前锁不可获得。</p>
-]]></content>
-      <categories>
-        <category>Java多线程</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>synchronized关键字与volatile原理浅析</title>
-    <url>/2018/08/05/synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8Evolatile%E5%8E%9F%E7%90%86%E6%B5%85%E6%9E%90/</url>
-    <content><![CDATA[<p>synchronized关键字与volatile关键字可以说是Java多线程的基础，无论是各种同步锁，还是我们所遇到的线程安全问题，都与这两个关键字有联系。</p>
-<h4 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h4><p>Synchronized关键字我们经常用来执行线程间的互斥操作，使用示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int x;</span><br><span class="line">public synchronized void setX(int x) &#123;</span><br><span class="line">    this.x = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>示例十分地简单，如果两个线程访问这个函数，他们是互斥的访问的，Synchronized关键字在这里对函数进行了类似原子操作的包装，在JMM（Java memory model）里面，Synchronized操作是这样的，当线程允许到使用Synchronized关键字修饰的代码时，它会先获取到Synchronized函数所对应的Monitor对象，如果两个线程获取到的需要获取同一个Monitor对象时，他们之间就会互斥。示例如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int x;</span><br><span class="line">int y;</span><br><span class="line">public synchronized void setX(int x) &#123;</span><br><span class="line">    this.x = x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public synchronized void setY(int y) &#123;</span><br><span class="line">    this.y = y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在这个示例中，如果线程A在执行setX函数，而线程B在执行setY函数，他们之间也是互斥地进行的，因为他们所需要获取到的Monitor是同一个。</p>
-<p>那有没有办法让两条线程不互斥地进行呢？因为两个函数当中资源并没有抢占的情况，所以，我们可以这样解决:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int x;</span><br><span class="line">int y;</span><br><span class="line"></span><br><span class="line">private final Object object1 = new Object();</span><br><span class="line">private final Object object2 = new Object();</span><br><span class="line"></span><br><span class="line">public void setX(int x) &#123;</span><br><span class="line">    synchronized (object1) &#123;</span><br><span class="line">        this.x = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public synchronized void setY(int y) &#123;</span><br><span class="line">    synchronized (object2) &#123;</span><br><span class="line">        this.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样A线程访问setX与B线程访问setY是不会互斥的，因为他们所需要获得的Monitor不是同一个。</p>
-<h4 id="Synchronize关键字与工作内存和共享内存"><a href="#Synchronize关键字与工作内存和共享内存" class="headerlink" title="Synchronize关键字与工作内存和共享内存"></a>Synchronize关键字与工作内存和共享内存</h4><p>从线程角度来说，内存可分为两种，一种是线程内的工作内存，另一种是线程间的共享内存，当使用Synchronized的时候，它主要做了三件事</p>
-<ol>
-<li>在执行之前，到共享内存读取到所需变量</li>
-<li>读取变量之后，其他线程无法再对此变量进行操作（其他线程将采取自旋或阻塞的方式等待）</li>
-<li>函数结束之后，将该变量的值刷新并解除锁定</li>
-</ol>
-<h5 id="锁的四种状态"><a href="#锁的四种状态" class="headerlink" title="锁的四种状态"></a>锁的四种状态</h5><p>在Synchronizationd中的锁是隐式锁，在Java对它进行优化之后，它是会进行自动升级的，升级的阶段有四个，分别如下：</p>
-<ul>
-<li>无锁</li>
-<li>偏向锁</li>
-<li>轻量级锁</li>
-<li>重量级锁</li>
-</ul>
-<p>其中偏向锁是Synchronizationd关键字所做的优化，它将获取锁的代价降到了最低，但是只适合单线程使用，当发生竞争时，偏向锁会升级成轻量级锁，这时如果锁已经被持有，则线程就会采取自旋的方式等待（自旋其实就是循环），如果竞争再升级，就会升级成重量级锁，这时如果再要获取锁，就会采取阻塞的方式等待。</p>
-<h4 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h4><p>volatile关键字所做的事情其实就是在改变volatile所修饰的变量时，它是会强制刷新到共享内存的，我们可以这样理解，volatile的每一步操作都和包裹在synchronized代码块中一样，但是！特别需要注意的是，这里的每一步并不是指的一行代码，而是指的每一步原子操作。</p>
-]]></content>
-      <categories>
-        <category>Java多线程</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Android事件分发机制总结</title>
     <url>/2018/07/30/Android%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<blockquote>
@@ -2630,32 +2260,6 @@
 ]]></content>
       <categories>
         <category>Network related</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>同步器-倒计时门闩</title>
-    <url>/2018/07/08/%E5%90%8C%E6%AD%A5%E5%99%A8-%E5%80%92%E8%AE%A1%E6%97%B6%E9%97%A8%E9%97%A9/</url>
-    <content><![CDATA[<p>Java中虽然提供了synchronized关键字对临界区进行线程同步访问，但是基于synchronized很难正确地编写同步代码，而倒计时门闩可以让一条或多条线程在“门口”一直等待，直到门闩的计数变量为0，线程才可以继续执行。</p>
-<h4 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h4><p>类java.util.concurrent.CountDownLatch实现了倒计时门闩同步器，它是由一个计数变量和两个操作数组成的，这两个操作分别是“导致一条线程等待直到计数变为0”以及“递减计数变量”</p>
-<h4 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h4><ul>
-<li><p>CountDownLatch（int count)：count是计数个数，当count的值是负数时，会抛出Exception</p>
-</li>
-<li><p>void await（）：除非线程被中断，否则强制调用线程一直等到计数倒数到0.中断时会抛出Exception</p>
-</li>
-<li><p>void countDown()：递减计数，当计数降至0时，释放所有等待线程。当该方法被调用时count已经为0，那么 <em>什么也不会发生</em></p>
-</li>
-<li><p>long getCount（）：返回当前的计数</p>
-</li>
-</ul>
-<h4 id="示例程序"><a href="#示例程序" class="headerlink" title="示例程序"></a>示例程序</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class CountDownLatchDemo &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CountDownLatch countDownLatch = new CountDownLatch(3);</span><br><span class="line">        Runnable runnable = new Runnable() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void run() &#123;</span><br><span class="line">                System.out.print(Thread.currentThread() + &quot;: in this thread latch count is &quot; + countDownLatch.getCount() + &quot;\n&quot;);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">                System.out.print(Thread.currentThread() +&quot;: after count down, latch count is &quot; + countDownLatch.getCount() + &quot;\n&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        ExecutorService executorService = Executors.newFixedThreadPool(3);</span><br><span class="line">        System.out.print(&quot;before latch await\n&quot;);</span><br><span class="line">        for (int i = 0; i &lt; 3; i ++) &#123;</span><br><span class="line">            executorService.execute(runnable);</span><br><span class="line">        &#125;</span><br><span class="line">        try &#123;</span><br><span class="line">            countDownLatch.await();</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(&quot;main thread work again\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在这个示例中，有三个子线程和一个主线程，主线程调用await方法之后一直等待，直到倒计时门闩中的计数变量变为0才继续执行，结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">before latch await</span><br><span class="line">Thread[pool-1-thread-2,5,main]: in this thread latch count is 3</span><br><span class="line">Thread[pool-1-thread-1,5,main]: in this thread latch count is 3</span><br><span class="line">Thread[pool-1-thread-2,5,main]: after count down, latch count is 2</span><br><span class="line">Thread[pool-1-thread-3,5,main]: in this thread latch count is 3</span><br><span class="line">Thread[pool-1-thread-1,5,main]: after count down, latch count is 1</span><br><span class="line">Thread[pool-1-thread-3,5,main]: after count down, latch count is 0</span><br><span class="line">main thread work again</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这里需要注意的是，并不是每次都会先打印子线程中的信息，可能会出现在子线程执行完countDown（）方法之后，countLatchDown中的计数变量已经为0，主线程已经可以执行，这时cpu先执行了主线程中的print语句，之后再去执行子线程中的print语句。</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Java多线程</category>
       </categories>
   </entry>
   <entry>
@@ -3910,65 +3514,6 @@
       </categories>
   </entry>
   <entry>
-    <title>发布Android开源项目到Jcenter库</title>
-    <url>/2017/12/10/%E5%8F%91%E5%B8%83Android%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%B0Jcenter%E5%BA%93/</url>
-    <content><![CDATA[<h4 id="我们在使用Android-studio时，导入一个第三方开源库很方便，如果整个库已经被发布到Maven库时，我们只需要在MainActivity所在的build-gradle（注意不是最外层的）中添加依赖即可，像这样"><a href="#我们在使用Android-studio时，导入一个第三方开源库很方便，如果整个库已经被发布到Maven库时，我们只需要在MainActivity所在的build-gradle（注意不是最外层的）中添加依赖即可，像这样" class="headerlink" title="我们在使用Android studio时，导入一个第三方开源库很方便，如果整个库已经被发布到Maven库时，我们只需要在MainActivity所在的build.gradle（注意不是最外层的）中添加依赖即可，像这样"></a>我们在使用Android studio时，导入一个第三方开源库很方便，如果整个库已经被发布到Maven库时，我们只需要在MainActivity所在的build.gradle（注意不是最外层的）中添加依赖即可，像这样</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">implementation &apos;com.android.support:appcompat-v7:26.1.0&apos;</span><br><span class="line">implementation &apos;com.android.support.constraint:constraint-layout:1.0.2&apos;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这里只是举个例子，实际上这两个都是官方的库，在Android studio 3.0中不再默认使用compile而是使用implementation来引入，这里注意一下</p>
-<h4 id="如果我们想要把自己做的一个库发布到Maven库上，让其他人也能这么方便地使用的话，-我们应该把库中的文件独立出来成一个Android-library，这样在后续打包的时候你就能把整个库独立打包，而不是和项目中其他的一些文件一起打包（比如说与库的实现无关的Activity和它的布局文件，还有一些其他的配置文件），像下面这样"><a href="#如果我们想要把自己做的一个库发布到Maven库上，让其他人也能这么方便地使用的话，-我们应该把库中的文件独立出来成一个Android-library，这样在后续打包的时候你就能把整个库独立打包，而不是和项目中其他的一些文件一起打包（比如说与库的实现无关的Activity和它的布局文件，还有一些其他的配置文件），像下面这样" class="headerlink" title="如果我们想要把自己做的一个库发布到Maven库上，让其他人也能这么方便地使用的话， 我们应该把库中的文件独立出来成一个Android library，这样在后续打包的时候你就能把整个库独立打包，而不是和项目中其他的一些文件一起打包（比如说与库的实现无关的Activity和它的布局文件，还有一些其他的配置文件），像下面这样"></a>如果我们想要把自己做的一个库发布到Maven库上，让其他人也能这么方便地使用的话， 我们应该把库中的文件独立出来成一个Android library，这样在后续打包的时候你就能把整个库独立打包，而不是和项目中其他的一些文件一起打包（比如说与库的实现无关的Activity和它的布局文件，还有一些其他的配置文件），像下面这样</h4><ol>
-<li><img src="http://img.blog.csdn.net/20171218101159513?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></li>
-<li><img src="http://img.blog.csdn.net/20171218101219101?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></li>
-<li><img src="http://img.blog.csdn.net/20171218101314644?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>在这里库的名字（红圈圈出来的）需要注意了，这个就是在将来引入库的时候，两个‘：’之间的库名称，像<strong>com.squareup.okhttp:okhttp:2.0.0</strong>，’:’后面的okhttp就是库的名字，这关系到将来发布之后时怎么个样子，所以特地拿出来说一下。<h4 id="接下来就是把去完成这个库了，完成之后你会发现在主应用-就是app文件夹中的-，比如说在MainActivity中，是无法使用这个库的，因为我们还少了一步，在主应用的依赖里加入这个库，因为加入的是本地库，所以只需要这么写"><a href="#接下来就是把去完成这个库了，完成之后你会发现在主应用-就是app文件夹中的-，比如说在MainActivity中，是无法使用这个库的，因为我们还少了一步，在主应用的依赖里加入这个库，因为加入的是本地库，所以只需要这么写" class="headerlink" title="接下来就是把去完成这个库了，完成之后你会发现在主应用(就是app文件夹中的)，比如说在MainActivity中，是无法使用这个库的，因为我们还少了一步，在主应用的依赖里加入这个库，因为加入的是本地库，所以只需要这么写"></a>接下来就是把去完成这个库了，完成之后你会发现在主应用(就是app文件夹中的)，比如说在MainActivity中，是无法使用这个库的，因为我们还少了一步，在主应用的依赖里加入这个库，因为加入的是本地库，所以只需要这么写</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compile project(&quot;:openingstartanimation&quot;)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>openingstartanimation是我自己写的库名称，在这里填入你自己的</p>
-<h4 id="已经做好这一步的话（其实如果不需要app使用这个库的话上一步可以不做，不过我们总得测试一下自己的库哈哈哈哈），就可以做一些把库发布到Jcenter上了。"><a href="#已经做好这一步的话（其实如果不需要app使用这个库的话上一步可以不做，不过我们总得测试一下自己的库哈哈哈哈），就可以做一些把库发布到Jcenter上了。" class="headerlink" title="已经做好这一步的话（其实如果不需要app使用这个库的话上一步可以不做，不过我们总得测试一下自己的库哈哈哈哈），就可以做一些把库发布到Jcenter上了。"></a>已经做好这一步的话（其实如果不需要app使用这个库的话上一步可以不做，不过我们总得测试一下自己的库哈哈哈哈），就可以做一些把库发布到Jcenter上了。</h4><h4 id="再Jcenter上注册账号，地址如下："><a href="#再Jcenter上注册账号，地址如下：" class="headerlink" title="再Jcenter上注册账号，地址如下："></a>再Jcenter上注册账号，地址如下：</h4><p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">https://bintray.com/signup/oss</a> （这个是开源项目的注册）</p>
-<h5 id="我在注册的时候遇到了个小坑，使用国内的qq邮箱注册无法被识别，使用谷歌邮箱注册也老是出错，建议大家直接使用边上的-sign-up-with-google-或者直接使用-sign-in-with-google-这样的出错几率比较小。"><a href="#我在注册的时候遇到了个小坑，使用国内的qq邮箱注册无法被识别，使用谷歌邮箱注册也老是出错，建议大家直接使用边上的-sign-up-with-google-或者直接使用-sign-in-with-google-这样的出错几率比较小。" class="headerlink" title="我在注册的时候遇到了个小坑，使用国内的qq邮箱注册无法被识别，使用谷歌邮箱注册也老是出错，建议大家直接使用边上的 sign up with google 或者直接使用 sign in with google ,这样的出错几率比较小。"></a>我在注册的时候遇到了个小坑，使用国内的qq邮箱注册无法被识别，使用谷歌邮箱注册也老是出错，建议大家直接使用边上的 <strong>sign up with google</strong> 或者直接使用 <strong>sign in with google</strong> ,这样的出错几率比较小。</h5><h4 id="注册成功之后进入个人中心，点左上角的edit进入个人配置，找到apikey，这个等等会用到。之后再回退到上一个页面，先-add-new-Repository-创建自己的maven库，这里的name一栏填的名字需要注意一下，这在后面也会用到，建议直接填maven，然后type的类型也是maven，开源协议则一般选择Apache2-0，创建完成之后再回到Android-studio配置一下文件。"><a href="#注册成功之后进入个人中心，点左上角的edit进入个人配置，找到apikey，这个等等会用到。之后再回退到上一个页面，先-add-new-Repository-创建自己的maven库，这里的name一栏填的名字需要注意一下，这在后面也会用到，建议直接填maven，然后type的类型也是maven，开源协议则一般选择Apache2-0，创建完成之后再回到Android-studio配置一下文件。" class="headerlink" title="注册成功之后进入个人中心，点左上角的edit进入个人配置，找到apikey，这个等等会用到。之后再回退到上一个页面，先 add new Repository 创建自己的maven库，这里的name一栏填的名字需要注意一下，这在后面也会用到，建议直接填maven，然后type的类型也是maven，开源协议则一般选择Apache2.0，创建完成之后再回到Android studio配置一下文件。"></a>注册成功之后进入个人中心，点左上角的edit进入个人配置，找到apikey，这个<strong>等等会用到</strong>。之后再回退到上一个页面，先 <strong>add new Repository</strong> 创建自己的maven库，这里的<strong>name一栏填的名字需要注意一下，这在后面也会用到，建议直接填maven</strong>，然后type的类型也是maven，开源协议则一般选择<strong>Apache2.0</strong>，创建完成之后再回到Android studio配置一下文件。</h4><h3 id="第一步，在最外层的build-gradle中加入依赖，如下"><a href="#第一步，在最外层的build-gradle中加入依赖，如下" class="headerlink" title="第一步，在最外层的build.gradle中加入依赖，如下"></a>第一步，在<strong>最外层的build.gradle</strong>中加入依赖，如下</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    </span><br><span class="line">    repositories &#123;</span><br><span class="line">        google()</span><br><span class="line">        jcenter()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">    classpath &apos;com.android.tools.build:gradle:3.0.1&apos;</span><br><span class="line">    classpath &apos;com.github.dcendents:android-maven-gradle-plugin:1.4.1&apos; //新添加的</span><br><span class="line">    classpath &apos;com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2&apos;   //新添加的</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="第二步，在库中的build-gradle-中填写maven库的配置，下面是我的build-gradle的完整的内容"><a href="#第二步，在库中的build-gradle-中填写maven库的配置，下面是我的build-gradle的完整的内容" class="headerlink" title="第二步，在库中的build.gradle 中填写maven库的配置，下面是我的build.gradle的完整的内容"></a>第二步，在<strong>库中的build.gradle</strong> 中填写maven库的配置，下面是我的build.gradle的完整的内容</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apply plugin: &apos;com.android.library&apos;</span><br><span class="line">apply plugin: &apos;com.github.dcendents.android-maven&apos;</span><br><span class="line">apply plugin: &apos;com.jfrog.bintray&apos;</span><br><span class="line">// This is the library version used when deploying the artifact</span><br><span class="line">version = &quot;1.0.0&quot;</span><br><span class="line"></span><br><span class="line">def siteUrl = &apos;&apos;      // 项目的主页</span><br><span class="line">def gitUrl = &apos;https://github.com/JoshuaRogue/FancyView.git&apos;   // Git仓库的url</span><br><span class="line">group = &quot;&quot;      // Maven Group ID for the artifact，一般填你唯一的包名</span><br><span class="line">install &#123;</span><br><span class="line">    repositories.mavenInstaller &#123;</span><br><span class="line">        // This generates POM.xml with proper parameters</span><br><span class="line">        pom &#123;</span><br><span class="line">            project &#123;</span><br><span class="line">                packaging &apos;aar&apos;</span><br><span class="line">                // Add your description here</span><br><span class="line">                name &apos;maven&apos;</span><br><span class="line">                url siteUrl</span><br><span class="line">                // Set your license</span><br><span class="line">                licenses &#123;</span><br><span class="line">                    license &#123;</span><br><span class="line">                        name &apos;The Apache Software License, Version 2.0&apos;</span><br><span class="line">                        url &apos;http://www.apache.org/licenses/LICENSE-2.0.txt&apos;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                developers &#123;</span><br><span class="line">                    developer &#123;</span><br><span class="line">                        id &apos;&apos;     //填写的一些基本信息</span><br><span class="line">                        name &apos;&apos;</span><br><span class="line">                        email &apos;&apos;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                scm &#123;</span><br><span class="line">                    connection gitUrl</span><br><span class="line">                    developerConnection gitUrl</span><br><span class="line">                    url siteUrl</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">task sourcesJar(type: Jar) &#123;</span><br><span class="line">    from android.sourceSets.main.java.srcDirs</span><br><span class="line">    classifier = &apos;sources&apos;</span><br><span class="line">&#125;</span><br><span class="line">task javadoc(type: Javadoc) &#123;</span><br><span class="line">    source = android.sourceSets.main.java.srcDirs</span><br><span class="line">&#125;</span><br><span class="line">task javadocJar(type: Jar, dependsOn: javadoc) &#123;</span><br><span class="line">    classifier = &apos;javadoc&apos;</span><br><span class="line">    from javadoc.destinationDir</span><br><span class="line">&#125;</span><br><span class="line">artifacts &#123;</span><br><span class="line">    archives javadocJar</span><br><span class="line">    archives sourcesJar</span><br><span class="line">&#125;</span><br><span class="line">Properties properties = new Properties()</span><br><span class="line">properties.load(project.rootProject.file(&apos;local.properties&apos;).newDataInputStream())</span><br><span class="line">bintray &#123;</span><br><span class="line">    user = properties.getProperty(&quot;bintray.user&quot;)</span><br><span class="line">    key = properties.getProperty(&quot;bintray.apikey&quot;)</span><br><span class="line">    configurations = [&apos;archives&apos;]</span><br><span class="line">    pkg &#123;</span><br><span class="line">        repo = &quot;&quot;    //这是刚刚在创建maven库时的name</span><br><span class="line">        name = &quot;&quot;   //发布到JCenter上的项目名字</span><br><span class="line">        websiteUrl = siteUrl</span><br><span class="line">        vcsUrl = gitUrl</span><br><span class="line">        licenses = [&quot;Apache-2.0&quot;]</span><br><span class="line">        publish = true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">javadoc &#123; //jav doc采用utf-8编码否则会报“GBK的不可映射字符”错误</span><br><span class="line">    options&#123;</span><br><span class="line">        encoding &quot;UTF-8&quot;</span><br><span class="line">        charSet &apos;UTF-8&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion 26</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        minSdkVersion 16</span><br><span class="line">        targetSdkVersion 26</span><br><span class="line">        versionCode 1</span><br><span class="line">        versionName &quot;1.0&quot;</span><br><span class="line"></span><br><span class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled false</span><br><span class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    implementation fileTree(dir: &apos;libs&apos;, include: [&apos;*.jar&apos;])</span><br><span class="line"></span><br><span class="line">    implementation &apos;com.android.support:appcompat-v7:26.1.0&apos;</span><br><span class="line">    testImplementation &apos;junit:junit:4.12&apos;</span><br><span class="line">    androidTestImplementation &apos;com.android.support.test:runner:1.0.1&apos;</span><br><span class="line">    androidTestImplementation &apos;com.android.support.test.espresso:espresso-core:3.0.1&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="还有一步别忘了，在最外层的local-propersitory中加入你的用户名和密码信息，如下"><a href="#还有一步别忘了，在最外层的local-propersitory中加入你的用户名和密码信息，如下" class="headerlink" title="还有一步别忘了，在最外层的local.propersitory中加入你的用户名和密码信息，如下:"></a>还有一步别忘了，在最外层的local.propersitory中加入你的用户名和密码信息，如下:</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#bintray</span><br><span class="line">bintray.user=your user</span><br><span class="line">bintray.apikey=your apikey</span><br></pre></td></tr></table></figure>
-<p>最后，在terminal（Android studio 下面直接有，不需要打开cmd）中运行<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gradlew bintrayUpload</span><br></pre></td></tr></table></figure></p>
-<h4 id="build成功之后就可以在你的主页中看到这个项目了"><a href="#build成功之后就可以在你的主页中看到这个项目了" class="headerlink" title="build成功之后就可以在你的主页中看到这个项目了"></a>build成功之后就可以在你的主页中看到这个项目了</h4><h5 id="以上，如有错误，恳请指出"><a href="#以上，如有错误，恳请指出" class="headerlink" title="以上，如有错误，恳请指出"></a>以上，如有错误，恳请指出</h5>]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Parcelable序列化类在Activity、Fragment之间通信</title>
-    <url>/2017/11/27/Parcelable%E5%BA%8F%E5%88%97%E5%8C%96%E7%B1%BB%E5%9C%A8Activity%E3%80%81Fragment%E4%B9%8B%E9%97%B4%E9%80%9A%E4%BF%A1/</url>
-    <content><![CDATA[<h4 id="要让一个类的对象序列化，我们首先得让这个类实现Parcelable接口，我自己定义的一个类如下："><a href="#要让一个类的对象序列化，我们首先得让这个类实现Parcelable接口，我自己定义的一个类如下：" class="headerlink" title="要让一个类的对象序列化，我们首先得让这个类实现Parcelable接口，我自己定义的一个类如下："></a>要让一个类的对象序列化，我们首先得让这个类实现Parcelable接口，我自己定义的一个类如下：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class NewPlan implements Parcelable&#123;</span><br><span class="line">    private Long id;</span><br><span class="line">    private String location;</span><br><span class="line">    private long startTime;</span><br><span class="line">    private long endTime;</span><br><span class="line">    public(Long id, String location, long startTime, long endTime) &#123;</span><br><span class="line">    this.id = id;</span><br><span class="line">    this.location = location;</span><br><span class="line">    this.startTime = startTime;</span><br><span class="line">    this.endTime = endTime;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public Long getId() &#123;</span><br><span class="line">        return this.id;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setId(Long id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">    public String getLocation() &#123;</span><br><span class="line">        return this.location;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setLocation(String location) &#123;</span><br><span class="line">        this.location = location;</span><br><span class="line">    &#125;</span><br><span class="line">    public long getStartTime() &#123;</span><br><span class="line">        return this.startTime;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setStartTime(long startTime) &#123;</span><br><span class="line">        this.startTime = startTime;</span><br><span class="line">    &#125;</span><br><span class="line">    public long getEndTime() &#123;</span><br><span class="line">        return this.endTime;</span><br><span class="line">    &#125;</span><br><span class="line">    public void setEndTime(long endTime) &#123;</span><br><span class="line">        this.endTime = endTime;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="这时Ide会提醒我们需要实现以下两个函数"><a href="#这时Ide会提醒我们需要实现以下两个函数" class="headerlink" title="这时Ide会提醒我们需要实现以下两个函数"></a>这时Ide会提醒我们需要实现以下两个函数</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public int describeContents() &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void writeToParcel(Parcel dest, int flags) &#123;</span><br><span class="line">        dest.writeString(location);</span><br><span class="line">        dest.writeLong(startTime);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="describeContents-函数我们一般不需要对它进行操作，我们需要写的是writeToParcel函数，注意，我们如果需要通信但是不需要得到对象中所有的属性的话，可以少些几个属性，比如我这里就只写了两个属性，做完这一步就可以来写内部生成器了"><a href="#describeContents-函数我们一般不需要对它进行操作，我们需要写的是writeToParcel函数，注意，我们如果需要通信但是不需要得到对象中所有的属性的话，可以少些几个属性，比如我这里就只写了两个属性，做完这一步就可以来写内部生成器了" class="headerlink" title="describeContents()函数我们一般不需要对它进行操作，我们需要写的是writeToParcel函数，注意，我们如果需要通信但是不需要得到对象中所有的属性的话，可以少些几个属性，比如我这里就只写了两个属性，做完这一步就可以来写内部生成器了"></a>describeContents()函数我们一般不需要对它进行操作，我们需要写的是writeToParcel函数，注意，我们如果需要通信但是不需要得到对象中所有的属性的话，可以少些几个属性，比如我这里就只写了两个属性，做完这一步就可以来写内部生成器了</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static final Parcelable.Creator&lt;NewPlan&gt; CREATOR = new Parcelable.Creator&lt;NewPlan&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public NewPlan createFromParcel(Parcel source) &#123;</span><br><span class="line">            NewPlan newPlan = new NewPlan();</span><br><span class="line">            newPlan.location = source.readString();</span><br><span class="line">            newPlan.startTime = source.readLong();</span><br><span class="line">            return newPlan;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public NewPlan[] newArray(int size) &#123;</span><br><span class="line">            return new NewPlan[size];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
-<h4 id="这里要严格按照我们刚刚写入的顺序来写，写入函数并没有给每个属性值都指定相应的Key，重写这两个函数之后，生成器就完成了。接下来我们就可以使用它通过Intent和Bundle在Activity和Fragment之间通信了"><a href="#这里要严格按照我们刚刚写入的顺序来写，写入函数并没有给每个属性值都指定相应的Key，重写这两个函数之后，生成器就完成了。接下来我们就可以使用它通过Intent和Bundle在Activity和Fragment之间通信了" class="headerlink" title="这里要严格按照我们刚刚写入的顺序来写，写入函数并没有给每个属性值都指定相应的Key，重写这两个函数之后，生成器就完成了。接下来我们就可以使用它通过Intent和Bundle在Activity和Fragment之间通信了"></a>这里要严格按照我们刚刚写入的顺序来写，写入函数并没有给每个属性值都指定相应的Key，重写这两个函数之后，生成器就完成了。接下来我们就可以使用它通过Intent和Bundle在Activity和Fragment之间通信了</h4><p>一.  Activity和Activity之间用Intent传递对象</p>
-<h5 id="发送"><a href="#发送" class="headerlink" title="发送"></a>发送</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Intent intent = new Intent(MainActivity.this, SecondActivity.class);</span><br><span class="line">intent.putExtra(&quot;it&quot;, new NewPlan(0, &quot;湖北武汉&quot;, 20171110,20171111);</span><br><span class="line">startActivity(intent);</span><br></pre></td></tr></table></figure>
-<h5 id="接收"><a href="#接收" class="headerlink" title="接收"></a>接收</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Intent intent = getIntent();</span><br><span class="line">NewPlan mNewPlan = intent.getParcelableExtra()；</span><br></pre></td></tr></table></figure>
-<h4 id="当然，除了传输一个对象，我们也可以传递List集合，不过传递对象集合时一定要注意，集合的类型一定是ArrayList，声明为List接口也是不可以的"><a href="#当然，除了传输一个对象，我们也可以传递List集合，不过传递对象集合时一定要注意，集合的类型一定是ArrayList，声明为List接口也是不可以的" class="headerlink" title="当然，除了传输一个对象，我们也可以传递List集合，不过传递对象集合时一定要注意，集合的类型一定是ArrayList，声明为List接口也是不可以的"></a>当然，除了传输一个对象，我们也可以传递List集合，不过传递对象集合时一定要注意，集合的类型一定是ArrayList，声明为List接口也是不可以的</h4><p>二. Activity与Fragment传递对象</p>
-<h4 id="我们在fragment的构造参数中无法传入我们想要传递的数据，官方推荐是使用argument传递消息，用法如下"><a href="#我们在fragment的构造参数中无法传入我们想要传递的数据，官方推荐是使用argument传递消息，用法如下" class="headerlink" title="我们在fragment的构造参数中无法传入我们想要传递的数据，官方推荐是使用argument传递消息，用法如下"></a>我们在fragment的构造参数中无法传入我们想要传递的数据，官方推荐是使用argument传递消息，用法如下</h4><h5 id="Activity给Fragment设置arguement"><a href="#Activity给Fragment设置arguement" class="headerlink" title="Activity给Fragment设置arguement"></a>Activity给Fragment设置arguement</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mScheduleDetailFragment = new ScheduleDetailFragment();//继承fragment的类</span><br><span class="line">bundleDetail.putParcelableArrayList(&quot;newPlan&quot;,new NewPlan(0, &quot;湖北武汉&quot;, 20171110,20171111); //将想要传递的对象放入Bundle</span><br><span class="line">        mScheduleDetailFragment.setArguments(bundleDetail);//设置argument</span><br></pre></td></tr></table></figure>
-<h5 id="fragment中获得Bundle中的对象"><a href="#fragment中获得Bundle中的对象" class="headerlink" title="fragment中获得Bundle中的对象"></a>fragment中获得Bundle中的对象</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NewPlan m= this.getArguments().getParcelable(&quot;newPlan&quot;);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>需要注意的是，只有在实现Parcelable接口时写入和读取的属性才能在被传递后被读取，没有这样做的属性在传递后为控制，比如说这里我只能得到location和StartTime这两个属性</p>
-<p>如有错误，恳请指出</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>另类的Android studio 3.0 报错解决方案</title>
-    <url>/2017/11/25/%E5%8F%A6%E7%B1%BB%E7%9A%84Android%20studio%203.0%20%E6%8A%A5%E9%94%99%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
-    <content><![CDATA[<h4 id="前几天手贱升级了3-0，结果第二天就报出了奇怪的错误，类似于下面这种"><a href="#前几天手贱升级了3-0，结果第二天就报出了奇怪的错误，类似于下面这种" class="headerlink" title="前几天手贱升级了3.0，结果第二天就报出了奇怪的错误，类似于下面这种"></a>前几天手贱升级了3.0，结果第二天就报出了奇怪的错误，类似于下面这种</h4><blockquote>
-<p>Error:too many padding sections on bottom border.</p>
-<p>Error:com.android.tools.aapt2.Aapt2Exception: AAPT2 error: check logs for details</p>
-<h4 id="按照网上给的解决方案，在gradle-properties-中把android-enableAapt2-false-加进去，发现还是报错，这次换成了aapt报错"><a href="#按照网上给的解决方案，在gradle-properties-中把android-enableAapt2-false-加进去，发现还是报错，这次换成了aapt报错" class="headerlink" title="按照网上给的解决方案，在gradle.properties 中把android.enableAapt2=false 加进去，发现还是报错，这次换成了aapt报错"></a>按照网上给的解决方案，在<em>gradle.properties</em> 中把<em>android.enableAapt2=false</em> 加进去，发现还是报错，这次换成了aapt报错</h4><p>Execution failed for task ‘:app:mergeDebugResources’. &gt; Error: Some file crunching failed, see logs for details</p>
-<p>####最后终于找到了问题的根源，就是9path图片的错误，Android studio对图片的要求很高，如果这里错了，很容易就报错了，把图片换掉之后aapt2也不会报错了</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
     <title>MVP模式中的小技巧：软引用与弱引用</title>
     <url>/2017/11/06/MVP%E6%A8%A1%E5%BC%8F%E4%B8%AD%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7%EF%BC%9A%E8%BD%AF%E5%BC%95%E7%94%A8%E4%B8%8E%E5%BC%B1%E5%BC%95%E7%94%A8/</url>
     <content><![CDATA[<blockquote>
@@ -4028,32 +3573,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Android中设置界面PreferenceFragment的用法</title>
-    <url>/2017/10/19/Android%E4%B8%AD%E8%AE%BE%E7%BD%AE%E7%95%8C%E9%9D%A2PreferenceFragment%E7%9A%84%E7%94%A8%E6%B3%95/</url>
-    <content><![CDATA[<blockquote>
-<p>发现Android虽然为我们提供了很好的设置界面的东西（也就是这个PreferenceFragment），但是网上的资料还真是少之又少，可能大家的需求都是自己做设置界面，不稀罕Google为我们做好的，不过既然用到了这个东西，还是拿出来做下笔记</p>
-<h4 id="第一步，我们现在res中写一个preferences-xml文件，当然你也可以命名成其他的名字"><a href="#第一步，我们现在res中写一个preferences-xml文件，当然你也可以命名成其他的名字" class="headerlink" title="第一步，我们现在res中写一个preferences.xml文件，当然你也可以命名成其他的名字"></a>第一步，我们现在res中写一个preferences.xml文件，当然你也可以命名成其他的名字</h4><p>文件目录如下：<br><img src="http://img.blog.csdn.net/20171016170343679?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h5 id="根文件布局是PreferenceScreen-定义了一个设置界面，PreferenceCategory则为设置的不同分类，可供选择的Preference有Preference，SwitchPreference，ListPreference以及CheckboxPreference达到，这些都可以放到PreferenceCategory中去，我自己写的界面如下"><a href="#根文件布局是PreferenceScreen-定义了一个设置界面，PreferenceCategory则为设置的不同分类，可供选择的Preference有Preference，SwitchPreference，ListPreference以及CheckboxPreference达到，这些都可以放到PreferenceCategory中去，我自己写的界面如下" class="headerlink" title="根文件布局是PreferenceScreen,定义了一个设置界面，PreferenceCategory则为设置的不同分类，可供选择的Preference有Preference，SwitchPreference，ListPreference以及CheckboxPreference达到，这些都可以放到PreferenceCategory中去，我自己写的界面如下"></a>根文件布局是PreferenceScreen,定义了一个设置界面，PreferenceCategory则为设置的不同分类，可供选择的Preference有Preference，SwitchPreference，ListPreference以及CheckboxPreference达到，这些都可以放到PreferenceCategory中去，我自己写的界面如下</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;PreferenceScreen xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;</span><br><span class="line">    &lt;PreferenceCategory android:title=&quot;@string/warning_setting&quot;&gt;</span><br><span class="line">        &lt;SwitchPreference android:key=&quot;weather_warn&quot;</span><br><span class="line">                          android:title=&quot;@string/weather_warn&quot;</span><br><span class="line">                          android:summaryOff=&quot;开启后在日程开始前会弹出通知栏&quot;</span><br><span class="line">                          android:summaryOn=&quot;会提醒日程&quot;</span><br><span class="line">                          android:defaultValue=&quot;false&quot;/&gt;</span><br><span class="line">        &lt;ListPreference android:key=&quot;warning_time&quot;</span><br><span class="line">                        android:dependency=&quot;weather_warn&quot;</span><br><span class="line">                        android:title=&quot;@string/waring_time_select&quot;</span><br><span class="line">                        android:summary=&quot;开启提醒则需要设置这项,默认为15分钟&quot;</span><br><span class="line">                        android:entries=&quot;@array/time&quot;</span><br><span class="line">                        android:entryValues=&quot;@array/time&quot;</span><br><span class="line">                        android:defaultValue=&quot;@string/time_default&quot;</span><br><span class="line">                        android:dialogTitle=&quot;请选择提前时间&quot;/&gt;</span><br><span class="line">    &lt;/PreferenceCategory&gt;</span><br><span class="line">    &lt;/PreferenceScreen&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>显示的效果是这样的<br><img src="http://img.blog.csdn.net/20171016170914634?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<blockquote>
-<p>这里的颜色跟定义的style有关系</p>
-</blockquote>
-<p>在这里我使用了一个android:dependency=”weather_warn”属性，这个属性的意思是只有当key为weather_warn的preference值为true时，它才是可以被选择的，我们在preference中可以定义默认的值，summary属性则是选项下面的小字，summaryon和summaryoff可以控制打开开关后显示的小字</p>
-<h4 id="第二步，写我们的Java类，继承PreferenceFragment"><a href="#第二步，写我们的Java类，继承PreferenceFragment" class="headerlink" title="第二步，写我们的Java类，继承PreferenceFragment"></a>第二步，写我们的Java类，继承PreferenceFragment</h4><p>在这里我们需要注意，这个Fragment和普通的Fragment有很大的不同，我们只需要在onCreate中执行addPreferencesFromResource(R.xml.preferences);就可以了，不需要写onCreateView函数，下面是我写的一个示例<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public void onCreate(@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        addPreferencesFromResource(R.xml.preferences);</span><br><span class="line">        useDefault = (SwitchPreference) findPreference(&quot;use_default_image&quot;);</span><br><span class="line">        warnDuration = (ListPreference) findPreference(&quot;warning_time&quot;);</span><br><span class="line">        updateDuration = (ListPreference) findPreference(&quot;update_duration&quot;);</span><br><span class="line">        useDefault.setOnPreferenceClickListener(this);</span><br><span class="line">        updateDuration.setOnPreferenceChangeListener(this);</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意我这里用到的ListPreference和SwitchPreference并不是刚刚我给出来的Preferces.xml中的内容哦，不过用法都是一样的，我们可以发现在这里，获得Preferences的方法很像在Activity中findviewbyid的用法，只不过这里使用的不是id，而是我们刚刚定义的key</p>
-</blockquote>
-<p>这里我们还定义了点击事件，如果像我这样使用的话还需要继承Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener这两个接口，然后重写两个方法，这也跟setOnClicklistener的用法十分相似，我们需要注意ListPreference的用法和想CheckPreference和SwitchPreference的方法都不一样，对SwitchPreference、CheckboxPreference应该设置点击事件，而对ListPreference则设置Chane事件。</p>
-<blockquote>
-<p>ListPreference的参考此文<br><a href="http://www.jb51.net/article/75874.htm" target="_blank" rel="noopener">http://www.jb51.net/article/75874.htm</a></p>
-<h4 id="以上，如有错误，恳请指出"><a href="#以上，如有错误，恳请指出" class="headerlink" title="以上，如有错误，恳请指出"></a>以上，如有错误，恳请指出</h4></blockquote>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
     <title>android图片状态栏实现沉浸式状态栏</title>
     <url>/2017/10/18/android%E5%9B%BE%E7%89%87%E7%8A%B6%E6%80%81%E6%A0%8F%E5%AE%9E%E7%8E%B0%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%8A%B6%E6%80%81%E6%A0%8F/</url>
     <content><![CDATA[<blockquote>
@@ -4068,54 +3587,6 @@
 <p>注： 转载自 <a href="http://blog.csdn.net/lmj623565791/article/details/48649563" target="_blank" rel="noopener">http://blog.csdn.net/lmj623565791/article/details/48649563</a><br>有了这个帮助类来帮助我们改变状态栏的颜色，实现起来就很简单了，实现如下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void setThemeColor(int mColor) &#123;</span><br><span class="line">    mNotificationBackground.setContentScrimColor(mColor);</span><br><span class="line">    StatusBarCompat.compat(MainActivity.this, mColor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 </blockquote>
 <h5 id="注意，-mNotificationBackground即为xml代码布局中CollapsingToolbarLayout的实例，这个设置是改变过渡时的颜色。"><a href="#注意，-mNotificationBackground即为xml代码布局中CollapsingToolbarLayout的实例，这个设置是改变过渡时的颜色。" class="headerlink" title="注意， mNotificationBackground即为xml代码布局中CollapsingToolbarLayout的实例，这个设置是改变过渡时的颜色。"></a>注意， mNotificationBackground即为xml代码布局中CollapsingToolbarLayout的实例，这个设置是改变过渡时的颜色。</h5>]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>DialogFragment实现自定义布局的小技巧</title>
-    <url>/2017/10/13/DialogFragment%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<blockquote>
-<p>DialogFragment可以说是用起来很方便，也很容易上手的一个类了，上次博客写了一篇关于将DatePicker放入DialogFragment中的文章，之后又遇到了将一整个布局放入DialogFragment中的情况，写着来记录一下</p>
-<h4 id="一般来说，我们在DialogFragment中放入一个View只需要像这样写"><a href="#一般来说，我们在DialogFragment中放入一个View只需要像这样写" class="headerlink" title="一般来说，我们在DialogFragment中放入一个View只需要像这样写"></a>一般来说，我们在DialogFragment中放入一个View只需要像这样写</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">View v = LayoutInflater.from(getActivity().getApplication())</span><br><span class="line">                .inflate(R.layout.datepicker, null);</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="但是如果我们需要把一整个布局都传入，而且还需要获得布局内控件的引用时，我们就需要一个ViewGroup传入，那这怎么才能在DialogFragment中实现呢？其实还是很简单的，只需要在onCreateView函数中将ViewGroup取出就可以了，具体代码如下："><a href="#但是如果我们需要把一整个布局都传入，而且还需要获得布局内控件的引用时，我们就需要一个ViewGroup传入，那这怎么才能在DialogFragment中实现呢？其实还是很简单的，只需要在onCreateView函数中将ViewGroup取出就可以了，具体代码如下：" class="headerlink" title="但是如果我们需要把一整个布局都传入，而且还需要获得布局内控件的引用时，我们就需要一个ViewGroup传入，那这怎么才能在DialogFragment中实现呢？其实还是很简单的，只需要在onCreateView函数中将ViewGroup取出就可以了，具体代码如下："></a>但是如果我们需要把一整个布局都传入，而且还需要获得布局内控件的引用时，我们就需要一个ViewGroup传入，那这怎么才能在DialogFragment中实现呢？其实还是很简单的，只需要在onCreateView函数中将ViewGroup取出就可以了，具体代码如下：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Nullable</span><br><span class="line">   @Override</span><br><span class="line">   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) &#123;</span><br><span class="line">       mViewGroup = container;</span><br><span class="line">       return super.onCreateView(inflater, container, savedInstanceState);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>然后再使用提取出的mViewGroup来获得整个布局<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@NonNull</span><br><span class="line">    @Override</span><br><span class="line">    public Dialog onCreateDialog(Bundle savedInstanceState) &#123;</span><br><span class="line">        View view = LayoutInflater.from(getContext())</span><br><span class="line">                .inflate(R.layout.location_dialog_fragment, mViewGroup, false);</span><br><span class="line">      ...... &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样就能轻松把自己写的布局再DialogFragment中展示了，获得布局中的控件就轻而易举了<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mEditLocation = (Button) view.findViewById(R.id.edit_location);</span><br><span class="line"> mThingStatement=(EditText)view.findViewById(R.id.thing_statement);</span><br><span class="line">       mSpendMoney = (EditText) view.findViewById(R.id.spend_money);</span><br><span class="line">       mStartTime = (TextView) view.findViewById(R.id.start_time);</span><br><span class="line">       mSpendTime = (EditText) view.findViewById(R.id.spend_time);</span><br></pre></td></tr></table></figure></p>
-<h5 id="以上，如有错误，恳请指出"><a href="#以上，如有错误，恳请指出" class="headerlink" title="以上，如有错误，恳请指出"></a>以上，如有错误，恳请指出</h5>]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Rxjava2和Retrofit2实现解析bing每日一图JSON</title>
-    <url>/2017/10/12/Rxjava2%E5%92%8CRetrofit2%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90bing%E6%AF%8F%E6%97%A5%E4%B8%80%E5%9B%BEJSON/</url>
-    <content><![CDATA[<blockquote>
-<p>一直想学习一下Rxjava和Retrofit实现网络请求，正好这几天准备实现一个下载bing每日一图的功能，就实践了一下</p>
-<h5 id="网上找的带有每日一图链接的资源如下"><a href="#网上找的带有每日一图链接的资源如下" class="headerlink" title="网上找的带有每日一图链接的资源如下"></a>网上找的带有每日一图链接的资源如下</h5><p><a href="https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1" target="_blank" rel="noopener">https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1</a></p>
-<h5 id="打开之后会得到一长串JSON格式的数据"><a href="#打开之后会得到一长串JSON格式的数据" class="headerlink" title="打开之后会得到一长串JSON格式的数据"></a>打开之后会得到一长串JSON格式的数据</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&quot;images&quot;:[&#123;&quot;startdate&quot;:&quot;20171006&quot;,&quot;fullstartdate&quot;:&quot;201710061600&quot;,&quot;enddate&quot;:&quot;20171007&quot;,&quot;url&quot;:&quot;/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085_1920x1080.jpg&quot;,&quot;urlbase&quot;:&quot;/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085&quot;,&quot;copyright&quot;:&quot;火星上的峡谷系统-水手号峡谷地区上的小行星 (© Detlev van Ravenswaay/Getty Images)&quot;,&quot;copyrightlink&quot;:&quot;http://www.bing.com/search?q=%E7%81%AB%E6%98%9F%E5%B3%A1%E8%B0%B7&amp;form=hpcapt&amp;mkt=zh-cn&quot;,&quot;quiz&quot;:&quot;/search?q=Bing+homepage+quiz&amp;filters=WQOskey:%22HPQuiz_20171006_VallesMarineris%22&amp;FORM=HPQUIZ&quot;,&quot;wp&quot;:true,&quot;hsh&quot;:&quot;5b69b96f1ea30eb5ec187173de25ef3c&quot;,&quot;drk&quot;:1,&quot;top&quot;:1,&quot;bot&quot;:1,&quot;hs&quot;:[]&#125;],&quot;tooltips&quot;:&#123;&quot;loading&quot;:&quot;正在加载...&quot;,&quot;previous&quot;:&quot;上一个图像&quot;,&quot;next&quot;:&quot;下一个图像&quot;,&quot;walle&quot;:&quot;此图片不能下载用作壁纸。&quot;,&quot;walls&quot;:&quot;下载今日美图。仅限用作桌面壁纸。&quot;&#125;&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h5 id="带有bing每日一图的链接显而易见了，就是"><a href="#带有bing每日一图的链接显而易见了，就是" class="headerlink" title="带有bing每日一图的链接显而易见了，就是"></a>带有bing每日一图的链接显而易见了，就是</h5><blockquote>
-<p>“urlbase”:”/az/hprichbg/rb/VallesMarineris_ZH-CN10598461085”</p>
-<p>#####当然 这仅仅是我写这篇文章时候的链接，每天数据都会不同</p>
-<h3 id="接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下"><a href="#接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下" class="headerlink" title="接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下"></a>接下来我们来开始实现Rxjava2和Retrofit2解析JSON了，添加依赖如下</h3><p> compile ‘com.squareup.retrofit2:retrofit:2.3.0’<br>    compile ‘io.reactivex.rxjava2:rxandroid:2.0.1’<br>    compile ‘io.reactivex.rxjava2:rxjava:2.1.3’<br>    compile ‘com.squareup.retrofit2:converter-gson:2.3.0’<br>    compile ‘com.squareup.retrofit2:adapter-rxjava2:2.3.0’</p>
-<h5 id="因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖"><a href="#因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖" class="headerlink" title="因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖"></a>因为okhttp已经集成在retrofit中了，所有这里不需要再加入okhttp的依赖</h5><h4 id="一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter-setter及内部类，还没有安装此插件的同学可以参考这一篇博文"><a href="#一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter-setter及内部类，还没有安装此插件的同学可以参考这一篇博文" class="headerlink" title="一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter setter及内部类，还没有安装此插件的同学可以参考这一篇博文"></a>一步一步来，首先，我们先根据返回的数据写一个实体类，这里有一个很方便的工具GsonFormat，可以直接根据网页中的信息生成gettter setter及内部类，还没有安装此插件的同学可以参考这一篇博文</h4><p><a href="http://blog.csdn.net/dakaring/article/details/46300963" target="_blank" rel="noopener">http://blog.csdn.net/dakaring/article/details/46300963</a></p>
-<h5 id="我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下"><a href="#我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下" class="headerlink" title="我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下"></a>我们也可以添加自己的函数，这样可以很方便地得到想要的数据，如下</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String getURL() &#123;</span><br><span class="line">        return images.get(0).getUrl();</span><br><span class="line"> &#125;</span><br><span class="line">String getDate() &#123;</span><br><span class="line">        return images.get(0).getEnddate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h5 id="这里就是我自己添加的函数"><a href="#这里就是我自己添加的函数" class="headerlink" title="这里就是我自己添加的函数"></a>这里就是我自己添加的函数</h5><h4 id="完成实体类之后就可以来定义接口了"><a href="#完成实体类之后就可以来定义接口了" class="headerlink" title="完成实体类之后就可以来定义接口了"></a>完成实体类之后就可以来定义接口了</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">interface ImageAPI &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 网络请求</span><br><span class="line">     * @return 实体类</span><br><span class="line">     */</span><br><span class="line">    @GET(&quot;HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1&quot;)</span><br><span class="line">    Flowable&lt;ImageBean&gt; getImage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="这里需要注意的是，在-GET后面添加的是上面的链接https-cn-bing-com-HPImageArchive-aspx-format-js-amp-idx-0-amp-n-1的后半部分，这也是retrofit-的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。"><a href="#这里需要注意的是，在-GET后面添加的是上面的链接https-cn-bing-com-HPImageArchive-aspx-format-js-amp-idx-0-amp-n-1的后半部分，这也是retrofit-的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。" class="headerlink" title="这里需要注意的是，在@GET后面添加的是上面的链接https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit 的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。"></a>这里需要注意的是，在@GET后面添加的是上面的链接<a href="https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit" target="_blank" rel="noopener">https://cn.bing.com/HPImageArchive.aspx?format=js&amp;idx=0&amp;n=1的后半部分，这也是retrofit</a> 的用法很重要的一点，当然，在我们这里并没有体现出来这种方式的优点，但在其他地方，可以起到很好的解耦作用。我们这里定义的接口直接就返回了ImageBean类，在后面就可以直接提取数据了。Flowable则是Rxjava2新引入的东西，它可以更好地处理同步异步的关系。</h5><h4 id="最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了"><a href="#最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了" class="headerlink" title="最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了"></a>最后一步就是实现了，我们在上一步只给出了链接的下半部分，在这里我们将将上半部分封装进retrofit，这样完整的链接就给出了</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private static final String BASE_URL = &quot;https://cn.bing.com&quot;;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Retrofit retrofit = new Retrofit.Builder()</span><br><span class="line">                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .baseUrl(&quot;https://cn.bing.com/&quot;)</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure>
-<h5 id="在这里我们实现了Retrofit-的初始化，以及将JSON转化，其中addCallAdapterFactory-RxJava2CallAdapterFactory-create-表示添加Rxjava2与Retrofit2的适配器，addConverterFactory-GsonConverterFactory-create-则表示添加Json转化工具。"><a href="#在这里我们实现了Retrofit-的初始化，以及将JSON转化，其中addCallAdapterFactory-RxJava2CallAdapterFactory-create-表示添加Rxjava2与Retrofit2的适配器，addConverterFactory-GsonConverterFactory-create-则表示添加Json转化工具。" class="headerlink" title="在这里我们实现了Retrofit 的初始化，以及将JSON转化，其中addCallAdapterFactory(RxJava2CallAdapterFactory.create())表示添加Rxjava2与Retrofit2的适配器，addConverterFactory(GsonConverterFactory.create())则表示添加Json转化工具。"></a>在这里我们实现了Retrofit 的初始化，以及将JSON转化，其中addCallAdapterFactory(RxJava2CallAdapterFactory.create())表示添加Rxjava2与Retrofit2的适配器，addConverterFactory(GsonConverterFactory.create())则表示添加Json转化工具。</h5><h4 id="最后一步-实现接口"><a href="#最后一步-实现接口" class="headerlink" title="最后一步 实现接口"></a>最后一步 实现接口</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">final ImageAPI imageAPI = retrofit.create(ImageAPI.class);</span><br><span class="line">        LogUtil.v(TAG, &quot;downloadUrl&quot;);</span><br><span class="line">        imageAPI.getImage()</span><br><span class="line">                .subscribeOn(Schedulers.io())</span><br><span class="line">                .observeOn(Schedulers.newThread())</span><br><span class="line">                .subscribe(new Subscriber&lt;ImageBean&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void onSubscribe(Subscription s) &#123;</span><br><span class="line">                        s.request(Long.MAX_VALUE);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onNext(ImageBean imageBean) &#123;</span><br><span class="line">                        LogUtil.v(TAG, &quot;next&quot;);</span><br><span class="line">                        LogUtil.d(TAG, BASE_URL + imageBean.getURL());</span><br><span class="line">                        LogUtil.d(TAG, imageBean.getDate());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onError(Throwable t) &#123;</span><br><span class="line">                        t.printStackTrace();</span><br><span class="line">                        LogUtil.v(TAG, &quot;error&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onComplete() &#123;</span><br><span class="line">                        LogUtil.v(TAG, &quot;complete&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br></pre></td></tr></table></figure>
-<h5 id="这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！"><a href="#这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！" class="headerlink" title="这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！"></a>这里需要注意onSubscribe函数中必须对s进行处理，这里表示一次性处理几次数据，若不处理，则onNext不生效！</h5><h4 id="到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！"><a href="#到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！" class="headerlink" title="到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！"></a>到这里就结束了，可以得到完整的每日一图链接，如有差错恳请指出！</h4>]]></content>
-      <categories>
-        <category>Android网络开发</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>ButterKnife在RecyclerView adapter中的使用</title>
-    <url>/2017/10/08/ButterKnife%E5%9C%A8RecyclerView%20adapter%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h4 id="ButterKnife是一个用起来十分方便的开源库，我们只需要用一个小小的插件ButterKnifeZenezny就免去了写一大袋findViewbyId的书写，不过在adapter中，插件自动生成的方式就步行了，我们一般都需要在ViewHolder中实现依赖注入-这时候我们需要像下面这样"><a href="#ButterKnife是一个用起来十分方便的开源库，我们只需要用一个小小的插件ButterKnifeZenezny就免去了写一大袋findViewbyId的书写，不过在adapter中，插件自动生成的方式就步行了，我们一般都需要在ViewHolder中实现依赖注入-这时候我们需要像下面这样" class="headerlink" title="ButterKnife是一个用起来十分方便的开源库，我们只需要用一个小小的插件ButterKnifeZenezny就免去了写一大袋findViewbyId的书写，不过在adapter中，插件自动生成的方式就步行了，我们一般都需要在ViewHolder中实现依赖注入,这时候我们需要像下面这样"></a>ButterKnife是一个用起来十分方便的开源库，我们只需要用一个小小的插件ButterKnifeZenezny就免去了写一大袋findViewbyId的书写，不过在adapter中，插件自动生成的方式就步行了，我们一般都需要在ViewHolder中实现依赖注入,这时候我们需要像下面这样</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static class LocationViewHolder extends RecyclerView.ViewHolder &#123;</span><br><span class="line">        @BindView(R.id.location_show)</span><br><span class="line">        TextView locationShow;</span><br><span class="line">        @BindView(R.id.statement_show)</span><br><span class="line">        TextView stateementShow;</span><br><span class="line">        @BindView(R.id.time_show)</span><br><span class="line">        TextView timeShow;</span><br><span class="line">        @BindView(R.id.spend_money_show)</span><br><span class="line">        TextView spendMoneyShow;</span><br><span class="line">        @BindView(R.id.spend_time_show)</span><br><span class="line">        TextView spendTimeShow;</span><br><span class="line">        public LocationViewHolder(View itemView) &#123;</span><br><span class="line">            super(itemView);</span><br><span class="line">            ButterKnife.bind(this, itemView);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="这种方式就可以实现用ButterKnife注入view，简化了我们的书写，当然，对项目中用了ButterKnife的强迫症患者来说，实在是很棒了。。"><a href="#这种方式就可以实现用ButterKnife注入view，简化了我们的书写，当然，对项目中用了ButterKnife的强迫症患者来说，实在是很棒了。。" class="headerlink" title="这种方式就可以实现用ButterKnife注入view，简化了我们的书写，当然，对项目中用了ButterKnife的强迫症患者来说，实在是很棒了。。"></a>这种方式就可以实现用ButterKnife注入view，简化了我们的书写，当然，对项目中用了ButterKnife的强迫症患者来说，实在是很棒了。。</h4>]]></content>
       <categories>
         <category>Android</category>
       </categories>
@@ -4140,49 +3611,6 @@
 <h4 id="最后在java函数中调用native函数，就可以实现图片的毛玻璃化了，这里给出我的实现方法"><a href="#最后在java函数中调用native函数，就可以实现图片的毛玻璃化了，这里给出我的实现方法" class="headerlink" title="最后在java函数中调用native函数，就可以实现图片的毛玻璃化了，这里给出我的实现方法"></a>最后在java函数中调用native函数，就可以实现图片的毛玻璃化了，这里给出我的实现方法</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Bitmap blur(Bitmap srcBitmap) &#123;</span><br><span class="line">       blurBitmap(srcBitmap, 13);</span><br><span class="line">        return srcBitmap;</span><br><span class="line">    &#125;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    // 参数r为对bitmap虚化的程度范围</span><br><span class="line">    static native void blurBitmap(Object bitmap, int r);</span><br></pre></td></tr></table></figure>
 <h3 id="附加一点东西，为了实现截图的毛玻璃效果，我们一般还会压缩一下图片，这样才能使毛玻璃效果更快更自然，这里给出一个减少图片像素的方法"><a href="#附加一点东西，为了实现截图的毛玻璃效果，我们一般还会压缩一下图片，这样才能使毛玻璃效果更快更自然，这里给出一个减少图片像素的方法" class="headerlink" title="附加一点东西，为了实现截图的毛玻璃效果，我们一般还会压缩一下图片，这样才能使毛玻璃效果更快更自然，这里给出一个减少图片像素的方法"></a>附加一点东西，为了实现截图的毛玻璃效果，我们一般还会压缩一下图片，这样才能使毛玻璃效果更快更自然，这里给出一个减少图片像素的方法</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static Bitmap compressScale(Bitmap bmp) &#123;</span><br><span class="line">        // 尺寸压缩倍数,值越大，图片尺寸越小</span><br><span class="line">        int ratio = 5;</span><br><span class="line">        // 压缩Bitmap到对应尺寸</span><br><span class="line">        Bitmap result = Bitmap.createBitmap(bmp.getWidth() / ratio, bmp.getHeight() / ratio, Bitmap.Config.ARGB_8888);</span><br><span class="line">        Canvas canvas = new Canvas(result);</span><br><span class="line">        Rect rect = new Rect(0, 0, bmp.getWidth() / ratio, bmp.getHeight() / ratio);</span><br><span class="line">        canvas.drawBitmap(bmp, null, rect, null);</span><br><span class="line">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span><br><span class="line">        // 把压缩后的数据存放到baos中</span><br><span class="line">        result.compress(Bitmap.CompressFormat.JPEG, 60 ,baos);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <h4 id="配合上这个方法，毛玻璃效果就能更快得实现了"><a href="#配合上这个方法，毛玻璃效果就能更快得实现了" class="headerlink" title="配合上这个方法，毛玻璃效果就能更快得实现了"></a>配合上这个方法，毛玻璃效果就能更快得实现了</h4><h5 id="如上，如有错误，恳请指正"><a href="#如上，如有错误，恳请指正" class="headerlink" title="如上，如有错误，恳请指正"></a>如上，如有错误，恳请指正</h5>]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>DialogFragment实现DatePicker</title>
-    <url>/2017/10/05/DialogFragment%E5%AE%9E%E7%8E%B0DatePicker/</url>
-    <content><![CDATA[<blockquote>
-<p>先上效果图<br><img src="http://img.blog.csdn.net/20171022171615530?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h4 id="要实现这个效果，首先，我们得先创建一个Dialogfragment，注意我们只重写onCreateDialog函数，其他的函数就不用管了，在此之前我们先写好xml文件，很简单，只需要把datepicker作为根布局就可以了"><a href="#要实现这个效果，首先，我们得先创建一个Dialogfragment，注意我们只重写onCreateDialog函数，其他的函数就不用管了，在此之前我们先写好xml文件，很简单，只需要把datepicker作为根布局就可以了" class="headerlink" title="要实现这个效果，首先，我们得先创建一个Dialogfragment，注意我们只重写onCreateDialog函数，其他的函数就不用管了，在此之前我们先写好xml文件，很简单，只需要把datepicker作为根布局就可以了"></a>要实现这个效果，首先，我们得先创建一个Dialogfragment，注意我们只重写onCreateDialog函数，其他的函数就不用管了，在此之前我们先写好xml文件，很简单，只需要把datepicker作为根布局就可以了</h4><p>datepicker.xml<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;DatePicker xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">            android:id=&quot;@+id/datePicker&quot;</span><br><span class="line">            android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_height=&quot;match_parent&quot;</span><br><span class="line">            android:calendarViewShown=&quot;false&quot;&gt;</span><br><span class="line">&lt;/DatePicker&gt;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h4 id="我们需要在onCreateDialog返回一个dialog，这个dialog我们一般都使用AlertDialog，现在官方已经不推荐使用Dialog了，具体代码如下："><a href="#我们需要在onCreateDialog返回一个dialog，这个dialog我们一般都使用AlertDialog，现在官方已经不推荐使用Dialog了，具体代码如下：" class="headerlink" title="我们需要在onCreateDialog返回一个dialog，这个dialog我们一般都使用AlertDialog，现在官方已经不推荐使用Dialog了，具体代码如下："></a>我们需要在onCreateDialog返回一个dialog，这个dialog我们一般都使用AlertDialog，现在官方已经不推荐使用Dialog了，具体代码如下：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">View v = LayoutInflater.from(getActivity())</span><br><span class="line">                .inflate(R.layout.datepicker, null);</span><br><span class="line">        final DatePicker datePicker = (DatePicker)v;</span><br><span class="line">        datePicker.setMinDate(TimeUtil.getDayLong());</span><br><span class="line">        //设置可选择的最小日期，TimeUtil是我自己写的工具类，返回当前日期的long值</span><br><span class="line">        AlertDialog.Builder dialogbuilder = new AlertDialog.Builder(getActivity())</span><br><span class="line">                .setView(datePicker)</span><br><span class="line">                .setTitle(R.string.datepicker_title)</span><br><span class="line">                .setPositiveButton(R.string.button_sure, new DialogInterface.OnClickListener() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void onClick(DialogInterface dialog, int which) &#123;            //添加自己的代码</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .setNegativeButton(R.string.button_cancel, null);</span><br><span class="line">                 return dialogbuilder.create();</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>alertdialog的构造用到了十分典型的Builder模式，这个模式可以使我们更容易组织alerdialog。</p>
-<h4 id="写完了dialogfragment之后，就可以在活动中调用它了，代码十分简单"><a href="#写完了dialogfragment之后，就可以在活动中调用它了，代码十分简单" class="headerlink" title="写完了dialogfragment之后，就可以在活动中调用它了，代码十分简单"></a>写完了dialogfragment之后，就可以在活动中调用它了，代码十分简单</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FragmentManager manager = getSupportFragmentManager(); </span><br><span class="line">DatePickerFragment datePickerFragment = new DatePickerFragment();</span><br><span class="line">//datePickerFragment即为我们写的继承dialogfragment的组件</span><br><span class="line">datePickerFragment.setActitityType(activityType);</span><br><span class="line">datePickerFragment.show(manager, &quot;DatePickerFragment&quot;);</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="不过这个dialogfragment显示的方式可能有些难看，这里给出我的一个动画的实现方式"><a href="#不过这个dialogfragment显示的方式可能有些难看，这里给出我的一个动画的实现方式" class="headerlink" title="不过这个dialogfragment显示的方式可能有些难看，这里给出我的一个动画的实现方式"></a>不过这个dialogfragment显示的方式可能有些难看，这里给出我的一个动画的实现方式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (dialog.getWindow() != null) &#123;</span><br><span class="line">            Window window=dialog.getWindow();</span><br><span class="line">            window.setWindowAnimations(R.style.dialogAnim);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>动画的xml代码如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;style name=&quot;dialogAnim&quot; mce_bogus=&quot;1&quot; parent=&quot;android:Animation&quot;&gt;</span><br><span class="line">        &lt;item name=&quot;android:windowEnterAnimation&quot;&gt;@anim/dialog_push_in&lt;/item&gt;</span><br><span class="line">        &lt;item name=&quot;android:windowExitAnimation&quot;&gt;@anim/dialog_push_out&lt;/item&gt;</span><br><span class="line">    &lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>dialog_push_in<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;set xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;</span><br><span class="line">    &lt;scale</span><br><span class="line">        android:duration=&quot;@android:integer/config_shortAnimTime&quot;</span><br><span class="line">        android:fromYScale=&quot;0.5&quot;</span><br><span class="line">        android:fromXScale=&quot;0.4&quot;</span><br><span class="line">        android:toXScale=&quot;1.0&quot;</span><br><span class="line">        android:toYScale=&quot;1.0&quot;</span><br><span class="line">        /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:duration=&quot;@android:integer/config_shortAnimTime&quot;</span><br><span class="line">        android:fromAlpha=&quot;0.0&quot;</span><br><span class="line">        android:toAlpha=&quot;1.0&quot; /&gt;</span><br><span class="line">&lt;/set&gt;</span><br></pre></td></tr></table></figure></p>
-<p>dialog_push_out<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;set xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;</span><br><span class="line">    &lt;scale</span><br><span class="line">        android:duration=&quot;@android:integer/config_shortAnimTime&quot;</span><br><span class="line">        android:fromYScale=&quot;1.0&quot;</span><br><span class="line">        android:fromXScale=&quot;1.0&quot;</span><br><span class="line">        android:toXScale=&quot;0.4&quot;</span><br><span class="line">        android:toYScale=&quot;0.5&quot;</span><br><span class="line">        /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;alpha</span><br><span class="line">        android:duration=&quot;@android:integer/config_shortAnimTime&quot;</span><br><span class="line">        android:fromAlpha=&quot;1.0&quot;</span><br><span class="line">        android:toAlpha=&quot;0.0&quot; /&gt;</span><br><span class="line">&lt;/set&gt;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Android</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>自定义ViewGroup之扩展FloatingActionButton</title>
-    <url>/2017/10/02/%E8%87%AA%E5%AE%9A%E4%B9%89ViewGroup%E4%B9%8B%E6%89%A9%E5%B1%95FloatingActionButton/</url>
-    <content><![CDATA[<blockquote>
-<p>本文主要是实现一个ViewGroup容器，并实现在内部自由放置FloatingActionButton，与各种FloatingActionButton开源库不同的是只侧重基础的实现，但实际效果还算美观。</p>
-</blockquote>
-<h4 id="效果图如下所示"><a href="#效果图如下所示" class="headerlink" title="效果图如下所示"></a>效果图如下所示</h4><p><img src="http://img.blog.csdn.net/20171015184457415?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="效果图"></p>
-<h4 id="首先，我们先实现一个类似于竖直排布的线性布局的ViewGroup，创建一个FloatingActionButtonMenu类集成ViewGroup"><a href="#首先，我们先实现一个类似于竖直排布的线性布局的ViewGroup，创建一个FloatingActionButtonMenu类集成ViewGroup" class="headerlink" title="首先，我们先实现一个类似于竖直排布的线性布局的ViewGroup，创建一个FloatingActionButtonMenu类集成ViewGroup"></a>首先，我们先实现一个类似于竖直排布的线性布局的ViewGroup，创建一个FloatingActionButtonMenu类集成ViewGroup</h4><h5 id="第一步-获得父类的arginLayoutParams，这里直接使用系统自带attrs就可以了，要注意的是方法返回值必须为ViewGroup-LayoutParams，否则在运行时会报错，这与我们直接按ctrl-o选择的结果不一样。"><a href="#第一步-获得父类的arginLayoutParams，这里直接使用系统自带attrs就可以了，要注意的是方法返回值必须为ViewGroup-LayoutParams，否则在运行时会报错，这与我们直接按ctrl-o选择的结果不一样。" class="headerlink" title="第一步 获得父类的arginLayoutParams，这里直接使用系统自带attrs就可以了，要注意的是方法返回值必须为ViewGroup.LayoutParams，否则在运行时会报错，这与我们直接按ctrl+o选择的结果不一样。"></a>第一步 获得父类的arginLayoutParams，这里直接使用系统自带attrs就可以了，要注意的是方法返回值必须为ViewGroup.LayoutParams，否则在运行时会报错，这与我们直接按ctrl+o选择的结果不一样。</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) &#123;</span><br><span class="line">        Log.d(tag, &quot;generateLayoutParams&quot;);</span><br><span class="line">        return new MarginLayoutParams(getContext(), attrs);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h5 id="第二步，重写onMeasure方法，这一步主要时得到我们实现的ViewGroup最后所占的空间，属性中match-parent与wrap-parent所对应的分别是MeasureSpec-EXACTLY和MeasureSpec-AT-MOST"><a href="#第二步，重写onMeasure方法，这一步主要时得到我们实现的ViewGroup最后所占的空间，属性中match-parent与wrap-parent所对应的分别是MeasureSpec-EXACTLY和MeasureSpec-AT-MOST" class="headerlink" title="第二步，重写onMeasure方法，这一步主要时得到我们实现的ViewGroup最后所占的空间，属性中match_parent与wrap_parent所对应的分别是MeasureSpec.EXACTLY和MeasureSpec.AT_MOST"></a>第二步，重写onMeasure方法，这一步主要时得到我们实现的ViewGroup最后所占的空间，属性中match_parent与wrap_parent所对应的分别是MeasureSpec.EXACTLY和MeasureSpec.AT_MOST</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;</span><br><span class="line">        // 获得此ViewGroup上级容器为其推荐的宽和高，以及计算模式</span><br><span class="line">        // 所得既为设置match_parent时的大小</span><br><span class="line">        Log.d(tag, &quot;onMeasure&quot;);</span><br><span class="line">        int widthMode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">        int heightMode = MeasureSpec.getMode(heightMeasureSpec);</span><br><span class="line">        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);</span><br><span class="line">        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);</span><br><span class="line">        // 计算出所有的childView的宽和高</span><br><span class="line">        measureChildren(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">        // 记录如果是wrap_content是设置的宽和高</span><br><span class="line">        int childCount = getChildCount();</span><br><span class="line">        MarginLayoutParams layoutParms = null;</span><br><span class="line">        //宽为各个子View的最大值，高为总和</span><br><span class="line">        int width = 0, height = 0;</span><br><span class="line">        for (int i = 0; i &lt; childCount; i++) &#123;</span><br><span class="line">            View childView = getChildAt(i);</span><br><span class="line">            layoutParms = (MarginLayoutParams) childView.getLayoutParams();</span><br><span class="line">            int cWidth = childView.getMeasuredWidth() + layoutParms.rightMargin + layoutParms.leftMargin;</span><br><span class="line">            int cHeight = childView.getMeasuredHeight();</span><br><span class="line">            if (cWidth &gt; width) &#123;</span><br><span class="line">                width = cWidth;</span><br><span class="line">            &#125;</span><br><span class="line">            height += cHeight + layoutParms.bottomMargin + layoutParms.topMargin;</span><br><span class="line">        &#125;</span><br><span class="line">        /**</span><br><span class="line">         * 若为match_parent则将宽高设置为上级推荐的大小</span><br><span class="line">         * 否则则设置为计算出的大小，即为wrap_parent</span><br><span class="line">         */</span><br><span class="line">        setMeasuredDimension((widthMode == MeasureSpec.EXACTLY)</span><br><span class="line">                ? sizeWidth : width, (heightMode == MeasureSpec.EXACTLY)</span><br><span class="line">                ? sizeHeight : height);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h5 id="第三步，重写onLayout函数，这个函数主要是制定容器中各个view相对于容器的位置，这里需要注意的是在进行计算时尽量使用子view的属性，用容器的属性进行计算可能会得到无法显示的结果"><a href="#第三步，重写onLayout函数，这个函数主要是制定容器中各个view相对于容器的位置，这里需要注意的是在进行计算时尽量使用子view的属性，用容器的属性进行计算可能会得到无法显示的结果" class="headerlink" title="第三步，重写onLayout函数，这个函数主要是制定容器中各个view相对于容器的位置，这里需要注意的是在进行计算时尽量使用子view的属性，用容器的属性进行计算可能会得到无法显示的结果"></a>第三步，重写onLayout函数，这个函数主要是制定容器中各个view相对于容器的位置，这里需要注意的是在进行计算时尽量使用子view的属性，用容器的属性进行计算可能会得到无法显示的结果</h5><blockquote>
-<p>四个点坐标的位置如下图所示<br><img src="http://img.blog.csdn.net/20171002210536111?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMzM0ODc0MTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h5 id="我们这里所实现的布局类似于叠罗汉，在xml文件中最下面的控件，在容器中就是在最底部，在这里我还使除了控制按钮之外的所有view变为透明状态同时不可点击，这样做主要是使动画更容易实现"><a href="#我们这里所实现的布局类似于叠罗汉，在xml文件中最下面的控件，在容器中就是在最底部，在这里我还使除了控制按钮之外的所有view变为透明状态同时不可点击，这样做主要是使动画更容易实现" class="headerlink" title="我们这里所实现的布局类似于叠罗汉，在xml文件中最下面的控件，在容器中就是在最底部，在这里我还使除了控制按钮之外的所有view变为透明状态同时不可点击，这样做主要是使动画更容易实现"></a>我们这里所实现的布局类似于叠罗汉，在xml文件中最下面的控件，在容器中就是在最底部，在这里我还使除了控制按钮之外的所有view变为透明状态同时不可点击，这样做主要是使动画更容易实现</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">    protected void onLayout(boolean changed, int l, int t, int r, int b) &#123;</span><br><span class="line">        Log.d(tag, &quot;onLayout&quot;);</span><br><span class="line">        int cCount = getChildCount();</span><br><span class="line">        MarginLayoutParams layoutParams;</span><br><span class="line">        /**</span><br><span class="line">         * 遍历所有childView根据其宽和高</span><br><span class="line">         * 指定相应位置</span><br><span class="line">         */</span><br><span class="line">        int height = 0;</span><br><span class="line">        for (int i = 0; i &lt; cCount; i++) &#123;</span><br><span class="line">            View childView = getChildAt(i);</span><br><span class="line">            layoutParams = (MarginLayoutParams) childView.getLayoutParams();</span><br><span class="line">            int cl = layoutParams.leftMargin;</span><br><span class="line">            int cr = cl + childView.getMeasuredWidth();</span><br><span class="line">            int ct = layoutParams.topMargin + height;</span><br><span class="line">            int cb = ct + childView.getMeasuredHeight();</span><br><span class="line">            childView.layout(cl, ct, cr, cb);</span><br><span class="line">            height += childView.getMeasuredHeight() + layoutParams.bottomMargin;</span><br><span class="line">            //使上面的子view全都不可见</span><br><span class="line">            if (i != cCount- 1)&#123;</span><br><span class="line">                childView.setAlpha(0f);</span><br><span class="line">                childView.setClickable(false);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        state = HIDE;</span><br><span class="line">        setClick(getChildAt(cCount- 1));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>在最后面实现的函数是把最底部的view作为一个开关，由它来控制其他子view是否可见</p>
-<h5 id="点击事件函数如下"><a href="#点击事件函数如下" class="headerlink" title="点击事件函数如下"></a>点击事件函数如下</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void setClick(final View view)&#123;</span><br><span class="line">       view.setOnClickListener(new OnClickListener() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void onClick(View v) &#123;</span><br><span class="line">               if (state == HIDE) &#123;</span><br><span class="line">                   //当状态为不可见时，点击按钮弹出所有隐藏view</span><br><span class="line">                   ObjectAnimator animator = ObjectAnimator.ofFloat(view, &quot;rotation&quot;, 0f, rotation);</span><br><span class="line">                   animator.setDuration(duration);</span><br><span class="line">                   animator.start();</span><br><span class="line">                   for (int i = 0; i&lt; getChildCount() - 1; i++)&#123;</span><br><span class="line">                       View childView = getChildAt(i);</span><br><span class="line">                       //实现淡入效果</span><br><span class="line">                       ObjectAnimator chlidanimator = ObjectAnimator.ofFloat(childView, &quot;alpha&quot;, 0f, 1f);</span><br><span class="line">                       //实现拉伸效果</span><br><span class="line">                       ObjectAnimator otheranimator = ObjectAnimator.ofFloat(childView, &quot;scaleX&quot;, 1.0f, 1.2f, 1.0f);</span><br><span class="line">                       otheranimator.setDuration(400);</span><br><span class="line">                       chlidanimator.setDuration(400);</span><br><span class="line">                       otheranimator.start();</span><br><span class="line">                       chlidanimator.start();</span><br><span class="line">                       childView.setClickable(true);</span><br><span class="line">                       state = SHOW;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; else &#123;</span><br><span class="line">                   //当状态为可见时，点击按钮隐藏所有view</span><br><span class="line">                   ObjectAnimator animator = ObjectAnimator.ofFloat(view, &quot;rotation&quot;, rotation, 0f);</span><br><span class="line">                   animator.setDuration(duration);</span><br><span class="line">                   animator.start();</span><br><span class="line">                   for (int i = 0; i&lt; getChildCount() - 1; i++)&#123;</span><br><span class="line">                       View childView = getChildAt(i);</span><br><span class="line">                       ObjectAnimator chlidanimator = ObjectAnimator.ofFloat(childView, &quot;alpha&quot;, 1f, 0f);</span><br><span class="line">                       chlidanimator.setDuration(400);</span><br><span class="line">                       chlidanimator.start();</span><br><span class="line">                       childView.setClickable(false);</span><br><span class="line">                       state = HIDE;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="XML代码如下"><a href="#XML代码如下" class="headerlink" title="XML代码如下"></a>XML代码如下</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;com.android.betterway.myview.FloatingActionButtonMenu</span><br><span class="line">        xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;172dp&quot;</span><br><span class="line">        android:layout_gravity=&quot;bottom|right&quot;</span><br><span class="line">        android:background=&quot;#00000000&quot;</span><br><span class="line">        android:layout_margin=&quot;15dp&quot;</span><br><span class="line">      &gt;</span><br><span class="line"></span><br><span class="line">        &lt;android.support.design.widget.FloatingActionButton</span><br><span class="line">            android:id=&quot;@+id/floatingActionButton7&quot;</span><br><span class="line">            android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_margin=&quot;10dp&quot;</span><br><span class="line">            android:clickable=&quot;true&quot;</span><br><span class="line">            android:elevation=&quot;4dp&quot;</span><br><span class="line">            app:fabSize=&quot;mini&quot;</span><br><span class="line">            app:srcCompat=&quot;@drawable/ic_action_addsmart&quot;</span><br><span class="line">            fab:backgroundTint=&quot;@color/primary_light&quot;/&gt;</span><br><span class="line"></span><br><span class="line">        &lt;android.support.design.widget.FloatingActionButton</span><br><span class="line">            android:id=&quot;@+id/floatingActionButton6&quot;</span><br><span class="line">            android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_margin=&quot;10dp&quot;</span><br><span class="line">            android:clickable=&quot;true&quot;</span><br><span class="line">            app:fabSize=&quot;mini&quot;</span><br><span class="line">            app:srcCompat=&quot;@drawable/ic_action_addnormal&quot;</span><br><span class="line">            fab:backgroundTint=&quot;@color/primary_light&quot;</span><br><span class="line">            fab:elevation=&quot;4dp&quot;/&gt;</span><br><span class="line">        &lt;android.support.design.widget.FloatingActionButton</span><br><span class="line">            android:id=&quot;@+id/floatingActionButton5&quot;</span><br><span class="line">            android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">            android:layout_margin=&quot;4dp&quot;</span><br><span class="line">            android:clickable=&quot;true&quot;</span><br><span class="line">            app:fabSize=&quot;normal&quot;</span><br><span class="line">            fab:elevation=&quot;5dp&quot;</span><br><span class="line">            app:srcCompat=&quot;@drawable/ic_action_add&quot;</span><br><span class="line">            fab:backgroundTint=&quot;@color/accent&quot;/&gt;</span><br><span class="line">    &lt;/com.android.betterway.myview.FloatingActionButtonMenu&gt;</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Android</category>
       </categories>
