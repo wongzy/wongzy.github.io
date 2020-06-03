@@ -113,7 +113,7 @@ Pre-master Secret是由客户端通过自身信息算出来的，客户端将会
 
 
 
-> HMAC是在获得了客户端MAC Secret和服务端MAC Secret后服务器和客户端都得到的HASH算法
+> HMAC是在获得了客户端MAC Secret和服务端MAC Secret后服务器和客户端都得到了的加了密钥的HASH算法，所以HMAC可以在hash之后对消息在进行一些*改动*
 
 服务端在收到客户端发送的Finished消息后将对消息进行验证，步骤如下：
 1. 服务端对之前所有的消息也做一个HMAC
