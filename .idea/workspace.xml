@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/_posts/Android-custom-View-s-mesure-layout-and-draw.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Android-custom-View-s-measure-layout-and-draw.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,11 +42,11 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1590891289733">
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1590893672423">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
     <state x="573" y="376" key="com.intellij.ide.util.TipDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1586783339962" />
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1590891289733" />
+    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1590893672423" />
     <state x="554" y="178" width="683" height="787" key="find.popup" timestamp="1590892227500">
       <screen x="0" y="23" width="1792" height="1097" />
     </state>
