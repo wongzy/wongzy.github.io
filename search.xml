@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Java&#39;s multithreading and android&#39;s handler</title>
-    <url>/2020/05/16/Java-s-multithreading-and-android-s-handler/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>OkHttp&#39;s configuration list</title>
     <url>/2020/04/25/OkHttp-s-configuration-list/</url>
     <content><![CDATA[<p>OkHttp is the most useful Http library in Android develop，it will help us build a http request and send it to server, bring us responses from server, its main work mechanism is Interceptor Chain(bottom of page).</p>
