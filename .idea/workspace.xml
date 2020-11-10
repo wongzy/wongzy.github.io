@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/source/_posts/Https连接建立过程.md" beforeDir="false" afterPath="$PROJECT_DIR$/source/_posts/Https连接建立过程.md" afterDir="false" />
+    <list default="true" id="a45c77ed-3d45-4693-91cd-06ab28e9b7bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,43 +38,50 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1XC3Y4zK0YpIV4ZsNUdUynuXUSJ" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="1eaLlpQtiqMSRDrg1SDHWJhIVat" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4852b924-9e39-42fc-8e57-01e487199365" name="Default Changelist" comment="" />
-      <created>1580536293980</created>
+      <changelist id="a45c77ed-3d45-4693-91cd-06ab28e9b7bb" name="Default Changelist" comment="" />
+      <created>1594554910859</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1580536293980</updated>
+      <updated>1594554910859</updated>
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog" timestamp="1592124516900">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state x="360" y="193" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1594555029610">
+      <screen x="0" y="23" width="1792" height="1017" />
     </state>
-    <state x="573" y="376" key="com.intellij.ide.util.TipDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1586783339962" />
-    <state x="573" y="391" key="com.intellij.ide.util.TipDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1592124516900" />
-    <state x="554" y="178" width="683" height="787" key="find.popup" timestamp="1590892227500">
-      <screen x="0" y="23" width="1792" height="1097" />
+    <state x="360" y="193" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1792.1017@0.23.1792.1017" timestamp="1594555029610" />
+    <state x="397" y="170" key="SettingsEditor" timestamp="1594555367947">
+      <screen x="0" y="23" width="1792" height="1017" />
     </state>
-    <state x="554" y="178" width="683" height="787" key="find.popup/0.23.1792.1097@0.23.1792.1097" timestamp="1590892227500" />
-    <state x="561" y="268" width="670" height="676" key="search.everywhere.popup" timestamp="1588943666987">
-      <screen x="0" y="23" width="1792" height="1097" />
-    </state>
-    <state x="561" y="268" width="670" height="676" key="search.everywhere.popup/0.23.1792.1097@0.23.1792.1097" timestamp="1588943666987" />
+    <state x="397" y="170" key="SettingsEditor/0.23.1792.1017@0.23.1792.1017" timestamp="1594555367947" />
   </component>
 </project>
